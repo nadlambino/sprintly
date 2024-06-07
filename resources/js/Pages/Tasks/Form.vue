@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import RadioInput from '@/Components/RadioInput.vue';
@@ -9,7 +9,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Alert from '@/Components/Alert.vue';
 import axios from 'axios';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
@@ -27,12 +27,14 @@ const form = useForm({
 const success = ref(false);
 const message = ref(null);
 const errors = ref(null);
+const images = computed(() => Array.from(form.images).map((image) => URL.createObjectURL(image)));
 
 const submit = (draft) => {
     success.value = false;
     errors.value = null;
 
     const routeName = draft ? 'api.tasks.draft' : 'api.tasks.store';
+    console.log(form.images)
 
     axios.post(route(routeName), form.data(), {
         headers: {
@@ -41,6 +43,7 @@ const submit = (draft) => {
     }).then(({ data }) => {
         success.value = true;
         message.value = data.message;
+        form.reset();
     }).catch((error) => {
         success.value = false;
         message.value = error?.response?.message || error?.response?.data?.message;
@@ -66,10 +69,10 @@ const submit = (draft) => {
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <form class="flex flex-col gap-5 p-5" @submit.prevent enctype="multipart/form-data">
+                    <form class="flex flex-col gap-5 p-5 max-w-2xl m-auto" @submit.prevent enctype="multipart/form-data">
                         <div class="flex flex-col gap-2">
-                            <InputLabel for="title" value="Title" />
-                            <TextInput id="title" type="text" class="mt-1 block w-full" v-model="form.title" />
+                            <InputLabel for="title" value="Title" required />
+                            <TextInput id="title" type="text" class="mt-1 block w-full" v-model="form.title" placeholder="Task Summary..." maxlength="100" />
                             <InputError v-for="error in errors?.title || []" :message="error" />
                         </div>
 
@@ -85,7 +88,7 @@ const submit = (draft) => {
                         </div>
 
                         <div class="flex flex-col gap-2">
-                            <InputLabel for="status" value="Status" />
+                            <InputLabel for="status" value="Status" required />
                             <div class="flex gap-10">
                                 <div v-for="status in statuses" class="flex gap-2 items-center">
                                     <RadioInput :key="status.id" :value="status.id" v-model="form.status_id" name="status" />
@@ -97,8 +100,12 @@ const submit = (draft) => {
 
                         <div class="flex flex-col gap-2">
                             <InputLabel for="images" value="Image(s)" />
-                            <input type="file" name="images" accept="image/*" multiple @input="form.images = $event.target.files" />
+                            <input type="file" class="focus:ring-0 focus:outline-none"ame="images" accept="image/*" multiple @input="form.images = $event.target.files" />
                             <InputError v-for="error in errors?.images || []" :message="error" />
+
+                            <div class="flex gap-5 justify-center flex-wrap mt-3">
+                                <img v-for="image in images" alt="" :src="image" class="aspect-square w-28 object-cover shadow-md rounded-md border" />
+                            </div>
                         </div>
 
                         <div class="flex justify-end items-center gap-3">
