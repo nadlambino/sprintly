@@ -11,29 +11,37 @@ import { computed, ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
-    statuses: Array
+    statuses: Array,
+    task: {
+        type: Object,
+        default: () => ({})
+    }
 });
 
 const form = useForm({
-    title: '',
-    content: '',
+    id: props.task?.id || null,
+    title: props.task?.title || '',
+    content: props.task?.content || '',
     images: [],
-    status_id: props.statuses[0].id,
+    status_id: props.task?.status_id || props.statuses[0].id,
     draft: 0
 });
 
+const isNew = computed(() => props.task?.id === undefined);
 const success = ref(false);
 const message = ref(null);
 const errors = ref(null);
 
 const images = computed(() => Array.from(form.images).map((image) => URL.createObjectURL(image)));
 const hasServerError = computed(() => success.value === false && errors?.value?.length === 0 && message?.value !== null);
+const showDraftButton = computed(() => isNew.value || props.task?.published_at !== null);
 
 const submit = (draft) => {
     success.value = false;
     errors.value = null;
 
-    const routeName = draft ? 'api.tasks.draft' : 'api.tasks.store';
+    const saveRoute = isNew.value ? 'api.tasks.store' : 'api.tasks.update';
+    const routeName = draft ? 'api.tasks.draft' : saveRoute;
     form.draft = draft ? 1 : 0;
 
     window.axios.post(route(routeName), form.data(), {
@@ -43,7 +51,7 @@ const submit = (draft) => {
     }).then(({ data }) => {
         success.value = true;
         message.value = data.message;
-        form.reset();
+        if (isNew) form.reset();
     }).catch((error) => {
         success.value = false;
         message.value = error?.response?.message || error?.response?.data?.message;
@@ -122,8 +130,8 @@ const submit = (draft) => {
 
                         <div class="flex justify-end items-center gap-3">
                             <Link class="text-muted w-24 flex justify-center hover:bg-secondary py-1 rounded-md hover:border-secondary hover:border" :href="route('tasks.index')">Cancel</Link>
-                            <SecondaryButton class="w-24 flex justify-center" @click="() => submit(true)">Draft</SecondaryButton>
-                            <PrimaryButton class="w-24 flex justify-center" @click="() => submit(false)">Create</PrimaryButton>
+                            <SecondaryButton v-if="showDraftButton" class="min-w-24 flex justify-center" @click="() => submit(true)">{{ isNew ? 'Save as Draft' : 'Move to Draft' }}</SecondaryButton>
+                            <PrimaryButton class="w-24 flex justify-center" @click="() => submit(false)">{{ isNew ? 'Create' : 'Update' }}</PrimaryButton>
                         </div>
                     </form>
                 </div>

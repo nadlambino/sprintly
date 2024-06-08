@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Tasks\CreateRequest;
+use App\Http\Requests\Api\Tasks\DraftRequest;
+use App\Models\Task;
 use App\QueryBuilders\Tasks\Filters\DraftFilter;
 use App\QueryBuilders\Tasks\Filters\StatusFilter;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -46,17 +49,28 @@ class TaskController extends Controller
         }
     }
 
-    public function draft(CreateRequest $request): JsonResponse
+    public function draft(DraftRequest $request): JsonResponse
     {
         try {
             $data = $request->validated();
             $data['published_at'] = null;
 
-            $task = $request->user()->tasks()->create($data);
+            $task = $request->user()->tasks()->updateOrCreate(Arr::only($data, 'id'), Arr::except($data, ['draft', 'id']));
 
             return $this->success('Task was saved to draft.', $task, 201);
+        } catch (Exception $e) {
+            return $this->error('Something went wrong while drafting the task. Please try again later.' . $e->getMessage());
+        }
+    }
+
+    public function update(CreateRequest $request, Task $task): JsonResponse
+    {
+        try {
+            $task->update($request->validated());
+
+            return $this->success('Task was successfully updated.', $task);
         } catch (Exception) {
-            return $this->error('Something went wrong while drafting the task. Please try again later.');
+            return $this->error('Something went wrong while updating the task. Please try again later.');
         }
     }
 }

@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import { computed } from 'vue';
 
@@ -15,7 +16,9 @@ const publishedAt = computed(() => props.task.published_at ? dayjs(props.task.pu
 
 <template>
     <div class="flex flex-col gap-5 border shadow-md rounded-md p-3">
-        <h1 class="truncate cursor-default font-bold text-lg" :title="task.title">{{ task.title }}</h1>
+        <Link :href="route('tasks.edit', task.id)" class="text-blue-600 hover:text-blue-800">
+            <h1 class="truncate font-bold text-lg" :title="task.title">{{ task.title }}</h1>
+        </Link>
         <div>
             <p class="line-clamp-3">{{ task.content }}</p>
         </div>

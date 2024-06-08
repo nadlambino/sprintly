@@ -7,4 +7,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tasks', [TaskController::class, 'index'])->name('api.tasks.index');
    Route::post('/tasks/store', [TaskController::class, 'store'])->name('api.tasks.store');
    Route::post('/tasks/draft', [TaskController::class, 'draft'])->name('api.tasks.draft');
+   Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('api.tasks.update');
 });
