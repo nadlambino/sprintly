@@ -4,9 +4,15 @@ import AddIcon from '../../Icons/AddIcon.vue';
 import { Link } from '@inertiajs/vue3';
 import TextInput from '@/Components/TextInput.vue';
 import { useTasksStore } from '@/Stores/useTasksStore';
+import ButtonDropdown from '@/Components/ButtonDropdown.vue';
 
 const tasksStore = useTasksStore();
-
+const options = [
+    { label: 'Created At (ASC)', value: 'created_at' },
+    { label: 'Created At (DESC)', value: '-created_at' },
+    { label: 'Title (ASC)', value: 'title' },
+    { label: 'Title (DESC)', value: '-title' },
+];
 </script>
 
 <template>
@@ -17,8 +23,9 @@ const tasksStore = useTasksStore();
                 <span>Create</span>
             </PrimaryButton>
         </Link>
-        <div>
+        <div class="flex gap-2">
             <TextInput placeholder="Search..." class="w-72" v-model="tasksStore.search" />
+            <ButtonDropdown v-model="tasksStore.sortBy" :label="`Sort By: ${tasksStore.sortBy}`" :options="options" />
         </div>
     </div>
 </template>

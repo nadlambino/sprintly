@@ -25,6 +25,7 @@ class TaskController extends Controller
                     AllowedFilter::custom('draft', new DraftFilter)
                 ])
                 ->allowedIncludes(['status', 'images'])
+                ->defaultSort('created_at')
                 ->allowedSorts(['title', 'created_at'])
                 ->paginate($request->get('per_page', 10));
 

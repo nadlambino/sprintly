@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/vue-query';
-import { ref, watch } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import { useDebounce } from "@vueuse/core";
 import { useTasksStore } from '@/Stores/useTasksStore';
 
@@ -14,8 +14,9 @@ export function useTasks(params = {}) {
     const search = ref(params?.search);
     const searchDebounce = useDebounce(search, 500);
 
-    watch(() => tasksStore.search, () => {
+    watchEffect(() => {
         search.value = tasksStore.search;
+        sort.value = tasksStore.sortBy;
     });
 
     const get = async () => {

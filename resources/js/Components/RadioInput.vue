@@ -4,7 +4,6 @@ const props = defineProps({
 })
 
 const model = defineModel({
-    type: Number,
     required: true,
 });
 </script>
