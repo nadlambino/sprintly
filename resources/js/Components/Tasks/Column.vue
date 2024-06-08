@@ -21,7 +21,7 @@ const props = defineProps({
 
 const tasksStore = useTasksStore();
 
-const { data, isPending, isFetchingNextPage, refetch, fetchNextPage, page } = await useTasks({
+const { data, isPending, isFetchingNextPage, refetch, fetchNextPage, page, total } = await useTasks({
     status: props.status,
     published: true,
     search: tasksStore.search,
@@ -43,7 +43,7 @@ watch(isPaginationIdentifierVisibleInViewPort, getNextPage);
 <template>
     <div class="flex flex-col gap-5 bg-white overflow-hidden shadow-sm sm:rounded-lg h-screen">
         <div class="px-5 py-2 text-center font-bold bg-muted text-white">
-            <h1 class="">{{ label }}</h1>
+            <h1 class="">{{ label }} ({{ total }})</h1>
         </div>
         <TaskEmpty class="mx-5" v-if="!isPending && data?.pages[page ?? 0]?.length === 0" :status="status" />
         <div ref="container" class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-full">

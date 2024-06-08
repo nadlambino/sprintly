@@ -14,9 +14,10 @@ const sortOptions = [
     { label: 'Title (DESC)', value: '-title' },
 ];
 const pageOptions = [
-    { label: '5 Per Page', value: 5 },
     { label: '10 Per Page', value: 10 },
-    { label: '25 Per Page', value: 25 },
+    { label: '20 Per Page', value: 20 },
+    { label: '50 Per Page', value: 50 },
+    { label: '100 Per Page', value: 100 },
 ]
 </script>
 

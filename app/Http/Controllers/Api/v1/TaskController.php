@@ -37,7 +37,8 @@ class TaskController extends Controller
                 $tasks->all(),
                 [
                     'has_next_page' => $hasNextPage = ($tasks->currentPage() < $tasks->lastPage()),
-                    'next_page' => $hasNextPage ? $tasks->currentPage() + 1 : null
+                    'next_page' => $hasNextPage ? $tasks->currentPage() + 1 : null,
+                    'total' => $tasks->total()
                 ]
             );
         } catch (Exception) {

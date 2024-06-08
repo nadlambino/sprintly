@@ -14,6 +14,7 @@ export function useTasks(params = {}) {
     const search = ref(params?.search);
     const searchDebounce = useDebounce(search, 500);
     const hasNextPage = ref(false);
+    const total = ref(0);
 
     watchEffect(() => {
         search.value = tasksStore.search;
@@ -36,6 +37,7 @@ export function useTasks(params = {}) {
 
         hasNextPage.value = response?.data?.metadata?.has_next_page;
         page.value = response?.data?.metadata?.next_page;
+        total.value = response?.data?.metadata?.total;
 
         return response?.data?.data || [];
     }
@@ -54,5 +56,6 @@ export function useTasks(params = {}) {
         fetchNextPage,
         isFetchingNextPage,
         page,
+        total
     };
 }
