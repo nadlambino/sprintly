@@ -2,6 +2,7 @@
 import { useTasks } from '@/Composables/useTasks';
 import Task from './Task.vue';
 import TaskSkeleton from './TaskSkeleton.vue';
+import TaskEmpty from './TaskEmpty.vue';
 import { computed } from 'vue';
 import { useTasksStore } from '@/Stores/useTasksStore';
 
@@ -41,6 +42,7 @@ const headBgColor = computed(() => {
         <div class="flex flex-col gap-5 p-5 pt-0 overflow-y-scroll h-full">
             <Task v-for="task in tasks" :key="task.id" :task="task" />
             <TaskSkeleton v-if="isPending" />
+            <TaskEmpty v-if="!isPending && tasks?.length === 0" />
         </div>
     </div>
 </template>
