@@ -26,9 +26,9 @@ class TaskController extends Controller
                 ])
                 ->allowedIncludes(['status', 'images'])
                 ->allowedSorts(['title', 'created_at'])
-                ->get();
+                ->paginate($request->get('per_page', 10));
 
-            return $this->success('Tasks retrieved successfully.', $tasks);
+            return $this->success('Tasks retrieved successfully.', $tasks->all());
         } catch (Exception $e) {
             return $this->error($e->getMessage());
         }
