@@ -28,10 +28,6 @@ const { data, isPending, isFetchingNextPage, refetch, fetchNextPage, page } = aw
     per_page: tasksStore.perPage
 });
 
-const headBgColor = computed(() => {
-    return props.status === 'todo' ? 'bg-primary text-white' : props.status === 'in progress' ? 'bg-yellow-300' : 'bg-green-300';
-});
-
 const paginationIdentifier = ref(null);
 const isPaginationIdentifierVisibleInViewPort = useElementVisibility(paginationIdentifier);
 
@@ -46,7 +42,7 @@ watch(isPaginationIdentifierVisibleInViewPort, getNextPage);
 
 <template>
     <div class="flex flex-col gap-5 bg-white overflow-hidden shadow-sm sm:rounded-lg h-screen">
-        <div :class="headBgColor" class="px-5 py-2 text-center font-bold">
+        <div class="px-5 py-2 text-center font-bold bg-muted text-white">
             <h1 class="">{{ label }}</h1>
         </div>
         <TaskEmpty class="mx-5" v-if="!isPending && data?.pages[page ?? 0]?.length === 0" />

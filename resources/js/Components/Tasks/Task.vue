@@ -18,6 +18,21 @@ const emit = defineEmits(['destroy']);
 const createdAt = computed(() => props.task.created_at ? dayjs(props.task.created_at).format('MMM D, YYYY h:mm A') : '-');
 const publishedAt = computed(() => props.task.published_at ? dayjs(props.task.published_at).format('MMM D, YYYY h:mm A') : '-');
 const showConfirmDelete = ref(false);
+const cardClass = computed(() => {
+    if (props.task.status.name === 'todo') {
+        return 'border-t-primary';
+    }
+
+    if (props.task.status.name === 'in progress') {
+        return 'border-t-yellow-500';
+    }
+
+    if (props.task.status.name === 'done') {
+        return 'border-t-green-500';
+    }
+
+    return 'border-t-gray-500';
+})
 
 const destroy = () => {
     window.axios.delete(route('api.tasks.destroy', { task: props.task.id }))
@@ -34,7 +49,7 @@ const destroy = () => {
         </template>
     </Alert>
 
-    <div class="flex flex-col gap-5 border shadow-md rounded-md p-3">
+    <div class="flex flex-col gap-5 border shadow-md rounded-md p-3 border-t-4" :class="cardClass">
         <div class="flex justify-between items-center">
             <div class="w-[90%]">
                 <Link :href="route('tasks.edit', task.id)" class="text-blue-600 hover:text-blue-800">
