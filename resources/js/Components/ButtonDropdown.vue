@@ -1,7 +1,6 @@
 <script setup>
 import RadioInput from '@/Components/RadioInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from './PrimaryButton.vue';
 import { ref } from 'vue';
 import { onClickOutside } from '@vueuse/core'
 import SecondaryButton from './SecondaryButton.vue';
