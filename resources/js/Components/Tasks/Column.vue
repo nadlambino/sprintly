@@ -1,8 +1,9 @@
 <script setup>
 import { useTasks } from '@/Composables/useTasks';
 import Task from './Task.vue';
+import TaskSkeleton from './TaskSkeleton.vue';
 import { computed } from 'vue';
-import { useTasksStore } from '@/Stores/useTaskStore';
+import { useTasksStore } from '@/Stores/useTasksStore';
 
 const props = defineProps({
     label: {
@@ -18,7 +19,7 @@ const props = defineProps({
 const tasksStore = useTasksStore();
 const sort = defineModel('sort');
 
-const { data: tasks } = await useTasks({
+const { data: tasks, isPending } = await useTasks({
     status: props.status,
     sort: sort.value,
     draft: false,
@@ -39,6 +40,7 @@ const headBgColor = computed(() => {
         </div>
         <div class="flex flex-col gap-5 p-5 pt-0 overflow-y-scroll h-full">
             <Task v-for="task in tasks" :key="task.id" :task="task" />
+            <TaskSkeleton v-if="isPending" />
         </div>
     </div>
 </template>
