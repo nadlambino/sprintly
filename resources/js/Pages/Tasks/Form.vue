@@ -9,6 +9,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Alert from '@/Components/Alert.vue';
 import { computed, ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
+import Toggle from '@/Components/Toggle.vue';
 
 const props = defineProps({
     statuses: Array,
@@ -24,38 +25,50 @@ const form = useForm({
     content: props.task?.content || '',
     images: [],
     status_id: props.task?.status_id || props.statuses[0].id,
-    draft: 0
+    publish: props.task?.published_at ? true : false
 });
 
-const isNew = computed(() => props.task?.id === undefined);
 const success = ref(false);
 const message = ref(null);
 const errors = ref(null);
 
 const images = computed(() => Array.from(form.images).map((image) => URL.createObjectURL(image)));
 const hasServerError = computed(() => success.value === false && errors?.value?.length === 0 && message?.value !== null);
-const showDraftButton = computed(() => isNew.value || props.task?.published_at !== null);
+const isNew = computed(() => props.task?.id === undefined);
 
-const submit = (draft) => {
+const submit = () => {
     success.value = false;
     errors.value = null;
+    const request = isNew.value ? create : update;
 
-    const saveRoute = isNew.value ? 'api.tasks.store' : 'api.tasks.update';
-    const routeName = draft ? 'api.tasks.draft' : saveRoute;
-    form.draft = draft ? 1 : 0;
-
-    window.axios.post(route(routeName), form.data(), {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    }).then(({ data }) => {
+    request().then(({ data }) => {
         success.value = true;
         message.value = data.message;
-        if (isNew) form.reset();
+
+        if (isNew.value) form.reset();
     }).catch((error) => {
         success.value = false;
         message.value = error?.response?.message || error?.response?.data?.message;
         errors.value = error?.response?.errors || error?.response?.data?.errors;
+    });
+}
+
+const create = () => {
+    return window.axios.post(route('api.tasks.store'), form.data(), {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}
+
+const update = () => {
+    const data = form.data();
+    data._method = 'PUT';
+
+    return window.axios.post(route('api.tasks.update', { task: form.id }), data, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
     });
 }
 </script>
@@ -119,6 +132,11 @@ const submit = (draft) => {
                         </div>
 
                         <div class="flex flex-col gap-2">
+                            <InputLabel for="publish" value="Publish" />
+                            <Toggle id="publish" v-model="form.publish"/>
+                        </div>
+
+                        <div class="flex flex-col gap-2">
                             <InputLabel for="images" value="Image(s)" />
                             <input type="file" class="focus:ring-0 focus:outline-none"ame="images" accept="image/*" multiple @input="form.images = $event.target.files" />
                             <InputError v-for="error in errors?.images || []" :message="error" />
@@ -130,7 +148,6 @@ const submit = (draft) => {
 
                         <div class="flex justify-end items-center gap-3">
                             <Link class="text-muted w-24 flex justify-center hover:bg-secondary py-1 rounded-md hover:border-secondary hover:border" :href="route('tasks.index')">Cancel</Link>
-                            <SecondaryButton v-if="showDraftButton" class="min-w-24 flex justify-center" @click="() => submit(true)">{{ isNew ? 'Save as Draft' : 'Move to Draft' }}</SecondaryButton>
                             <PrimaryButton class="w-24 flex justify-center" @click="() => submit(false)">{{ isNew ? 'Create' : 'Update' }}</PrimaryButton>
                         </div>
                     </form>

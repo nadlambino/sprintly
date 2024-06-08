@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Status::class);
-            $table->string('title', 100)->unique();
+            $table->string('title', 100);
             $table->text('content');
             $table->timestamp('published_at')->nullable()->default(now());
             $table->timestamps();

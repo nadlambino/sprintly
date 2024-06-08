@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Tasks\CreateRequest;
-use App\Http\Requests\Api\Tasks\DraftRequest;
+use App\Http\Requests\Api\Tasks\UpdateRequest;
 use App\Models\Task;
 use App\QueryBuilders\Tasks\Filters\DraftFilter;
 use App\QueryBuilders\Tasks\Filters\StatusFilter;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -33,15 +32,19 @@ class TaskController extends Controller
                 ->paginate($request->get('per_page', 10));
 
             return $this->success('Tasks retrieved successfully.', $tasks->all());
-        } catch (Exception $e) {
-            return $this->error($e->getMessage());
+        } catch (Exception) {
+            return $this->error('Something went wrong while retrieving the tasks. Please try again later.');
         }
     }
 
     public function store(CreateRequest $request): JsonResponse
     {
         try {
-            $task = $request->user()->tasks()->create($request->validated());
+            $data = $request->validated();
+            $publish = filter_var($request->get('publish', false), FILTER_VALIDATE_BOOL);
+            $data['published_at'] = $publish ? now() : null;
+
+            $task = $request->user()->tasks()->create($data);
 
             return $this->success('Task was successfully created.', $task, 201);
         } catch (Exception) {
@@ -49,24 +52,14 @@ class TaskController extends Controller
         }
     }
 
-    public function draft(DraftRequest $request): JsonResponse
+    public function update(UpdateRequest $request, Task $task): JsonResponse
     {
         try {
             $data = $request->validated();
-            $data['published_at'] = null;
+            $publish = filter_var($request->get('publish', false), FILTER_VALIDATE_BOOL);
+            $data['published_at'] = $publish ? now() : null;
 
-            $task = $request->user()->tasks()->updateOrCreate(Arr::only($data, 'id'), Arr::except($data, ['draft', 'id']));
-
-            return $this->success('Task was saved to draft.', $task, 201);
-        } catch (Exception $e) {
-            return $this->error('Something went wrong while drafting the task. Please try again later.' . $e->getMessage());
-        }
-    }
-
-    public function update(CreateRequest $request, Task $task): JsonResponse
-    {
-        try {
-            $task->update($request->validated());
+            $task->update($data);
 
             return $this->success('Task was successfully updated.', $task);
         } catch (Exception) {

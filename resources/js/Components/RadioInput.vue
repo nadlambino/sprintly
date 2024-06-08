@@ -11,7 +11,7 @@ const model = defineModel({
 <template>
     <input
         type="radio"
-        class="border-gray-400 focus:border-primary/80 focus:ring-primary rounded-full shadow-sm"
+        class="w-4 h-4 text-primary bg-gray-100 border-gray-300 focus:ring-primary/60 focus:ring-2"
         v-model="model"
         :value="value"
         :id="value"
