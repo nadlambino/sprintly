@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/vue-query';
+import { useInfiniteQuery } from '@tanstack/vue-query';
 import { ref, watchEffect } from 'vue';
 import { useDebounce } from "@vueuse/core";
 import { useTasksStore } from '@/Stores/useTasksStore';
@@ -13,14 +13,13 @@ export function useTasks(params = {}) {
     const perPage = ref(params?.per_page || 10);
     const search = ref(params?.search);
     const searchDebounce = useDebounce(search, 500);
-    const hasNextPage = ref(false);
 
     watchEffect(() => {
         search.value = tasksStore.search;
         sort.value = tasksStore.sortBy;
     });
 
-    const get = async () => {
+    const get = async ({ pageParam = 1 }) => {
         const response = await axios.get(route('api.tasks.index', {
             filter: {
                 title: searchDebounce.value,
@@ -29,18 +28,19 @@ export function useTasks(params = {}) {
             },
             sort: sort.value,
             include: 'status,images',
-            page: page.value,
+            page: pageParam,
             per_page: perPage.value
         }));
 
-        hasNextPage.value = response?.data?.metadata?.has_next_page;
+        page.value = response?.data?.metadata?.next_page;
 
         return response?.data?.data || [];
     }
 
-    const { isPending, isFetching, isError, data, error, refetch } = useQuery({
-        queryKey: [{ status, sort, published, searchDebounce, page, perPage }],
+    const { isPending, isFetching, isFetchingNextPage, isError, data, error, refetch, hasNextPage, fetchNextPage } = useInfiniteQuery({
+        queryKey: [{ status, sort, published, searchDebounce, perPage }],
         queryFn: get,
+        getNextPageParam: () => page.value
     });
 
     return {
@@ -52,6 +52,8 @@ export function useTasks(params = {}) {
         isError,
         error,
         refetch,
+        fetchNextPage,
+        isFetchingNextPage,
         hasNextPage
     };
 }

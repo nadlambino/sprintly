@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Status;
 use App\Models\Task;
-use App\Policies\TaskPolicy;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 

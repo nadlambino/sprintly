@@ -32,7 +32,14 @@ class TaskController extends Controller
                 ->allowedSorts(['title', 'created_at'])
                 ->paginate($request->get('per_page', 10));
 
-            return $this->success('Tasks retrieved successfully.', $tasks->all(), ['has_next_page' => $tasks->currentPage() < $tasks->lastPage()]);
+            return $this->success(
+                'Tasks retrieved successfully.',
+                $tasks->all(),
+                [
+                    'has_next_page' => $hasNextPage = ($tasks->currentPage() < $tasks->lastPage()),
+                    'next_page' => $hasNextPage ? $tasks->currentPage() + 1 : null
+                ]
+            );
         } catch (Exception) {
             return $this->error('Something went wrong while retrieving the tasks. Please try again later.');
         }

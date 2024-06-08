@@ -1,10 +1,12 @@
 <script setup>
 import { useTasks } from '@/Composables/useTasks';
+import { computed } from 'vue';
+import { useTasksStore } from '@/Stores/useTasksStore';
+import { useElementVisibility } from '@vueuse/core'
+import { ref, watch } from 'vue';
 import Task from './Task.vue';
 import TaskSkeleton from './TaskSkeleton.vue';
 import TaskEmpty from './TaskEmpty.vue';
-import { computed } from 'vue';
-import { useTasksStore } from '@/Stores/useTasksStore';
 
 const props = defineProps({
     label: {
@@ -19,17 +21,27 @@ const props = defineProps({
 
 const tasksStore = useTasksStore();
 
-const { data: tasks, isPending, refetch, hasNextPage } = await useTasks({
+const { data, isPending, isFetchingNextPage, refetch, fetchNextPage, hasNextPage } = await useTasks({
     status: props.status,
     published: true,
     search: tasksStore.search,
-    page: 1,
     per_page: 5
 });
 
 const headBgColor = computed(() => {
     return props.status === 'todo' ? 'bg-primary text-white' : props.status === 'in progress' ? 'bg-yellow-300' : 'bg-green-300';
 });
+
+const paginationIdentifier = ref(null);
+const isPaginationIdentifierVisibleInViewPort = useElementVisibility(paginationIdentifier);
+
+const getNextPage = async (visible) => {
+    if (visible === false) return;
+
+    fetchNextPage();
+}
+
+watch(isPaginationIdentifierVisibleInViewPort, getNextPage);
 </script>
 
 <template>
@@ -37,10 +49,13 @@ const headBgColor = computed(() => {
         <div :class="headBgColor" class="px-5 py-2 text-center font-bold">
             <h1 class="">{{ label }}</h1>
         </div>
-        <div class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-full">
-            <Task v-for="task in tasks" :key="task.id" :task="task" @destroy="refetch" />
-            <TaskSkeleton v-if="isPending" />
-            <TaskEmpty v-if="!isPending && tasks?.length === 0" />
+        <div ref="container" class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-full">
+            <div v-for="page in data?.pages" class="flex flex-col gap-5">
+                <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" />
+            </div>
+            <TaskSkeleton v-if="isPending || isFetchingNextPage" />
+            <TaskEmpty v-if="!isPending && data?.pages?.length === 0" />
+            <div ref="paginationIdentifier"></div>
         </div>
     </div>
 </template>
