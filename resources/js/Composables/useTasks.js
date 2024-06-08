@@ -35,7 +35,7 @@ export function useTasks(params = {}) {
         return response?.data?.data || [];
     }
 
-    const { isPending, isFetching, isError, data, error } = useQuery({
+    const { isPending, isFetching, isError, data, error, refetch } = useQuery({
         queryKey: [{ status, sort, draft, searchDebounce, page, perPage }],
         queryFn: get,
     });
@@ -48,5 +48,6 @@ export function useTasks(params = {}) {
         isFetching,
         isError,
         error,
+        refetch
     };
 }

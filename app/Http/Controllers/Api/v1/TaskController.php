@@ -11,6 +11,7 @@ use App\QueryBuilders\Tasks\Filters\StatusFilter;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -64,6 +65,19 @@ class TaskController extends Controller
             return $this->success('Task was successfully updated.', $task);
         } catch (Exception) {
             return $this->error('Something went wrong while updating the task. Please try again later.');
+        }
+    }
+
+    public function destroy(Task $task): JsonResponse
+    {
+        try {
+            Gate::authorize('delete', $task);
+
+            $task->delete();
+
+            return $this->success('Task was successfully deleted.');
+        } catch (Exception) {
+            return $this->error('Something went wrong while deleting the task. Please try again later.');
         }
     }
 }

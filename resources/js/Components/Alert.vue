@@ -5,7 +5,11 @@ import Modal from './Modal.vue';
 
 const props = defineProps({
     show: Boolean,
-    message: String
+    message: String,
+    title: {
+        type: String,
+        default: 'Alert',
+    }
 });
 
 const visible = ref(props.show);
@@ -17,10 +21,13 @@ watch(() => props.show, () => {
 
 <template>
     <Modal :show="visible" :closeable="true" @close="visible = false" max-width="md">
-        <div class="p-5 pb-3">
-            <h1 class="text-base text-center text-gray-700">{{ message }}</h1>
+        <div class="p-3 border-top border">
+            <h1 class="font-bold text-sm text-gray-700 tracking-wider uppercase">{{ title }}</h1>
         </div>
-        <div class="p-5 pt-3 flex justify-end gap-2">
+        <div class="p-3 py-5">
+            <h1 class="text-base text-muted text-gray-700">{{ message }}</h1>
+        </div>
+        <div class="p-3 border-top border flex justify-end gap-2">
             <SecondaryButton @click="visible = false">Close</SecondaryButton>
             <slot name="actions" />
         </div>

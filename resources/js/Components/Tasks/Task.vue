@@ -1,7 +1,10 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import DeleteIcon from '@/Icons/DeleteIcon.vue';
+import Alert from '@/Components/Alert.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const props = defineProps({
     task: {
@@ -10,15 +13,38 @@ const props = defineProps({
     }
 });
 
+const emit = defineEmits(['destroy']);
+
 const createdAt = computed(() => props.task.created_at ? dayjs(props.task.created_at).format('MMM D, YYYY h:mm A') : '-');
 const publishedAt = computed(() => props.task.published_at ? dayjs(props.task.published_at).format('MMM D, YYYY h:mm A') : '-');
+const showConfirmDelete = ref(false);
+
+const destroy = () => {
+    window.axios.delete(route('api.tasks.destroy', { task: props.task.id }))
+        .then(() => emit('destroy', props.task.id));
+}
 </script>
 
 <template>
+    <Alert :show="showConfirmDelete" title="Confirm Delete" message="Are you sure you want to delete this task?" @close="showConfirmDelete = false">
+        <template #actions>
+            <PrimaryButton class="flex gap-1 justify-center items-center" @click="destroy">
+                Confirm
+            </PrimaryButton>
+        </template>
+    </Alert>
+
     <div class="flex flex-col gap-5 border shadow-md rounded-md p-3">
-        <Link :href="route('tasks.edit', task.id)" class="text-blue-600 hover:text-blue-800">
-            <h1 class="truncate font-bold text-lg" :title="task.title">{{ task.title }}</h1>
-        </Link>
+        <div class="flex justify-between items-center">
+            <div class="w-[90%]">
+                <Link :href="route('tasks.edit', task.id)" class="text-blue-600 hover:text-blue-800">
+                    <h1 class="font-bold text-lg truncate" :title="task.title">{{ task.title }}</h1>
+                </Link>
+            </div>
+            <button type="button" @click="showConfirmDelete = true">
+                <DeleteIcon class="text-gray-500"/>
+            </button>
+        </div>
         <div>
             <p class="line-clamp-3">{{ task.content }}</p>
         </div>

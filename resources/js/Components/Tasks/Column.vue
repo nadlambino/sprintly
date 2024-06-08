@@ -20,7 +20,7 @@ const props = defineProps({
 const tasksStore = useTasksStore();
 const sort = defineModel('sort');
 
-const { data: tasks, isPending } = await useTasks({
+const { data: tasks, isPending, refetch } = await useTasks({
     status: props.status,
     sort: sort.value,
     draft: false,
@@ -40,7 +40,7 @@ const headBgColor = computed(() => {
             <h1 class="">{{ label }}</h1>
         </div>
         <div class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-full">
-            <Task v-for="task in tasks" :key="task.id" :task="task" />
+            <Task v-for="task in tasks" :key="task.id" :task="task" @destroy="refetch" />
             <TaskSkeleton v-if="isPending" />
             <TaskEmpty v-if="!isPending && tasks?.length === 0" />
         </div>

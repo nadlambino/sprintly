@@ -77,7 +77,7 @@ const update = () => {
     <Head title="Tasks" />
 
     <AuthenticatedLayout>
-        <Alert :show="success || hasServerError" :message="message">
+        <Alert :show="success || hasServerError" :message="message" :title="isNew ? 'Task Created' : 'Task Updated'">
             <template #actions>
                 <Link :href="route('tasks.index')">
                     <PrimaryButton class="flex gap-1 justify-center items-center">
