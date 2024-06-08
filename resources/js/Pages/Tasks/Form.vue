@@ -4,7 +4,6 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import RadioInput from '@/Components/RadioInput.vue';
-import NavLink from '@/Components/NavLink.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Alert from '@/Components/Alert.vue';
