@@ -15,5 +15,6 @@ const model = defineModel({
         v-model="model"
         :value="value"
         :id="value"
+        :checked="model === value"
     />
 </template>

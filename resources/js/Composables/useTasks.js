@@ -10,13 +10,14 @@ export function useTasks(params = {}) {
     const sort  = ref(params?.sort || 'created_at');
     const published = ref(params?.published || false);
     const page = ref(params?.page || 1);
-    const perPage = ref(params?.per_page || 10);
+    const perPage = ref(params?.per_page || tasksStore.perPage);
     const search = ref(params?.search);
     const searchDebounce = useDebounce(search, 500);
 
     watchEffect(() => {
         search.value = tasksStore.search;
         sort.value = tasksStore.sortBy;
+        perPage.value = tasksStore.perPage;
     });
 
     const get = async ({ pageParam = 1 }) => {
@@ -37,23 +38,19 @@ export function useTasks(params = {}) {
         return response?.data?.data || [];
     }
 
-    const { isPending, isFetching, isFetchingNextPage, isError, data, error, refetch, hasNextPage, fetchNextPage } = useInfiniteQuery({
+    const { data, isPending, isFetching, isFetchingNextPage, refetch, fetchNextPage } = useInfiniteQuery({
         queryKey: [{ status, sort, published, searchDebounce, perPage }],
         queryFn: get,
         getNextPageParam: () => page.value
     });
 
     return {
-        status,
-        sort,
         data,
         isPending,
         isFetching,
-        isError,
-        error,
         refetch,
         fetchNextPage,
         isFetchingNextPage,
-        hasNextPage
+        page,
     };
 }

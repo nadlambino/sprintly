@@ -14,7 +14,7 @@ const selected = defineModel();
 const showSort = ref(false);
 const target = ref(null)
 
-onClickOutside(target, event => showSort.value = false);
+onClickOutside(target, () => showSort.value = false);
 </script>
 
 <template>
@@ -27,12 +27,12 @@ onClickOutside(target, event => showSort.value = false);
         </SecondaryButton>
 
         <!-- Dropdown menu -->
-        <div v-show="showSort" id="dropdownDefaultRadio" class="z-10 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow absolute right-0 top-12">
-            <ul class="p-3 space-y-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioButton">
+        <div v-show="showSort" id="dropdownDefaultRadio" class="z-10 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-lg absolute right-0 top-12">
+            <ul class="py-1 text-sm text-gray-700" aria-labelledby="dropdownRadioButton">
                 <li v-for="option in options" :key="option.value">
-                    <div class="flex gap-2 items-center">
-                        <RadioInput :id="option.value" :value="option.value" v-model="selected" name="sort" />
-                        <InputLabel :for="option.value" :value="option.label" class="capitalize cursor-pointer"/>
+                    <div class="flex items-center">
+                        <RadioInput class="hidden" :id="option.value" :value="option.value" v-model="selected" name="sort" />
+                        <InputLabel :for="option.value" :value="option.label" class="capitalize cursor-pointer w-full hover:bg-secondary p-1"/>
                     </div>
                 </li>
             </ul>

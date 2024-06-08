@@ -7,12 +7,17 @@ import { useTasksStore } from '@/Stores/useTasksStore';
 import ButtonDropdown from '@/Components/ButtonDropdown.vue';
 
 const tasksStore = useTasksStore();
-const options = [
+const sortOptions = [
     { label: 'Created At (ASC)', value: 'created_at' },
     { label: 'Created At (DESC)', value: '-created_at' },
     { label: 'Title (ASC)', value: 'title' },
     { label: 'Title (DESC)', value: '-title' },
 ];
+const pageOptions = [
+    { label: '5 Per Page', value: 5 },
+    { label: '10 Per Page', value: 10 },
+    { label: '25 Per Page', value: 25 },
+]
 </script>
 
 <template>
@@ -24,9 +29,9 @@ const options = [
             </PrimaryButton>
         </Link>
         <div class="flex gap-2">
-            <TextInput placeholder="Search..." class="w-72" v-model="tasksStore.search" />
-            <ButtonDropdown v-model="tasksStore.sortBy" :label="`Sort By: ${tasksStore.sortBy}`" :options="options" />
+            <TextInput placeholder="Search by title..." class="w-72" v-model="tasksStore.search" />
+            <ButtonDropdown v-model="tasksStore.sortBy" :label="`Sort By: ${tasksStore.sortBy}`" :options="sortOptions" />
+            <ButtonDropdown v-model="tasksStore.perPage" :label="`Per Page: ${tasksStore.perPage}`" :options="pageOptions" />
         </div>
     </div>
 </template>
-@/Stores/useTasksStore

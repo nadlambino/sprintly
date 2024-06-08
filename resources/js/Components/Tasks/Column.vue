@@ -21,11 +21,11 @@ const props = defineProps({
 
 const tasksStore = useTasksStore();
 
-const { data, isPending, isFetchingNextPage, refetch, fetchNextPage, hasNextPage } = await useTasks({
+const { data, isPending, isFetchingNextPage, refetch, fetchNextPage, page } = await useTasks({
     status: props.status,
     published: true,
     search: tasksStore.search,
-    per_page: 5
+    per_page: tasksStore.perPage
 });
 
 const headBgColor = computed(() => {
@@ -49,12 +49,12 @@ watch(isPaginationIdentifierVisibleInViewPort, getNextPage);
         <div :class="headBgColor" class="px-5 py-2 text-center font-bold">
             <h1 class="">{{ label }}</h1>
         </div>
+        <TaskEmpty class="mx-5" v-if="!isPending && data?.pages[page ?? 0]?.length === 0" />
         <div ref="container" class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-full">
             <div v-for="page in data?.pages" class="flex flex-col gap-5">
                 <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" />
             </div>
             <TaskSkeleton v-if="isPending || isFetchingNextPage" />
-            <TaskEmpty v-if="!isPending && data?.pages?.length === 0" />
             <div ref="paginationIdentifier"></div>
         </div>
     </div>
