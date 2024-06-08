@@ -9,6 +9,7 @@ import Alert from '@/Components/Alert.vue';
 import { computed, ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import Toggle from '@/Components/Toggle.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 
 const props = defineProps({
     statuses: Array,
@@ -24,7 +25,8 @@ const form = useForm({
     content: props.task?.content || '',
     images: [],
     status_id: props.task?.status_id || props.statuses[0].id,
-    publish: props.task?.published_at ? true : false
+    publish: props.task?.published_at ? true : false,
+    replace_images: false
 });
 
 const success = ref(false);
@@ -54,7 +56,10 @@ const submit = () => {
 }
 
 const create = () => {
-    return window.axios.post(route('api.tasks.store'), form.data(), {
+    const data = form.data();
+    delete data.replace_images;
+
+    return window.axios.post(route('api.tasks.store'), data, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -141,14 +146,21 @@ const update = () => {
                             <input type="file" class="focus:ring-0 focus:outline-none"ame="images" accept="image/*" multiple @input="form.images = $event.target.files" />
                             <InputError v-for="error in errors?.images || []" :message="error" />
 
-                            <div class="flex gap-5 justify-center flex-wrap mt-3">
+                            <InputLabel for="replaced-images" value="Replace Image(s)" :class="{ 'text-muted cursor-not-allowed': images.length === 0 }" />
+                            <Toggle id="replaced-images" v-model="form.replace_images" :disabled="images.length === 0" />
+
+                            <div class="flex gap-5 justify-center flex-wrap mt-3" v-if="!isNew">
                                 <img v-for="image in images" alt="" :src="image" class="aspect-square w-28 object-cover shadow-md rounded-md border" />
-                                <img v-for="image in savedImages" alt="" :src="image" class="aspect-square w-28 object-cover shadow-md rounded-md border" />
+                                <template v-if="!form.replace_images">
+                                    <img v-for="image in savedImages" alt="" :src="image" class="aspect-square w-28 object-cover shadow-md rounded-md border" />
+                                </template>
                             </div>
                         </div>
 
-                        <div class="flex justify-end items-center gap-3">
-                            <Link class="text-muted w-24 flex justify-center hover:bg-secondary py-1 rounded-md hover:border-secondary hover:border" :href="route('tasks.index')">Cancel</Link>
+                        <div class="flex justify-end items-center gap-3 mt-2">
+                            <Link :href="route('tasks.index')">
+                                <SecondaryButton>Cancel</SecondaryButton>
+                            </Link>
                             <PrimaryButton class="w-24 flex justify-center" @click="() => submit(false)">{{ isNew ? 'Create' : 'Update' }}</PrimaryButton>
                         </div>
                     </form>

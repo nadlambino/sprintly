@@ -65,7 +65,10 @@ class TaskController extends Controller
         try {
             $data = $request->validated();
             $publish = filter_var($request->get('publish', false), FILTER_VALIDATE_BOOL);
+            $replaceImages = filter_var($request->get('replace_images', false), FILTER_VALIDATE_BOOL);
             $data['published_at'] = $publish ? now() : null;
+
+            Task::deletePreviousUploads($replaceImages);
 
             $task->update($data);
 

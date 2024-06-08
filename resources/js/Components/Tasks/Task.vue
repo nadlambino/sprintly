@@ -46,13 +46,13 @@ const destroy = () => {
             </button>
         </div>
         <div>
-            <p class="line-clamp-3">{{ task.content }}</p>
+            <p class="line-clamp-3 text-gray-700" :title="task.content">{{ task.content }}</p>
         </div>
         <div v-if="task.images.length > 0">
             <img :src="task.images[0].path" :alt="task.title" class="w-full object-cover" />
             <small class="text-muted" v-if="task.images.length > 1"> and {{ task.images.length - 1 }} more image(s)</small>
         </div>
-        <div class="flex flex-col text-muted">
+        <div class="flex flex-col text-muted text-xs">
             <div class="flex justify-between">
                 <small>Created At</small>
                 <small>{{ createdAt }}</small>
