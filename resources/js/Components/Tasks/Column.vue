@@ -2,6 +2,7 @@
 import { useTasks } from '@/Composables/useTasks';
 import Task from './Task.vue';
 import { computed } from 'vue';
+import { useTasksStore } from '@/Stores/useTaskStore';
 
 const props = defineProps({
     label: {
@@ -14,15 +15,15 @@ const props = defineProps({
     }
 });
 
-const search = defineModel('search')
+const tasksStore = useTasksStore();
 const sort = defineModel('sort');
 
-const { data } = await useTasks({
+const { data: tasks } = await useTasks({
     status: props.status,
     sort: sort.value,
     draft: false,
-    search: search.value,
-    page: 2,
+    search: tasksStore.search,
+    page: 1,
     per_page: 5
 });
 
@@ -37,7 +38,8 @@ const headBgColor = computed(() => {
             <h1 class="">{{ label }}</h1>
         </div>
         <div class="flex flex-col gap-5 p-5 pt-0 overflow-y-scroll h-full">
-            <Task v-for="task in data" :key="task.id" :task="task" />
+            <Task v-for="task in tasks" :key="task.id" :task="task" />
         </div>
     </div>
 </template>
+@/Stores/useTasksStore
