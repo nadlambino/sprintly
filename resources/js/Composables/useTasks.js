@@ -13,6 +13,7 @@ export function useTasks(params = {}) {
     const perPage = ref(params?.per_page || tasksStore.perPage);
     const search = ref(params?.search);
     const searchDebounce = useDebounce(search, 500);
+    const hasNextPage = ref(false);
 
     watchEffect(() => {
         search.value = tasksStore.search;
@@ -33,6 +34,7 @@ export function useTasks(params = {}) {
             per_page: perPage.value
         }));
 
+        hasNextPage.value = response?.data?.metadata?.has_next_page;
         page.value = response?.data?.metadata?.next_page;
 
         return response?.data?.data || [];
@@ -41,7 +43,7 @@ export function useTasks(params = {}) {
     const { data, isPending, isFetching, isFetchingNextPage, refetch, fetchNextPage } = useInfiniteQuery({
         queryKey: [{ status, sort, published, searchDebounce, perPage }],
         queryFn: get,
-        getNextPageParam: () => page.value
+        getNextPageParam: () => hasNextPage.value ? page.value : null,
     });
 
     return {
