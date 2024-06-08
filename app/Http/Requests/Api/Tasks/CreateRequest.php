@@ -25,7 +25,7 @@ class CreateRequest extends FormRequest
             'title'     => ['required', 'min:3', 'max:100', 'unique:tasks,title'],
             'content'   => ['required', 'min:3', 'max:10000'],
             'status_id' => ['required', 'exists:statuses,id'],
-            'images'    => ['array', 'max:5'],
+            'images'    => ['array'],
             'images.*'  => ['image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:4096'],
         ];
     }
@@ -33,7 +33,6 @@ class CreateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'images.*.max' => 'Image file should not exceed 4MB',
             'images.*.mimes' => 'Image file should be jpeg, png, jpg, gif, svg or webp',
             'images.*' => 'Image is unreadable. Please try a different image.',
         ];
