@@ -45,7 +45,7 @@ watch(isPaginationIdentifierVisibleInViewPort, getNextPage);
         <div class="px-5 py-2 text-center font-bold bg-muted text-white">
             <h1 class="">{{ label }}</h1>
         </div>
-        <TaskEmpty class="mx-5" v-if="!isPending && data?.pages[page ?? 0]?.length === 0" />
+        <TaskEmpty class="mx-5" v-if="!isPending && data?.pages[page ?? 0]?.length === 0" :status="status" />
         <div ref="container" class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-full">
             <div v-for="page in data?.pages" class="flex flex-col gap-5">
                 <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" />

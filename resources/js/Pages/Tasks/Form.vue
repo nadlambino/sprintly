@@ -10,6 +10,7 @@ import { computed, ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import Toggle from '@/Components/Toggle.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { useUrlSearchParams } from '@vueuse/core';
 
 const props = defineProps({
     statuses: Array,
@@ -19,12 +20,14 @@ const props = defineProps({
     }
 });
 
+const url = useUrlSearchParams('history');
+
 const form = useForm({
     id: props.task?.id || null,
     title: props.task?.title || '',
     content: props.task?.content || '',
     images: [],
-    status_id: props.task?.status_id || props.statuses[0].id,
+    status_id: props.task?.status_id || props.statuses?.find(s => s.name === url.status)?.id || props.statuses[0].id,
     publish: props.task?.published_at ? true : false,
     replace_images: false
 });
@@ -88,11 +91,11 @@ const update = () => {
     <AuthenticatedLayout>
         <Alert :show="success || hasServerError || errorHasImageServerError" :message="message" title="Task">
             <template #actions>
-                <Link :href="route('tasks.index')">
+                <a :href="route('tasks.index')">
                     <PrimaryButton class="flex gap-1 justify-center items-center">
                         Go Back To Tasks
                     </PrimaryButton>
-                </Link>
+                </a>
             </template>
         </Alert>
 
