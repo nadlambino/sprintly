@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Tasks\CreateRequest;
 use App\Http\Requests\Api\Tasks\UpdateRequest;
 use App\Models\Task;
-use App\QueryBuilders\Tasks\Filters\DraftFilter;
+use App\QueryBuilders\Tasks\Filters\PublishedFilter;
 use App\QueryBuilders\Tasks\Filters\StatusFilter;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -25,14 +25,14 @@ class TaskController extends Controller
                     'title',
                     'content',
                     AllowedFilter::custom('status', new StatusFilter),
-                    AllowedFilter::custom('draft', new DraftFilter)
+                    AllowedFilter::custom('published', new PublishedFilter)
                 ])
                 ->allowedIncludes(['status', 'images'])
                 ->defaultSort('created_at')
                 ->allowedSorts(['title', 'created_at'])
                 ->paginate($request->get('per_page', 10));
 
-            return $this->success('Tasks retrieved successfully.', $tasks->all());
+            return $this->success('Tasks retrieved successfully.', $tasks->all(), ['has_next_page' => $tasks->currentPage() < $tasks->lastPage()]);
         } catch (Exception) {
             return $this->error('Something went wrong while retrieving the tasks. Please try again later.');
         }
@@ -47,7 +47,7 @@ class TaskController extends Controller
 
             $task = $request->user()->tasks()->create($data);
 
-            return $this->success('Task was successfully created.', $task, 201);
+            return $this->success('Task was successfully created.', $task, status: 201);
         } catch (Exception) {
             return $this->error('Something went wrong while creating the task. Please try again later.');
         }

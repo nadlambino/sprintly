@@ -8,11 +8,12 @@ use Illuminate\Support\Collection;
 
 abstract class Controller
 {
-    public function success(?string $message = null, array|Collection|Model $data = [], int $status = 200): JsonResponse
+    public function success(?string $message = null, array|Collection|Model $data = [], array $metadata = [], int $status = 200): JsonResponse
     {
         return response()->json([
             'message' => $message,
             'data' => $data,
+            'metadata' => $metadata
         ], $status);
     }
 

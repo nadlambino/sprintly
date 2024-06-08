@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/vue-query';
-import { ref, watch, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useDebounce } from "@vueuse/core";
 import { useTasksStore } from '@/Stores/useTasksStore';
 
@@ -8,11 +8,12 @@ export function useTasks(params = {}) {
 
     const status = ref(params?.status);
     const sort  = ref(params?.sort || 'created_at');
-    const draft = ref(params?.draft || false);
+    const published = ref(params?.published || false);
     const page = ref(params?.page || 1);
     const perPage = ref(params?.per_page || 10);
     const search = ref(params?.search);
     const searchDebounce = useDebounce(search, 500);
+    const hasNextPage = ref(false);
 
     watchEffect(() => {
         search.value = tasksStore.search;
@@ -24,7 +25,7 @@ export function useTasks(params = {}) {
             filter: {
                 title: searchDebounce.value,
                 status: status.value,
-                draft: draft.value
+                published: published.value
             },
             sort: sort.value,
             include: 'status,images',
@@ -32,11 +33,13 @@ export function useTasks(params = {}) {
             per_page: perPage.value
         }));
 
+        hasNextPage.value = response?.data?.metadata?.has_next_page;
+
         return response?.data?.data || [];
     }
 
     const { isPending, isFetching, isError, data, error, refetch } = useQuery({
-        queryKey: [{ status, sort, draft, searchDebounce, page, perPage }],
+        queryKey: [{ status, sort, published, searchDebounce, page, perPage }],
         queryFn: get,
     });
 
@@ -48,6 +51,7 @@ export function useTasks(params = {}) {
         isFetching,
         isError,
         error,
-        refetch
+        refetch,
+        hasNextPage
     };
 }

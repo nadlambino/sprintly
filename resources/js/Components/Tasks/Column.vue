@@ -18,12 +18,10 @@ const props = defineProps({
 });
 
 const tasksStore = useTasksStore();
-const sort = defineModel('sort');
 
-const { data: tasks, isPending, refetch } = await useTasks({
+const { data: tasks, isPending, refetch, hasNextPage } = await useTasks({
     status: props.status,
-    sort: sort.value,
-    draft: false,
+    published: true,
     search: tasksStore.search,
     page: 1,
     per_page: 5
