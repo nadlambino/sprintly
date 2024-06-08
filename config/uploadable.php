@@ -7,7 +7,7 @@ return [
      * You can set this to false if you want to use your own validation rules
      * or if you've already validated your uploads from your request.
      */
-    'validate' => true,
+    'validate' => false,
 
     /**
      * Delete the uploadable model when the upload fails.

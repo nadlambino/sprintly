@@ -31,16 +31,20 @@ const form = useForm({
 
 const success = ref(false);
 const message = ref(null);
-const errors = ref(null);
+const errors = ref({});
 
 const images = computed(() => Array.from(form.images).map((image) => URL.createObjectURL(image)));
 const savedImages = computed(() => props.task?.images?.map((image) => window.location.origin + '/' + image.path));
 const hasServerError = computed(() => success.value === false && errors?.value?.length === 0 && message?.value !== null);
 const isNew = computed(() => props.task?.id === undefined);
 
+const errorHasImageServerError = computed(() => {
+    return Object.keys(errors.value).some(key => key.toLowerCase().includes('images.'));
+});
+
 const submit = () => {
     success.value = false;
-    errors.value = null;
+    errors.value = {};
     const request = isNew.value ? create : update;
 
     request().then(({ data }) => {
@@ -82,7 +86,7 @@ const update = () => {
     <Head title="Tasks" />
 
     <AuthenticatedLayout>
-        <Alert :show="success || hasServerError" :message="message" :title="isNew ? 'Task Created' : 'Task Updated'">
+        <Alert :show="success || hasServerError || errorHasImageServerError" :message="message" title="Task">
             <template #actions>
                 <Link :href="route('tasks.index')">
                     <PrimaryButton class="flex gap-1 justify-center items-center">
@@ -142,14 +146,19 @@ const update = () => {
                         </div>
 
                         <div class="flex flex-col gap-2">
-                            <InputLabel for="images" value="Image(s)" />
+                            <div class="flex w-full justify-between items-center">
+                                <InputLabel for="images" value="Image(s)" />
+                                <small class="text-muted uppercase text-[10px]">Maximum of 5 images only</small>
+                            </div>
                             <input type="file" class="focus:ring-0 focus:outline-none"ame="images" accept="image/*" multiple @input="form.images = $event.target.files" />
                             <InputError v-for="error in errors?.images || []" :message="error" />
 
-                            <InputLabel for="replaced-images" value="Replace Image(s)" :class="{ 'text-muted cursor-not-allowed': images.length === 0 }" />
-                            <Toggle id="replaced-images" v-model="form.replace_images" :disabled="images.length === 0" />
+                            <template v-if="!isNew">
+                                <InputLabel for="replaced-images" value="Replace Image(s)" :class="{ 'text-muted cursor-not-allowed': images.length === 0 }" />
+                                <Toggle id="replaced-images" v-model="form.replace_images" :disabled="images.length === 0" />
+                            </template>
 
-                            <div class="flex gap-5 justify-center flex-wrap mt-3" v-if="!isNew">
+                            <div class="flex gap-5 justify-center flex-wrap mt-3">
                                 <img v-for="image in images" alt="" :src="image" class="aspect-square w-28 object-cover shadow-md rounded-md border" />
                                 <template v-if="!form.replace_images">
                                     <img v-for="image in savedImages" alt="" :src="image" class="aspect-square w-28 object-cover shadow-md rounded-md border" />
@@ -161,7 +170,7 @@ const update = () => {
                             <Link :href="route('tasks.index')">
                                 <SecondaryButton>Cancel</SecondaryButton>
                             </Link>
-                            <PrimaryButton class="w-24 flex justify-center" @click="() => submit(false)">{{ isNew ? 'Create' : 'Update' }}</PrimaryButton>
+                            <PrimaryButton class="w-24 flex justify-center" @click="() => submit(false)" :disabled="form.processing">{{ isNew ? 'Create' : 'Update' }}</PrimaryButton>
                         </div>
                     </form>
                 </div>
