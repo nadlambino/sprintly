@@ -5,7 +5,6 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import RadioInput from '@/Components/RadioInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Alert from '@/Components/Alert.vue';
 import { computed, ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
@@ -33,6 +32,7 @@ const message = ref(null);
 const errors = ref(null);
 
 const images = computed(() => Array.from(form.images).map((image) => URL.createObjectURL(image)));
+const savedImages = computed(() => props.task?.images?.map((image) => window.location.origin + '/' + image.path));
 const hasServerError = computed(() => success.value === false && errors?.value?.length === 0 && message?.value !== null);
 const isNew = computed(() => props.task?.id === undefined);
 
@@ -143,6 +143,7 @@ const update = () => {
 
                             <div class="flex gap-5 justify-center flex-wrap mt-3">
                                 <img v-for="image in images" alt="" :src="image" class="aspect-square w-28 object-cover shadow-md rounded-md border" />
+                                <img v-for="image in savedImages" alt="" :src="image" class="aspect-square w-28 object-cover shadow-md rounded-md border" />
                             </div>
                         </div>
 

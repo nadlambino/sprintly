@@ -27,7 +27,7 @@ class TaskController extends Controller
 
         return Inertia::render('Tasks/Form', [
             'statuses' => Status::all(['id', 'name']),
-            'task' => $task,
+            'task' => $task->load(['status', 'images']),
         ]);
     }
 }
