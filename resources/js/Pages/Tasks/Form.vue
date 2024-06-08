@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import RadioInput from '@/Components/RadioInput.vue';
@@ -8,7 +8,6 @@ import NavLink from '@/Components/NavLink.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Alert from '@/Components/Alert.vue';
-import axios from 'axios';
 import { computed, ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
 
@@ -18,25 +17,27 @@ const props = defineProps({
 
 const form = useForm({
     title: '',
-    description: '',
+    content: '',
     images: [],
     status_id: props.statuses[0].id,
-    published: 0
+    draft: 0
 });
 
 const success = ref(false);
 const message = ref(null);
 const errors = ref(null);
+
 const images = computed(() => Array.from(form.images).map((image) => URL.createObjectURL(image)));
+const hasServerError = computed(() => success.value === false && errors?.value?.length === 0 && message?.value !== null);
 
 const submit = (draft) => {
     success.value = false;
     errors.value = null;
 
     const routeName = draft ? 'api.tasks.draft' : 'api.tasks.store';
-    console.log(form.images)
+    form.draft = draft ? 1 : 0;
 
-    axios.post(route(routeName), form.data(), {
+    window.axios.post(route(routeName), form.data(), {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -56,13 +57,13 @@ const submit = (draft) => {
     <Head title="Tasks" />
 
     <AuthenticatedLayout>
-        <Alert :show="success" :message="message">
+        <Alert :show="success || hasServerError" :message="message">
             <template #actions>
-                <NavLink :href="route('tasks.index')" unstyled>
+                <Link :href="route('tasks.index')">
                     <PrimaryButton class="flex gap-1 justify-center items-center">
                         Go Back To Tasks
                     </PrimaryButton>
-                </NavLink>
+                </Link>
             </template>
         </Alert>
 
@@ -72,19 +73,31 @@ const submit = (draft) => {
                     <form class="flex flex-col gap-5 p-5 max-w-2xl m-auto" @submit.prevent enctype="multipart/form-data">
                         <div class="flex flex-col gap-2">
                             <InputLabel for="title" value="Title" required />
-                            <TextInput id="title" type="text" class="mt-1 block w-full" v-model="form.title" placeholder="Task Summary..." maxlength="100" />
+                            <TextInput
+                                id="title"
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.title"
+                                placeholder="Task Summary..."
+                                minlength="3"
+                                maxlength="100"
+                                required
+                            />
                             <InputError v-for="error in errors?.title || []" :message="error" />
                         </div>
 
                         <div class="flex flex-col gap-2">
-                            <InputLabel for="description" value="Description" />
+                            <InputLabel for="content" value="Content" required />
                             <TextInput
-                                id="description"
+                                id="content"
                                 type="textarea"
                                 class="mt-1 block w-full"
-                                v-model="form.description"
+                                v-model="form.content"
+                                minlength="3"
+                                maxlength="10000"
+                                required
                             />
-                            <InputError v-for="error in errors?.description || []" :message="error" />
+                            <InputError v-for="error in errors?.content || []" :message="error" />
                         </div>
 
                         <div class="flex flex-col gap-2">
@@ -109,7 +122,7 @@ const submit = (draft) => {
                         </div>
 
                         <div class="flex justify-end items-center gap-3">
-                            <NavLink class="text-muted w-24 flex justify-center hover:bg-secondary py-1 rounded-md hover:border-secondary hover:border" unstyled :href="route('tasks.index')">Cancel</NavLink>
+                            <Link class="text-muted w-24 flex justify-center hover:bg-secondary py-1 rounded-md hover:border-secondary hover:border" :href="route('tasks.index')">Cancel</Link>
                             <SecondaryButton class="w-24 flex justify-center" @click="() => submit(true)">Draft</SecondaryButton>
                             <PrimaryButton class="w-24 flex justify-center" @click="() => submit(false)">Create</PrimaryButton>
                         </div>

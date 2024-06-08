@@ -14,9 +14,9 @@ class TaskController extends Controller
         try {
             $task = $request->user()->tasks()->create($request->validated());
 
-            return $this->success('Task created successfully', $task, 201);
+            return $this->success('Task was successfully created.', $task, 201);
         } catch (Exception) {
-            return $this->error('Task could not be created. Please try again later.');
+            return $this->error('Something went wrong while creating the task. Please try again later.');
         }
     }
 
@@ -28,9 +28,9 @@ class TaskController extends Controller
 
             $task = $request->user()->tasks()->create($data);
 
-            return $this->success('Task drafted successfully', $task, 201);
+            return $this->success('Task was saved to draft.', $task, 201);
         } catch (Exception) {
-            return $this->error('Task could not be drafted. Please try again later.');
+            return $this->error('Something went wrong while drafting the task. Please try again later.');
         }
     }
 }

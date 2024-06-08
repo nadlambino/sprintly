@@ -22,10 +22,10 @@ class CreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => ['required', 'string', 'min:3', 'max:100'],
-            'description' => ['sometimes', 'nullable', 'max:10000'],
-            'status_id'   => ['sometimes', 'nullable', 'int', 'exists:statuses,id'],
-            'published'   => ['required', 'boolean']
+            'title'     => ['required', 'min:3', 'max:100', 'unique:tasks,title'],
+            'content'   => ['required', 'min:3', 'max:10000'],
+            'status_id' => ['required', 'exists:statuses,id'],
+            'draft'     => ['required', 'boolean']
         ];
     }
 }
