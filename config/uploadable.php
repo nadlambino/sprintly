@@ -27,7 +27,7 @@ return [
      * Force delete all the uploads associated to the uploadable model when it's deleted.
      * When this is set to true, the uploaded file will also be deleted, otherwise, it will be kept for model restoration.
      */
-    'force_delete_uploads' => false,
+    'force_delete_uploads' => true,
 
     /**
      * All previous uploads will be deleted after the new uploads are saved.

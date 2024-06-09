@@ -123,4 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'delete_trash_days_old' => env('DELETE_TRASH_DAYS_OLD', 30),
+
+    'run_delete_every' => env('RUN_DELETE_EVERY', 'daily'),
 ];
