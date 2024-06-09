@@ -23,9 +23,9 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'     => ['required', 'min:3', 'max:100', 'unique:tasks,title,' . $this->route('task')->id],
-            'content'   => ['required', 'min:3', 'max:10000'],
-            'status_id' => ['required', 'exists:statuses,id'],
+            'title'     => ['sometimes', 'min:3', 'max:100', 'unique:tasks,title,' . $this->route('task')->id],
+            'content'   => ['sometimes', 'min:3', 'max:10000'],
+            'status_id' => ['sometimes', 'exists:statuses,id'],
             'images'    => ['array'],
             'images.*'  => ['image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:4096'],
         ];

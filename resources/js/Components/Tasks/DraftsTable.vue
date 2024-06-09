@@ -24,6 +24,11 @@ const destroy = (id) => {
     window.axios.delete(route('api.tasks.destroy', { task: id }))
         .then(() => refetch());
 }
+
+const publish = (id) => {
+    window.axios.put(route('api.tasks.update', { task: id }), { publish: true })
+        .then(() => refetch());
+}
 </script>
 
 <template>
@@ -32,7 +37,7 @@ const destroy = (id) => {
         <template #actions="{ row }">
             <div class="flex gap-2">
                 <Link :href="route('tasks.edit', row.id)" class="bg-blue-500 hover:bg-blue-700 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
-                <button class="bg-green-500 hover:bg-green-700 text-white uppercase text-xs font-bold py-1 px-2 rounded">Publish</button>
+                <button @click="() => publish(row.id)" class="bg-green-500 hover:bg-green-700 text-white uppercase text-xs font-bold py-1 px-2 rounded">Publish</button>
                 <button @click="() => destroy(row.id)" class="bg-red-500 hover:bg-red-700 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
             </div>
         </template>
