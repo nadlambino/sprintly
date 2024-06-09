@@ -45,6 +45,7 @@ class TaskController extends Controller
     {
         return Inertia::render('Tasks/Trashed', [
             'statuses' => Status::all(['id', 'name']),
+            'days_before_deletion' => config('app.delete_trash_days_old'),
         ]);
     }
 }

@@ -6,14 +6,15 @@ import TaskTable from '@/Components/Tasks/TaskTable.vue';
 
 const props = defineProps({
     statuses: Array,
+    days_before_deletion: Number,
 });
 
 const headers = [
     { key: 'status.name', label: 'Status', class: 'uppercase text-xs font-bold' },
     { key: 'title', label: 'Title', class: 'text-xs' },
-    { key: 'created_at', label: 'Created At', class: 'text-xs' },
-    { key: 'updated_at', label: 'Updated At', class: 'text-xs' },
-    { key: 'deleted_at', label: 'Deleted At', class: 'text-xs' },
+    { key: 'deleted_at', label: 'Trashed At', class: 'text-xs' },
+    { key: 'deleted_since', label: 'Trashed Since', class: 'text-xs' },
+    { key: 'to_be_deleted_at', label: 'To Be Deleted At', class: 'text-xs' },
 ];
 </script>
 
@@ -26,8 +27,9 @@ const headers = [
         </template>
 
         <div class="p-5">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-5">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-between items-center py-3">
                 <h1 class="text-lg font-bold text-muted">Trashed</h1>
+                <small class="text-xs text-muted">Note: If the server worker is running, your trashed tasks will be deleted after {{ days_before_deletion }} day(s) of being trashed.</small>
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <Suspense>

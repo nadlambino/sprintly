@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use NadLambino\Uploadable\Models\Traits\HasUpload;
 
 class Task extends Model
@@ -19,6 +20,11 @@ class Task extends Model
         'published_at'
     ];
 
+    protected $appends = [
+        'deleted_since',
+        'to_be_deleted_at'
+    ];
+
     protected function casts(): array
     {
         return [
@@ -27,6 +33,18 @@ class Task extends Model
             'deleted_at'   => 'datetime:Y-m-d h:i A',
             'published_at' => 'datetime:Y-m-d h:i A',
         ];
+    }
+
+    public function getDeletedSinceAttribute(): ?string
+    {
+        return $this->deleted_at ? Carbon::parse($this->deleted_at)->diffForHumans() : null;
+    }
+
+    public function getToBeDeletedAtAttribute(): ?string
+    {
+        return $this->deleted_at
+            ? Carbon::parse($this->deleted_at)->addDays(config('app.delete_trash_days_old', 30))->endOfDay()->diffForHumans()
+            : null;
     }
 
     /**

@@ -18,7 +18,7 @@ const props = defineProps({
         </template>
 
         <div class="p-5">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-5">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-between items-center py-3">
                 <h1 class="text-lg font-bold text-muted">Drafts</h1>
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

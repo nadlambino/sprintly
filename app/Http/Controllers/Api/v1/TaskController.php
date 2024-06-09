@@ -104,7 +104,7 @@ class TaskController extends Controller
             $task->restore();
 
             return $this->success('Task was successfully restored.');
-        } catch (Exception $e) {
+        } catch (Exception) {
             return $this->error('Something went wrong while restoring the task. Please try again later.');
         }
     }
