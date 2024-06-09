@@ -3,9 +3,9 @@ import { useTasks } from '@/Composables/useTasks';
 import { useTasksStore } from '@/Stores/useTasksStore';
 import { useElementVisibility } from '@vueuse/core'
 import { ref, watch } from 'vue';
-import Task from './Task.vue';
-import TaskSkeleton from './TaskSkeleton.vue';
-import TaskEmpty from './TaskEmpty.vue';
+import Task from '@/Components/Tasks/Task.vue';
+import TaskSkeleton from '@/Components/Tasks/TaskSkeleton.vue';
+import TaskEmpty from '@/Components/Tasks/TaskEmpty.vue';
 
 const props = defineProps({
     label: {

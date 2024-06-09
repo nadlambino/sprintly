@@ -1,7 +1,7 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import SubMenu from './SubMenu.vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import DraftsTable from '@/Components/Tasks/DraftsTable.vue';
 </script>
 

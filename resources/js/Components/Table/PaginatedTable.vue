@@ -1,8 +1,7 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useElementVisibility } from '@vueuse/core';
 import TableRow from './TableRow.vue';
-import { computed } from 'vue';
 
 const props = defineProps({
     headers: Array,
@@ -17,7 +16,6 @@ const emit = defineEmits(['next']);
 
 const target = ref(null);
 const isVisible = useElementVisibility(target);
-
 watch(isVisible, (visible) => visible && emit('next'));
 
 const totalShownData = computed(() => props.data?.reduce((total, page) => total + page.length, 0));

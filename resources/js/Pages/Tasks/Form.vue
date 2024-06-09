@@ -1,16 +1,16 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { computed, ref } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useUrlSearchParams } from '@vueuse/core';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import RadioInput from '@/Components/RadioInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Alert from '@/Components/Alert.vue';
-import { computed, ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import Toggle from '@/Components/Toggle.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { useUrlSearchParams } from '@vueuse/core';
 
 const props = defineProps({
     statuses: Array,

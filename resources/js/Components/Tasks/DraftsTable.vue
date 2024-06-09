@@ -1,8 +1,8 @@
 <script setup>
 import { useTasks } from '@/Composables/useTasks';
 import { useTasksStore } from '@/Stores/useTasksStore';
-import PaginatedTable from '../Table/PaginatedTable.vue';
 import { Link } from '@inertiajs/vue3';
+import PaginatedTable from '@/Components/Table/PaginatedTable.vue';
 
 const headers = [
     { key: 'status.name', label: 'Status', class: 'uppercase text-xs font-bold' },

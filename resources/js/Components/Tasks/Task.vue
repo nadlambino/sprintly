@@ -1,7 +1,6 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
-import dayjs from 'dayjs';
 import { computed, ref } from 'vue';
+import { Link } from '@inertiajs/vue3';
 import DeleteIcon from '@/Icons/DeleteIcon.vue';
 import Alert from '@/Components/Alert.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -15,8 +14,6 @@ const props = defineProps({
 
 const emit = defineEmits(['destroy']);
 
-const createdAt = computed(() => props.task.created_at ? dayjs(props.task.created_at).format('MMM D, YYYY h:mm A') : '-');
-const publishedAt = computed(() => props.task.published_at ? dayjs(props.task.published_at).format('MMM D, YYYY h:mm A') : '-');
 const showConfirmDelete = ref(false);
 const cardClass = computed(() => {
     if (props.task.status.name === 'todo') {
@@ -70,11 +67,11 @@ const destroy = () => {
         <div class="flex flex-col text-muted text-xs">
             <div class="flex justify-between">
                 <small>Created At</small>
-                <small>{{ createdAt }}</small>
+                <small>{{ task.created_at }}</small>
             </div>
             <div class="flex justify-between">
                 <small>Published At</small>
-                <small>{{ publishedAt }}</small>
+                <small>{{ task.published_at }}</small>
             </div>
         </div>
     </div>

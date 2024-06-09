@@ -1,5 +1,5 @@
 <script setup>
-import TableColumn from './TableColumn.vue';
+import TableColumn from '@/Components/Table/TableColumn.vue';
 
 const props = defineProps({
     headers: Array,

@@ -1,5 +1,5 @@
 <script setup>
-import Column from './Column.vue';
+import Column from '@/Components/Tasks/Column.vue';
 </script>
 
 <template>

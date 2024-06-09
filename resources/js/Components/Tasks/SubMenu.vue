@@ -1,9 +1,9 @@
 <script setup>
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import AddIcon from '../../Icons/AddIcon.vue';
-import { Link } from '@inertiajs/vue3';
-import TextInput from '@/Components/TextInput.vue';
 import { useTasksStore } from '@/Stores/useTasksStore';
+import { Link } from '@inertiajs/vue3';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import AddIcon from '@/Icons/AddIcon.vue';
+import TextInput from '@/Components/TextInput.vue';
 import ButtonDropdown from '@/Components/ButtonDropdown.vue';
 
 const tasksStore = useTasksStore();
