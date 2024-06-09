@@ -6,7 +6,11 @@ import { onClickOutside } from '@vueuse/core'
 
 const props = defineProps({
     label: String,
-    options: Array
+    options: Array,
+    placement: {
+        type: String,
+        default: 'right-0'
+    }
 });
 
 const selected = defineModel();
@@ -26,7 +30,7 @@ onClickOutside(target, () => showSort.value = false);
         </button>
 
         <!-- Dropdown menu -->
-        <div v-show="showSort" id="dropdownDefaultRadio" class="z-10 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-xl absolute right-0 top-12">
+        <div v-show="showSort" id="dropdownDefaultRadio" class="z-10 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-xl absolute top-12" :class="placement">
             <ul class="py-1 text-xs" aria-labelledby="dropdownRadioButton">
                 <li v-for="option in options" :key="option.value">
                     <div class="flex items-center">

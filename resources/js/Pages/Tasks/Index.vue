@@ -21,7 +21,7 @@ const kanban = useStorage('kanban', true);
             <SubMenu :board="false" :toggleable="true" v-model:kanban="kanban" :statuses="statuses" />
         </template>
 
-        <div class="py-5">
+        <div class="p-5">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-5">
                 <h1 class="text-lg font-bold text-muted">Board</h1>
             </div>

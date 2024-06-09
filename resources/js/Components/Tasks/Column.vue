@@ -34,7 +34,7 @@ watch(isVisible, (visible) => visible && next());
 </script>
 
 <template>
-    <div class="flex flex-col gap-5 bg-white overflow-hidden shadow-sm sm:rounded-lg h-screen">
+    <div class="flex flex-col gap-5 bg-white overflow-hidden shadow-sm rounded-lg max-h-screen">
         <div class="px-5 py-2 text-center font-bold bg-muted text-white">
             <p class="uppercase text-sm font-normal">{{ label }} ({{ total }})</p>
         </div>

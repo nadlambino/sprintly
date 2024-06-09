@@ -3,7 +3,7 @@ import Column from '@/Components/Tasks/Column.vue';
 </script>
 
 <template>
-    <div class="grid grid-cols-3 gap-5">
+    <div class="flex flex-col md:grid md:grid-cols-3 gap-5">
         <Suspense>
             <Column label="To Do" status="todo" />
         </Suspense>

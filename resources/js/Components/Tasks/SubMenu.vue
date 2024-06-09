@@ -84,7 +84,7 @@ watch(kanban, resetStatusFilter);
 </script>
 
 <template>
-    <div class="flex gap-5 justify-between">
+    <div class="flex flex-col md:flex-row gap-5 justify-between">
         <div class="flex gap-5 items-center">
             <Link v-if="create" :href="route('tasks.create')">
                 <PrimaryButton class="flex gap-1 justify-center items-center">
@@ -102,14 +102,16 @@ watch(kanban, resetStatusFilter);
                 Trashed
             </Link>
         </div>
-        <div v-if="filters" class="flex gap-3 items-center">
-            <TextInput placeholder="Search by title..." class="w-72" v-model="tasksStore.search" />
-            <ButtonDropdown v-if="filterable || !kanban" v-model="tasksStore.status" :label="`Status: ${tasksStore.status}`" :options="statusOptions" />
-            <ButtonDropdown v-model="tasksStore.sortBy" :label="`Sort: ${tasksStore.sortBy}`" :options="sortOptions" />
-            <ButtonDropdown v-model="tasksStore.perPage" :label="`Paginate: ${tasksStore.perPage}`" :options="pageOptions" />
-            <div v-if="toggleable" class="flex flex-col gap-1">
-                <InputLabel value="Kanban" class="text-[10px] uppercase text-muted" />
-                <Toggle v-model="kanban" />
+        <div v-if="filters" class="flex flex-col md:flex-row gap-3 items-end md:items-center">
+            <TextInput placeholder="Search by title..." class="min-w-full md:min-w-72" v-model="tasksStore.search" />
+            <div class="flex gap-3">
+                <ButtonDropdown v-if="filterable || !kanban" v-model="tasksStore.status" :label="`Status: ${tasksStore.status}`" :options="statusOptions" placement="left-0" />
+                <ButtonDropdown v-model="tasksStore.sortBy" :label="`Sort: ${tasksStore.sortBy}`" :options="sortOptions" />
+                <ButtonDropdown v-model="tasksStore.perPage" :label="`Paginate: ${tasksStore.perPage}`" :options="pageOptions" />
+                <div v-if="toggleable" class="flex flex-col gap-1">
+                    <InputLabel value="Kanban" class="text-[10px] uppercase text-muted" />
+                    <Toggle v-model="kanban" />
+                </div>
             </div>
         </div>
     </div>
