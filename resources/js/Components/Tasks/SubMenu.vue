@@ -6,6 +6,17 @@ import AddIcon from '@/Icons/AddIcon.vue';
 import TextInput from '@/Components/TextInput.vue';
 import ButtonDropdown from '@/Components/ButtonDropdown.vue';
 
+const props = defineProps({
+    create: {
+        type: Boolean,
+        default: true
+    },
+    draft: {
+        type: Boolean,
+        default: true
+    }
+});
+
 const tasksStore = useTasksStore();
 const sortOptions = [
     { label: 'Created At (ASC)', value: 'created_at' },
@@ -23,14 +34,14 @@ const pageOptions = [
 
 <template>
     <div class="flex gap-5 justify-between">
-        <div class="flex gap-3 items-center">
-            <Link :href="route('tasks.create')">
+        <div class="flex gap-5 items-center">
+            <Link v-if="create" :href="route('tasks.create')">
                 <PrimaryButton class="flex gap-1 justify-center items-center">
                     <AddIcon class="text-white" />
                     <span>Create</span>
                 </PrimaryButton>
             </Link>
-            <Link :href="route('tasks.drafts')">
+            <Link v-if="draft" :href="route('tasks.drafts')" class="text-primary hover:text-primary/80 hover:underline">
                 Drafts
             </Link>
         </div>

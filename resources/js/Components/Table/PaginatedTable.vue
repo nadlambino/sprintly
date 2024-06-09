@@ -9,7 +9,8 @@ const props = defineProps({
     isEmpty: Boolean,
     isRequesting: Boolean,
     hasNextPage: Boolean,
-    total: Number
+    total: Number,
+    label: String
 });
 
 const emit = defineEmits(['next']);
@@ -62,6 +63,6 @@ const totalShownData = computed(() => props.data?.reduce((total, page) => total 
         </table>
     </div>
     <div class="flex justify-end items-center gap-3 mt-2">
-        <small class="text-muted">Showing {{ totalShownData }} of {{ total }}</small>
+        <small class="text-muted">Showing {{ totalShownData }} of {{ total }} {{ label }}</small>
     </div>
 </template>

@@ -32,8 +32,7 @@ const publish = (id) => {
 </script>
 
 <template>
-
-    <PaginatedTable :data="data?.pages" :headers="headers" :total="total" :is-empty="isEmpty" :is-requesting="isRequesting" :has-next-page="hasNextPage" @next="next">
+    <PaginatedTable :data="data?.pages" :headers="headers" :total="total" :is-empty="isEmpty" :is-requesting="isRequesting" :has-next-page="hasNextPage" label="tasks" @next="next">
         <template #actions="{ row }">
             <div class="flex gap-2">
                 <Link :href="route('tasks.edit', row.id)" class="bg-blue-500 hover:bg-blue-700 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
