@@ -35,16 +35,16 @@ const props = defineProps({
 
 const tasksStore = useTasksStore();
 const sortOptions = [
-    { label: 'Created At (ASC)', value: 'created_at' },
-    { label: 'Created At (DESC)', value: '-created_at' },
-    { label: 'Title (ASC)', value: 'title' },
-    { label: 'Title (DESC)', value: '-title' },
+    { label: '&uarr; Created', value: 'created_at' },
+    { label: '&darr; Created', value: '-created_at' },
+    { label: '&uarr; Title', value: 'title' },
+    { label: '&darr; Title', value: '-title' },
 ];
 const pageOptions = [
-    { label: '10 Per Page', value: 10 },
-    { label: '20 Per Page', value: 20 },
-    { label: '50 Per Page', value: 50 },
-    { label: '100 Per Page', value: 100 },
+    { label: '10 Tasks', value: 10 },
+    { label: '20 Tasks', value: 20 },
+    { label: '50 Tasks', value: 50 },
+    { label: '100 Tasks', value: 100 },
 ];
 const statusOptions = computed(() => {
     let options =  props.statuses?.map(status => {

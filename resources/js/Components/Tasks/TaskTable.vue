@@ -73,10 +73,10 @@ const restore = (id) => {
     <PaginatedTable :data="data?.pages" :headers="headers" :total="total" :is-empty="isEmpty" :is-requesting="isRequesting" :has-next-page="hasNextPage" label="tasks" @next="next">
         <template #actions="{ row }">
             <div class="flex gap-2">
-                <Link v-if="editable" :href="route('tasks.edit', row.id)" class="bg-blue-500 hover:bg-blue-700 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
-                <button v-if="publishable" @click="() => publish(row.id)" class="bg-green-500 hover:bg-green-700 text-white uppercase text-xs font-bold py-1 px-2 rounded">Publish</button>
-                <button v-if="deletable" @click="() => destroy(row.id)" class="bg-red-500 hover:bg-red-700 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
-                <button v-if="restorable" @click="() => restore(row.id)" class="bg-green-500 hover:bg-green-700 text-white uppercase text-xs font-bold py-1 px-2 rounded">Restore</button>
+                <Link v-if="editable" :href="route('tasks.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
+                <button v-if="publishable" @click="() => publish(row.id)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Publish</button>
+                <button v-if="deletable" @click="() => destroy(row.id)" class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
+                <button v-if="restorable" @click="() => restore(row.id)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Restore</button>
             </div>
         </template>
     </PaginatedTable>
