@@ -6,6 +6,8 @@ import AddIcon from '@/Icons/AddIcon.vue';
 import TextInput from '@/Components/TextInput.vue';
 import ButtonDropdown from '@/Components/ButtonDropdown.vue';
 import { computed } from 'vue';
+import { watch } from 'vue';
+import { onMounted } from 'vue';
 
 const props = defineProps({
     statuses: Array,
@@ -43,7 +45,7 @@ const pageOptions = [
     { label: '20 Per Page', value: 20 },
     { label: '50 Per Page', value: 50 },
     { label: '100 Per Page', value: 100 },
-]
+];
 const statusOptions = computed(() => {
     let options =  props.statuses?.map(status => {
         return {
@@ -55,7 +57,15 @@ const statusOptions = computed(() => {
     options.unshift({ label: 'All', value: 'all' });
 
     return options;
-})
+});
+
+const resetStatusFilter = () => {
+    tasksStore.status = props.filterable ? 'all' : null;
+};
+
+onMounted(resetStatusFilter);
+
+watch(() => props.filterable, resetStatusFilter);
 </script>
 
 <template>

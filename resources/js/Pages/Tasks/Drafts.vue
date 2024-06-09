@@ -1,11 +1,8 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
-import { onMounted } from 'vue';
-import { useTasksStore } from '@/Stores/useTasksStore';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import TaskTable from '@/Components/Tasks/TaskTable.vue';
-import { onBeforeUnmount } from 'vue';
 
 const props = defineProps({
     statuses: Array,
@@ -17,16 +14,6 @@ const headers = [
     { key: 'created_at', label: 'Created At', class: 'text-xs' },
     { key: 'updated_at', label: 'Updated At', class: 'text-xs' },
 ];
-
-const tasksStore = useTasksStore();
-
-onMounted(() => {
-    tasksStore.status = 'all';
-});
-
-onBeforeUnmount(() => {
-    tasksStore.status = null;
-})
 </script>
 
 <template>

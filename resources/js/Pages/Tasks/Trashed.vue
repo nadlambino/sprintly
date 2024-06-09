@@ -4,6 +4,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import TaskTable from '@/Components/Tasks/TaskTable.vue';
 
+const props = defineProps({
+    statuses: Array,
+});
+
 const headers = [
     { key: 'status.name', label: 'Status', class: 'uppercase text-xs font-bold' },
     { key: 'title', label: 'Title', class: 'text-xs' },
@@ -18,7 +22,7 @@ const headers = [
 
     <AuthenticatedLayout>
         <template #header>
-            <SubMenu :trashed="false" />
+            <SubMenu :trashed="false" :filterable="true" :statuses="statuses" />
         </template>
 
         <div class="py-5">
