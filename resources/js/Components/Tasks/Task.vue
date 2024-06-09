@@ -48,13 +48,13 @@ const destroy = () => {
 
     <div :data-id="task.id" :data-status="task.status.name" class="flex flex-col gap-5 border shadow-md rounded-md p-3 border-t-4 hover:cursor-grab" :class="cardClass">
         <div class="flex justify-between items-center">
-            <div class="w-[90%]">
+            <div class="w-[87%]">
                 <Link :href="route('tasks.edit', task.id)" class="text-blue-600 hover:text-blue-800">
                     <h1 class="font-bold text-lg truncate" :title="task.title">{{ task.title }}</h1>
                 </Link>
             </div>
             <button type="button" @click="showConfirmDelete = true">
-                <DeleteIcon class="text-gray-500"/>
+                <DeleteIcon class="text-gray-500 hover:text-red-500"/>
             </button>
         </div>
         <div>
