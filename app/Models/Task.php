@@ -19,6 +19,16 @@ class Task extends Model
         'published_at'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'created_at'   => 'datetime:Y-m-d h:i A',
+            'updated_at'   => 'datetime:Y-m-d h:i A',
+            'deleted_at'   => 'datetime:Y-m-d h:i A',
+            'published_at' => 'datetime:Y-m-d h:i A',
+        ];
+    }
+
     /**
      * Relation method between Task and Status
      *

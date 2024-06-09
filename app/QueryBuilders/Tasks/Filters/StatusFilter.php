@@ -9,6 +9,9 @@ class StatusFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property): void
     {
-        $query->when(! empty($value), fn ($query) => $query->whereHas('status', fn($query) => $query->where('name', $value)));
+        $query->when(
+            ! empty($value),
+            fn ($query) => $query->whereHas('status', fn($query) => $query->where('name', $value)),
+        );
     }
 }

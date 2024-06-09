@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/vue-query';
-import { computed, ref, watchEffect } from 'vue';
+import { computed, ref, watch, watchEffect } from 'vue';
 import { useDebounce } from "@vueuse/core";
 import { useTasksStore } from '@/Stores/useTasksStore';
 
@@ -21,6 +21,10 @@ export function useTasks(params = {}) {
         sort.value = tasksStore.sortBy;
         perPage.value = tasksStore.perPage;
     });
+
+    watch(() => tasksStore.search, () => {
+        page.value = 1;
+    })
 
     const get = async ({ pageParam = 1 }) => {
         const response = await axios.get(route('api.tasks.index', {

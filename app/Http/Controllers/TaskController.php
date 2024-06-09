@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Status;
 use App\Models\Task;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
@@ -29,5 +30,10 @@ class TaskController extends Controller
             'statuses' => Status::all(['id', 'name']),
             'task' => $task->load(['status', 'images']),
         ]);
+    }
+
+    public function drafts()
+    {
+        return Inertia::render('Tasks/Drafts');
     }
 }

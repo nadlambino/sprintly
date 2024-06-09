@@ -7,6 +7,7 @@ export const useTasksStore = defineStore('tasks', () => {
     const search = ref(url.title || '');
     const sortBy = ref(url.sort || 'created_at');
     const perPage = ref(url.per_page || 10);
+    const status = ref(url.status);
 
     watch(search, () => {
         url.title = search.value;
@@ -20,9 +21,14 @@ export const useTasksStore = defineStore('tasks', () => {
         url.per_page = perPage.value;
     });
 
+    watch(status, () => {
+        url.status = status.value;
+    });
+
     return {
         search,
         sortBy,
-        perPage
+        perPage,
+        status
     };
 });

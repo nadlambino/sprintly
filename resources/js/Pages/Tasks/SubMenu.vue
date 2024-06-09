@@ -23,12 +23,17 @@ const pageOptions = [
 
 <template>
     <div class="flex gap-5 justify-between">
-        <Link :href="route('tasks.create')">
-            <PrimaryButton class="flex gap-1 justify-center items-center">
-                <AddIcon class="text-white" />
-                <span>Create</span>
-            </PrimaryButton>
-        </Link>
+        <div class="flex gap-3 items-center">
+            <Link :href="route('tasks.create')">
+                <PrimaryButton class="flex gap-1 justify-center items-center">
+                    <AddIcon class="text-white" />
+                    <span>Create</span>
+                </PrimaryButton>
+            </Link>
+            <Link :href="route('tasks.drafts')">
+                Drafts
+            </Link>
+        </div>
         <div class="flex gap-2">
             <TextInput placeholder="Search by title..." class="w-72" v-model="tasksStore.search" />
             <ButtonDropdown v-model="tasksStore.sortBy" :label="`Sort By: ${tasksStore.sortBy}`" :options="sortOptions" />
