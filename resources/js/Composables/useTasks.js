@@ -8,7 +8,8 @@ export function useTasks(params = {}) {
 
     const status = ref(params?.status);
     const sort  = ref(params?.sort || 'created_at');
-    const published = ref(params?.published || false);
+    const published = ref(params?.published);
+    const trashed = ref(params?.trashed);
     const page = ref(params?.page || 1);
     const perPage = ref(params?.per_page || tasksStore.perPage);
     const search = ref(params?.search);
@@ -31,7 +32,8 @@ export function useTasks(params = {}) {
             filter: {
                 title: searchDebounce.value,
                 status: status.value,
-                published: published.value
+                published: published.value,
+                trashed: trashed.value,
             },
             sort: sort.value,
             include: 'status,images',
@@ -47,7 +49,7 @@ export function useTasks(params = {}) {
     }
 
     const { data, isPending, isFetching, isFetchingNextPage, refetch, fetchNextPage } = useInfiniteQuery({
-        queryKey: [{ status, sort, published, searchDebounce, perPage }],
+        queryKey: [{ status, sort, published, trashed, searchDebounce, perPage }],
         queryFn: get,
         initialPageParam: 1,
         getNextPageParam: () => hasNextPage.value ? page.value : null,

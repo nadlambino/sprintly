@@ -36,4 +36,9 @@ class TaskController extends Controller
     {
         return Inertia::render('Tasks/Drafts');
     }
+
+    public function trashed()
+    {
+        return Inertia::render('Tasks/Trashed');
+    }
 }

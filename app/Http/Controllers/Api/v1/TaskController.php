@@ -8,6 +8,7 @@ use App\Http\Requests\Api\Tasks\UpdateRequest;
 use App\Models\Task;
 use App\QueryBuilders\Tasks\Filters\PublishedFilter;
 use App\QueryBuilders\Tasks\Filters\StatusFilter;
+use App\QueryBuilders\Tasks\Filters\TrashedFilter;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,7 +26,8 @@ class TaskController extends Controller
                     'title',
                     'content',
                     AllowedFilter::custom('status', new StatusFilter),
-                    AllowedFilter::custom('published', new PublishedFilter)
+                    AllowedFilter::custom('published', new PublishedFilter),
+                    AllowedFilter::custom('trashed', new TrashedFilter)
                 ])
                 ->allowedIncludes(['status', 'images'])
                 ->defaultSort('created_at')
@@ -89,6 +91,21 @@ class TaskController extends Controller
             return $this->success('Task was successfully deleted.');
         } catch (Exception) {
             return $this->error('Something went wrong while deleting the task. Please try again later.');
+        }
+    }
+
+    public function restore(int $id): JsonResponse
+    {
+        try {
+            $task = Task::onlyTrashed()->findOrFail($id);
+
+            Gate::authorize('restore', $task);
+
+            $task->restore();
+
+            return $this->success('Task was successfully restored.');
+        } catch (Exception $e) {
+            return $this->error('Something went wrong while restoring the task. Please try again later.');
         }
     }
 }

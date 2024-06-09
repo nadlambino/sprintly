@@ -44,6 +44,9 @@ const pageOptions = [
             <Link v-if="draft" :href="route('tasks.drafts')" class="text-primary hover:text-primary/80 hover:underline">
                 Drafts
             </Link>
+            <Link v-if="draft" :href="route('tasks.trashed')" class="text-primary hover:text-primary/80 hover:underline">
+                Trashed
+            </Link>
         </div>
         <div class="flex gap-2">
             <TextInput placeholder="Search by title..." class="w-72" v-model="tasksStore.search" />
