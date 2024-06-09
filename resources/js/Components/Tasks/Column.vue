@@ -68,10 +68,10 @@ const move = async (event) => {
                     <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" />
                 </VueDraggableNext>
             </div>
-            <TaskSkeleton v-if="isRequesting" />
             <div v-if="hasNextPage" ref="target"></div>
             <p v-if="!hasNextPage && !isRequesting && !isEmpty" class="text-center text-muted">No more tasks</p>
         </div>
+        <TaskSkeleton class="mx-5" v-if="isRequesting" />
     </div>
 </template>
 
