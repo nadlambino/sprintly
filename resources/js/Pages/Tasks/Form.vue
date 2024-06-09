@@ -103,7 +103,7 @@ const update = () => {
             </template>
         </Alert>
 
-        <div class="py-12">
+        <div class="p-5">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <form class="flex flex-col gap-5 p-5 max-w-2xl m-auto" @submit.prevent enctype="multipart/form-data">
@@ -150,7 +150,7 @@ const update = () => {
                         <div class="flex flex-col gap-2">
                             <div class="flex justify-between items-center">
                                 <InputLabel for="publish" value="Publish" />
-                                <small class="text-muted text-xs">Only published tasks will be visible in board page.</small>
+                                <small class="text-muted text-xs text-right">Only published tasks will be visible in board page.</small>
                             </div>
                             <Toggle id="publish" v-model="form.publish"/>
                         </div>
@@ -163,7 +163,7 @@ const update = () => {
                             <template v-if="!isNew">
                                 <div class="flex justify-between items-center">
                                     <InputLabel for="replaced-images" value="Replace Image(s)" :class="{ 'text-muted cursor-not-allowed': images.length === 0 }" />
-                                    <small class="text-muted text-xs">When checked, all images will be replaced with new ones.</small>
+                                    <small class="text-muted text-xs text-right">When checked, all images will be replaced with new ones.</small>
                                 </div>
                                 <Toggle id="replaced-images" v-model="form.replace_images" :disabled="images.length === 0" />
                             </template>
