@@ -11,6 +11,7 @@ import Alert from '@/Components/Alert.vue';
 import InputError from '@/Components/InputError.vue';
 import Toggle from '@/Components/Toggle.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+import SubMenu from '@/Components/Tasks/SubMenu.vue';
 
 const props = defineProps({
     statuses: Array,
@@ -89,6 +90,9 @@ const update = () => {
     <Head title="Tasks" />
 
     <AuthenticatedLayout>
+        <template #header>
+            <SubMenu :create="false" :filters="false"/>
+        </template>
         <Alert :show="success || hasServerError || errorHasImageServerError" :message="message" title="Task">
             <template #actions>
                 <Link :href="route('tasks.index')">
@@ -149,10 +153,7 @@ const update = () => {
                         </div>
 
                         <div class="flex flex-col gap-2">
-                            <div class="flex w-full justify-between items-center">
-                                <InputLabel for="images" value="Image(s)" />
-                                <small class="text-muted uppercase text-[10px]">Maximum of 5 images only</small>
-                            </div>
+                            <InputLabel for="images" value="Image(s)" />
                             <input type="file" class="focus:ring-0 focus:outline-none"ame="images" accept="image/*" multiple @input="form.images = $event.target.files" />
                             <InputError v-for="error in errors?.images || []" :message="error" />
 

@@ -26,6 +26,10 @@ const props = defineProps({
         type: Boolean,
         default: true
     },
+    filters: {
+        type: Boolean,
+        default: true
+    },
     trashed: {
         type: Boolean,
         default: true
@@ -98,7 +102,7 @@ watch(kanban, resetStatusFilter);
                 Trashed
             </Link>
         </div>
-        <div class="flex gap-3 items-center">
+        <div v-if="filters" class="flex gap-3 items-center">
             <TextInput placeholder="Search by title..." class="w-72" v-model="tasksStore.search" />
             <ButtonDropdown v-if="filterable || !kanban" v-model="tasksStore.status" :label="`Status: ${tasksStore.status}`" :options="statusOptions" />
             <ButtonDropdown v-model="tasksStore.sortBy" :label="`Sort: ${tasksStore.sortBy}`" :options="sortOptions" />
