@@ -23,7 +23,7 @@ const totalShownData = computed(() => props.data?.reduce((total, page) => total 
 </script>
 
 <template>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[70vh]">
+    <div class="relative overflow-x-auto shadow-md rounded-lg max-h-[70vh]">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>

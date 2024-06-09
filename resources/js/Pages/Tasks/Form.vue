@@ -105,7 +105,7 @@ const update = () => {
 
         <div class="p-5">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                     <form class="flex flex-col gap-5 p-5 max-w-2xl m-auto" @submit.prevent enctype="multipart/form-data">
                         <div class="flex flex-col gap-2">
                             <InputLabel for="title" value="Title" required />
