@@ -50,12 +50,12 @@ const totalShownData = computed(() => props.data?.reduce((total, page) => total 
                 </template>
                 <tr v-if="hasNextPage" ref="target"></tr>
                 <tr v-if="isRequesting">
-                    <td :colspan="headers.length + 1" class="text-center py-4">
+                    <td :colspan="headers.length + 1" class="text-center py-4 bg-gray-50">
                         Loading...
                     </td>
                 </tr>
                 <tr v-if="!hasNextPage && !isRequesting && !isEmpty" class="text-center text-muted py-2">
-                    <td :colspan="headers.length + 1" class="py-4">
+                    <td :colspan="headers.length + 1" class="py-4 bg-gray-50">
                         No more data
                     </td>
                 </tr>
