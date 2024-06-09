@@ -8,6 +8,9 @@ import ButtonDropdown from '@/Components/ButtonDropdown.vue';
 import { computed } from 'vue';
 import { watch } from 'vue';
 import { onMounted } from 'vue';
+import Toggle from '../Toggle.vue';
+import { ref } from 'vue';
+import InputLabel from '../InputLabel.vue';
 
 const props = defineProps({
     statuses: Array,
@@ -28,6 +31,10 @@ const props = defineProps({
         default: true
     },
     filterable: {
+        type: Boolean,
+        default: false
+    },
+    toggleable: {
         type: Boolean,
         default: false
     }
@@ -60,12 +67,16 @@ const statusOptions = computed(() => {
 });
 
 const resetStatusFilter = () => {
-    tasksStore.status = props.filterable ? 'all' : null;
+    tasksStore.status = props.filterable || !kanban.value ? 'all' : tasksStore.status;
 };
 
 onMounted(resetStatusFilter);
 
 watch(() => props.filterable, resetStatusFilter);
+
+const kanban = defineModel('kanban', { default: false });
+
+watch(kanban, resetStatusFilter);
 </script>
 
 <template>
@@ -87,11 +98,15 @@ watch(() => props.filterable, resetStatusFilter);
                 Trashed
             </Link>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-3 items-center">
             <TextInput placeholder="Search by title..." class="w-72" v-model="tasksStore.search" />
-            <ButtonDropdown v-if="filterable" v-model="tasksStore.status" :label="`Status: ${tasksStore.status}`" :options="statusOptions" />
+            <ButtonDropdown v-if="filterable || !kanban" v-model="tasksStore.status" :label="`Status: ${tasksStore.status}`" :options="statusOptions" />
             <ButtonDropdown v-model="tasksStore.sortBy" :label="`Sort: ${tasksStore.sortBy}`" :options="sortOptions" />
             <ButtonDropdown v-model="tasksStore.perPage" :label="`Paginate: ${tasksStore.perPage}`" :options="pageOptions" />
+            <div v-if="toggleable" class="flex flex-col gap-1">
+                <InputLabel value="Kanban" class="text-[10px] uppercase text-muted" />
+                <Toggle v-model="kanban" />
+            </div>
         </div>
     </div>
 </template>

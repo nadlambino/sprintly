@@ -3,6 +3,14 @@ import { Head } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import Kanban from '@/Components/Tasks/Kanban.vue';
+import TaskTable from '@/Components/Tasks/TaskTable.vue';
+import { useStorage } from '@vueuse/core'
+
+const props = defineProps({
+    statuses: Array,
+});
+
+const kanban = useStorage('kanban', true);
 </script>
 
 <template>
@@ -10,15 +18,24 @@ import Kanban from '@/Components/Tasks/Kanban.vue';
 
     <AuthenticatedLayout>
         <template #header>
-            <SubMenu :board="false" />
+            <SubMenu :board="false" :toggleable="true" v-model:kanban="kanban" :statuses="statuses" />
         </template>
 
         <div class="py-5">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pb-5">
-                <h1 class="text-lg font-bold text-muted">Drafts</h1>
+                <h1 class="text-lg font-bold text-muted">Board</h1>
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <Kanban />
+                <Kanban v-if="kanban" />
+                <Suspense>
+                    <TaskTable
+                        v-if="!kanban"
+                        :published="true"
+                        :trashed="false"
+                        :deletable="true"
+                        :editable="true"
+                    />
+                </Suspense>
             </div>
         </div>
     </AuthenticatedLayout>

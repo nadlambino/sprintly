@@ -91,11 +91,11 @@ const update = () => {
     <AuthenticatedLayout>
         <Alert :show="success || hasServerError || errorHasImageServerError" :message="message" title="Task">
             <template #actions>
-                <a :href="route('tasks.index')">
+                <Link :href="route('tasks.index')">
                     <PrimaryButton class="flex gap-1 justify-center items-center">
                         Go Back To Tasks
                     </PrimaryButton>
-                </a>
+                </Link>
             </template>
         </Alert>
 

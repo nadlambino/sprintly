@@ -7,7 +7,12 @@ import PaginatedTable from '@/Components/Table/PaginatedTable.vue';
 const props = defineProps({
     headers: {
         type: Array,
-        required: true
+        default: () => [
+            { key: 'status.name', label: 'Status', class: 'uppercase text-xs font-bold' },
+            { key: 'title', label: 'Title', class: 'text-xs' },
+            { key: 'created_at', label: 'Created At', class: 'text-xs' },
+            { key: 'updated_at', label: 'Updated At', class: 'text-xs' },
+        ],
     },
     status: {
         default: null,
