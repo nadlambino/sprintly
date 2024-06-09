@@ -2,7 +2,6 @@
 import Counter from '@/Components/Counter.vue';
 import { useTasks } from '@/Composables/useTasks';
 
-
 const { total } = await useTasks({
     status: 'all',
     trashed: true,
