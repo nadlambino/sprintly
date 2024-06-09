@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/vue-query';
-import { ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { useDebounce } from "@vueuse/core";
 import { useTasksStore } from '@/Stores/useTasksStore';
 
@@ -45,17 +45,24 @@ export function useTasks(params = {}) {
     const { data, isPending, isFetching, isFetchingNextPage, refetch, fetchNextPage } = useInfiniteQuery({
         queryKey: [{ status, sort, published, searchDebounce, perPage }],
         queryFn: get,
+        initialPageParam: 1,
         getNextPageParam: () => hasNextPage.value ? page.value : null,
     });
 
+    const isRequesting = computed(() => isPending.value || isFetching.value || isFetchingNextPage.value);
+    const isEmpty = computed(() => !isRequesting.value && data?.value?.pages[0]?.length === 0);
+
+    const next = () => {
+        if (hasNextPage.value) fetchNextPage();
+    }
+
     return {
         data,
-        isPending,
-        isFetching,
+        total,
+        isRequesting,
+        isEmpty,
+        hasNextPage,
         refetch,
-        fetchNextPage,
-        isFetchingNextPage,
-        page,
-        total
+        next,
     };
 }

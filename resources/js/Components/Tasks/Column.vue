@@ -1,6 +1,5 @@
 <script setup>
 import { useTasks } from '@/Composables/useTasks';
-import { computed } from 'vue';
 import { useTasksStore } from '@/Stores/useTasksStore';
 import { useElementVisibility } from '@vueuse/core'
 import { ref, watch } from 'vue';
@@ -21,23 +20,17 @@ const props = defineProps({
 
 const tasksStore = useTasksStore();
 
-const { data, isPending, isFetchingNextPage, refetch, fetchNextPage, page, total } = await useTasks({
+const { data, total, isRequesting, isEmpty, hasNextPage, refetch, next } = await useTasks({
     status: props.status,
     published: true,
     search: tasksStore.search,
     per_page: tasksStore.perPage
 });
 
-const paginationIdentifier = ref(null);
-const isPaginationIdentifierVisibleInViewPort = useElementVisibility(paginationIdentifier);
+const target = ref(null);
+const isVisible = useElementVisibility(target);
 
-const getNextPage = async (visible) => {
-    if (visible === false) return;
-
-    fetchNextPage();
-}
-
-watch(isPaginationIdentifierVisibleInViewPort, getNextPage);
+watch(isVisible, (visible) => visible && next());
 </script>
 
 <template>
@@ -45,14 +38,14 @@ watch(isPaginationIdentifierVisibleInViewPort, getNextPage);
         <div class="px-5 py-2 text-center font-bold bg-muted text-white">
             <p class="uppercase text-sm font-normal">{{ label }} ({{ total }})</p>
         </div>
-        <TaskEmpty class="mx-5" v-if="!isPending && data?.pages[page ?? 0]?.length === 0" :status="status" />
+        <TaskEmpty class="mx-5" v-if="isEmpty" :status="status" />
         <div ref="container" class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-full">
             <div v-for="page in data?.pages" class="flex flex-col gap-5">
                 <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" />
             </div>
-            <TaskSkeleton v-if="isPending || isFetchingNextPage" />
-            <div ref="paginationIdentifier"></div>
+            <TaskSkeleton v-if="isRequesting" />
+            <div v-if="hasNextPage" ref="target"></div>
+            <p v-if="!hasNextPage && !isRequesting && !isEmpty" class="text-center text-muted">No more tasks</p>
         </div>
     </div>
 </template>
-@/Stores/useTasksStore
