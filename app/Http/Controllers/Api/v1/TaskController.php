@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Tasks\CreateRequest;
 use App\Http\Requests\Api\Tasks\UpdateRequest;
+use App\Models\Status;
 use App\Models\Task;
 use App\QueryBuilders\Tasks\Filters\PublishedFilter;
 use App\QueryBuilders\Tasks\Filters\StatusFilter;
@@ -63,17 +64,16 @@ class TaskController extends Controller
         }
     }
 
-    public function update(UpdateRequest $request, Task $task): JsonResponse
+    public function update(UpdateRequest $request, Task $task, Status $status): JsonResponse
     {
         try {
             $data = $request->validated();
-            $publish = filter_var($request->get('publish', false), FILTER_VALIDATE_BOOL);
-            $replaceImages = filter_var($request->get('replace_images', false), FILTER_VALIDATE_BOOL);
-            $data['published_at'] = $publish ? now() : null;
+            $data['published_at'] = filter_var($request->get('publish', false), FILTER_VALIDATE_BOOL) ? now() : null;
+            $data['status_id'] = $status->whereIdOrName($request->validated('status_id'), $request->validated('status'))->first()?->id;
 
-            Task::deletePreviousUploads($replaceImages);
+            Task::deletePreviousUploads(filter_var($request->get('replace_images', false), FILTER_VALIDATE_BOOL));
 
-            $task->update($data);
+            $task->update(array_filter($data));
 
             return $this->success('Task was successfully updated.', $task);
         } catch (Exception) {

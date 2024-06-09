@@ -21,6 +21,7 @@
         "@tanstack/vue-query": "^5.40.1",
         "@vueuse/core": "^10.10.0",
         "dayjs": "^1.11.11",
-        "pinia": "^2.1.7"
+        "pinia": "^2.1.7",
+        "vue-draggable-next": "^2.2.1"
     }
 }
