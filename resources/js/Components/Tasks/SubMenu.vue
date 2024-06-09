@@ -5,8 +5,10 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AddIcon from '@/Icons/AddIcon.vue';
 import TextInput from '@/Components/TextInput.vue';
 import ButtonDropdown from '@/Components/ButtonDropdown.vue';
+import { computed } from 'vue';
 
 const props = defineProps({
+    statuses: Array,
     create: {
         type: Boolean,
         default: true
@@ -22,6 +24,10 @@ const props = defineProps({
     trashed: {
         type: Boolean,
         default: true
+    },
+    filterable: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -38,6 +44,18 @@ const pageOptions = [
     { label: '50 Per Page', value: 50 },
     { label: '100 Per Page', value: 100 },
 ]
+const statusOptions = computed(() => {
+    let options =  props.statuses?.map(status => {
+        return {
+            label: status.name,
+            value: status.name
+        }
+    }) ?? [];
+
+    options.unshift({ label: 'All', value: 'all' });
+
+    return options;
+})
 </script>
 
 <template>
@@ -61,8 +79,9 @@ const pageOptions = [
         </div>
         <div class="flex gap-2">
             <TextInput placeholder="Search by title..." class="w-72" v-model="tasksStore.search" />
-            <ButtonDropdown v-model="tasksStore.sortBy" :label="`Sort By: ${tasksStore.sortBy}`" :options="sortOptions" />
-            <ButtonDropdown v-model="tasksStore.perPage" :label="`Per Page: ${tasksStore.perPage}`" :options="pageOptions" />
+            <ButtonDropdown v-if="filterable" v-model="tasksStore.status" :label="`Status: ${tasksStore.status}`" :options="statusOptions" />
+            <ButtonDropdown v-model="tasksStore.sortBy" :label="`Sort: ${tasksStore.sortBy}`" :options="sortOptions" />
+            <ButtonDropdown v-model="tasksStore.perPage" :label="`Paginate: ${tasksStore.perPage}`" :options="pageOptions" />
         </div>
     </div>
 </template>

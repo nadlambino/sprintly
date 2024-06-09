@@ -6,7 +6,7 @@ import { useTasksStore } from '@/Stores/useTasksStore';
 export function useTasks(params = {}) {
     const tasksStore = useTasksStore();
 
-    const status = ref(params?.status);
+    const status = ref(params?.status || tasksStore.status);
     const sort  = ref(params?.sort || 'created_at');
     const published = ref(params?.published);
     const trashed = ref(params?.trashed);
@@ -25,7 +25,11 @@ export function useTasks(params = {}) {
 
     watch(() => tasksStore.search, () => {
         page.value = 1;
-    })
+    });
+
+    watch(() => tasksStore.status, () => {
+        status.value = tasksStore.status;
+    });
 
     const get = async ({ pageParam = 1 }) => {
         const response = await axios.get(route('api.tasks.index', {

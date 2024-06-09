@@ -12,7 +12,9 @@ class TaskController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Tasks/Index');
+        return Inertia::render('Tasks/Index', [
+            'statuses' => Status::all(['id', 'name']),
+        ]);
     }
 
     public function create()
@@ -34,11 +36,15 @@ class TaskController extends Controller
 
     public function drafts()
     {
-        return Inertia::render('Tasks/Drafts');
+        return Inertia::render('Tasks/Drafts', [
+            'statuses' => Status::all(['id', 'name']),
+        ]);
     }
 
     public function trashed()
     {
-        return Inertia::render('Tasks/Trashed');
+        return Inertia::render('Tasks/Trashed', [
+            'statuses' => Status::all(['id', 'name']),
+        ]);
     }
 }
