@@ -10,7 +10,7 @@ import Kanban from '@/Components/Tasks/Kanban.vue';
 
     <AuthenticatedLayout>
         <template #header>
-            <SubMenu />
+            <SubMenu :board="false" />
         </template>
 
         <div class="py-5">

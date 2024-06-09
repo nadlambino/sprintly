@@ -2,7 +2,14 @@
 import { Head } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
-import DraftsTable from '@/Components/Tasks/DraftsTable.vue';
+import TaskTable from '@/Components/Tasks/TaskTable.vue';
+
+const headers = [
+    { key: 'status.name', label: 'Status', class: 'uppercase text-xs font-bold' },
+    { key: 'title', label: 'Title', class: 'text-xs' },
+    { key: 'created_at', label: 'Created At', class: 'text-xs' },
+    { key: 'updated_at', label: 'Updated At', class: 'text-xs' },
+];
 </script>
 
 <template>
@@ -19,7 +26,13 @@ import DraftsTable from '@/Components/Tasks/DraftsTable.vue';
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <Suspense>
-                    <DraftsTable />
+                    <TaskTable
+                        :trashed="false"
+                        :headers="headers"
+                        :publishable="true"
+                        :deletable="true"
+                        :editable="true"
+                    />
                 </Suspense>
             </div>
         </div>

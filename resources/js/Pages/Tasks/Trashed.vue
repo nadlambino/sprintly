@@ -18,7 +18,7 @@ const headers = [
 
     <AuthenticatedLayout>
         <template #header>
-            <SubMenu :draft="false" />
+            <SubMenu :trashed="false" />
         </template>
 
         <div class="py-5">

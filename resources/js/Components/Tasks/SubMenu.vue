@@ -11,7 +11,15 @@ const props = defineProps({
         type: Boolean,
         default: true
     },
+    board: {
+        type: Boolean,
+        default: true
+    },
     draft: {
+        type: Boolean,
+        default: true
+    },
+    trashed: {
         type: Boolean,
         default: true
     }
@@ -41,10 +49,13 @@ const pageOptions = [
                     <span>Create</span>
                 </PrimaryButton>
             </Link>
+            <Link v-if="board" :href="route('tasks.index')" class="text-primary hover:text-primary/80 hover:underline">
+                Board
+            </Link>
             <Link v-if="draft" :href="route('tasks.drafts')" class="text-primary hover:text-primary/80 hover:underline">
                 Drafts
             </Link>
-            <Link v-if="draft" :href="route('tasks.trashed')" class="text-primary hover:text-primary/80 hover:underline">
+            <Link v-if="trashed" :href="route('tasks.trashed')" class="text-primary hover:text-primary/80 hover:underline">
                 Trashed
             </Link>
         </div>
