@@ -148,17 +148,23 @@ const update = () => {
                         </div>
 
                         <div class="flex flex-col gap-2">
-                            <InputLabel for="publish" value="Publish" />
+                            <div class="flex justify-between items-center">
+                                <InputLabel for="publish" value="Publish" />
+                                <small class="text-muted text-xs">Only published tasks will be visible in board page.</small>
+                            </div>
                             <Toggle id="publish" v-model="form.publish"/>
                         </div>
 
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-3">
                             <InputLabel for="images" value="Image(s)" />
                             <input type="file" class="focus:ring-0 focus:outline-none"ame="images" accept="image/*" multiple @input="form.images = $event.target.files" />
                             <InputError v-for="error in errors?.images || []" :message="error" />
 
                             <template v-if="!isNew">
-                                <InputLabel for="replaced-images" value="Replace Image(s)" :class="{ 'text-muted cursor-not-allowed': images.length === 0 }" />
+                                <div class="flex justify-between items-center">
+                                    <InputLabel for="replaced-images" value="Replace Image(s)" :class="{ 'text-muted cursor-not-allowed': images.length === 0 }" />
+                                    <small class="text-muted text-xs">When checked, all images will be replaced with new ones.</small>
+                                </div>
                                 <Toggle id="replaced-images" v-model="form.replace_images" :disabled="images.length === 0" />
                             </template>
 
