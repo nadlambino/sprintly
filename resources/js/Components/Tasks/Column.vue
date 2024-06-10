@@ -40,6 +40,11 @@ const move = async (event) => {
     const status = event?.item?.parentElement?.getAttribute('data-status');
     const previousStatus = event?.item?.getAttribute('data-status');
 
+    if (!id || !status) {
+        dragging.value = false;
+        return;
+    };
+
     await window.axios.put(route('api.tasks.update', { task: id }), { status })
         .then(() => {
             emits('rerender', status?.replace(' ', ''), previousStatus?.replace(' ', ''));
@@ -77,6 +82,6 @@ const move = async (event) => {
 
 <style scoped>
     .dragging {
-        @apply opacity-50 border border-gray-400 border-dashed h-screen;
+        @apply opacity-50 border border-gray-400 border-dashed h-screen overflow-hidden;
     }
 </style>
