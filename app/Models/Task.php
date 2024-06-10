@@ -25,6 +25,11 @@ class Task extends Model
         'to_be_deleted_at'
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [
@@ -35,11 +40,21 @@ class Task extends Model
         ];
     }
 
+    /**
+     * Get the deleted_since attribute.
+     *
+     * @return string|null
+     */
     public function getDeletedSinceAttribute(): ?string
     {
         return $this->deleted_at ? Carbon::parse($this->deleted_at)->diffForHumans() : null;
     }
 
+    /**
+     * Get the to_be_deleted_at attribute.
+     *
+     * @return string|null
+     */
     public function getToBeDeletedAtAttribute(): ?string
     {
         return $this->deleted_at

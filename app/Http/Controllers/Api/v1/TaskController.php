@@ -19,13 +19,18 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
+    /**
+     * Get list of tasks.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function index(Request $request): JsonResponse
     {
         try {
             $tasks = QueryBuilder::for($request->user()->tasks())
                 ->allowedFilters([
                     'title',
-                    'content',
                     AllowedFilter::custom('status', new StatusFilter),
                     AllowedFilter::custom('published', new PublishedFilter),
                     AllowedFilter::custom('trashed', new TrashedFilter)
@@ -49,6 +54,12 @@ class TaskController extends Controller
         }
     }
 
+    /**
+     * Store new task.
+     *
+     * @param CreateRequest $request
+     * @return JsonResponse
+     */
     public function store(CreateRequest $request): JsonResponse
     {
         try {
@@ -64,6 +75,14 @@ class TaskController extends Controller
         }
     }
 
+    /**
+     * Update task.
+     *
+     * @param UpdateRequest $request
+     * @param Task $task
+     * @param Status $status
+     * @return JsonResponse
+     */
     public function update(UpdateRequest $request, Task $task, Status $status): JsonResponse
     {
         try {
@@ -81,6 +100,12 @@ class TaskController extends Controller
         }
     }
 
+    /**
+     * Delete task.
+     *
+     * @param Task $task
+     * @return JsonResponse
+     */
     public function destroy(Task $task): JsonResponse
     {
         try {
@@ -94,6 +119,12 @@ class TaskController extends Controller
         }
     }
 
+    /**
+     * Restore task.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
     public function restore(int $id): JsonResponse
     {
         try {
