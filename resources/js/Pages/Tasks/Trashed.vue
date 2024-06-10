@@ -6,7 +6,7 @@ import TaskTable from '@/Components/Tasks/TaskTable.vue';
 
 const props = defineProps({
     statuses: Array,
-    days_before_deletion: Number,
+    days_before_deletion: Number|String,
 });
 
 const headers = [

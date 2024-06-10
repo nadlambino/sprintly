@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Status;
 use App\Models\Task;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class TaskController extends Controller
 {
-    private Status $statuses;
+    private Collection $statuses;
 
     public function __construct()
     {
