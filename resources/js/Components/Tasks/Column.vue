@@ -75,7 +75,7 @@ const move = async (event) => {
         <div class="px-5 py-2 text-center font-bold bg-primary text-white">
             <p class="uppercase text-sm font-normal">{{ label }} ({{ total }})</p>
         </div>
-        <TaskEmpty class="mx-5" v-if="isEmpty && ! dragging" :status="status" />
+        <TaskEmpty v-if="isEmpty && ! dragging" class="mx-5" :status="status" />
         <div ref="container" class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-full">
             <div v-for="page in data?.pages">
                 <VueDraggableNext
@@ -92,8 +92,8 @@ const move = async (event) => {
             </div>
             <div v-if="hasNextPage" ref="target"></div>
             <p v-if="!hasNextPage && !isRequesting && !isEmpty" class="text-center text-muted">No more tasks</p>
+            <TaskSkeleton v-if="isRequesting" />
         </div>
-        <TaskSkeleton class="mx-5" v-if="isRequesting" />
     </div>
 </template>
 

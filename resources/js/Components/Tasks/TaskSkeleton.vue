@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <div class="flex flex-col gap-5 border shadow-md rounded-md p-3 border-t-4 border-t-gray-200">
+    <div class="flex flex-col gap-5 border shadow-lg rounded-md p-3 border-t-4 border-t-gray-200">
         <h1 class="truncate cursor-default font-bold text-lg w-full h-5 bg-gray-200 animate-pulse rounded-md"></h1>
         <div class="flex flex-col gap-1">
             <p class="line-clamp-3 w-full h-3 bg-gray-200 animate-pulse rounded-md"></p>

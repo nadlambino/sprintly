@@ -34,7 +34,7 @@ const { destroy } = useTaskApi  ();
         </template>
     </Alert>
 
-    <div :data-id="task.id" :data-status="task.status.name" class="flex flex-col gap-5 border shadow-md rounded-md p-3 border-t-4 hover:cursor-grab" :class="accentClass">
+    <div :data-id="task.id" :data-status="task.status.name" class="flex flex-col gap-5 border shadow-lg rounded-md p-3 border-t-4 hover:cursor-grab" :class="accentClass">
         <div class="flex justify-between items-center">
             <div class="w-[87%]">
                 <Link :href="route('tasks.edit', task.id)" class="text-blue-600 hover:text-blue-800">

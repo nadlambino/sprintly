@@ -1,6 +1,6 @@
 import { useUrlSearchParams } from '@vueuse/core';
 import { defineStore } from 'pinia';
-import { ref, watch, computed, watchEffect } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { useDebounce } from '@vueuse/core';
 
@@ -50,10 +50,16 @@ export function useTaskApi(params = {}) {
     const hasNextPage = ref(false);
     const total = ref(0);
 
-    watchEffect(() => {
+    watch(() => taskStore.search, () => {
         search.value = taskStore.search;
-        sort.value = taskStore.sortBy;
+    });
+
+    watch(() => taskStore.perPage, () => {
         perPage.value = taskStore.perPage;
+    });
+
+    watch(() => taskStore.sortBy, () => {
+        sort.value = taskStore.sortBy;
     });
 
     watch(() => taskStore.search, () => {
