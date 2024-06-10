@@ -19,6 +19,9 @@ const props = defineProps({
     accentColor: {
         type: String,
         default: 'gray-500',
+    },
+    parentId: {
+        default: null
     }
 });
 
@@ -37,7 +40,8 @@ const {
     status: props.status,
     published: true,
     search: taskStore.search,
-    per_page: taskStore.perPage
+    per_page: taskStore.perPage,
+    parent_id: props.parentId
 });
 
 const target = ref(null);

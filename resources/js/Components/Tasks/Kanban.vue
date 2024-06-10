@@ -2,6 +2,12 @@
 import { ref, reactive } from 'vue';
 import Column from '@/Components/Tasks/Column.vue';
 
+const props = defineProps({
+    parentId: {
+        default: null
+    }
+});
+
 const dragging = ref(false);
 const keys = reactive({
     todo: Math.random(),
@@ -31,6 +37,7 @@ const rerender = (status, previousStatus) => {
                 v-model:dragging="dragging"
                 @rerender="rerender"
                 :key="keys.todo"
+                :parent-id="parentId"
             />
         </Suspense>
         <Suspense>
@@ -41,6 +48,7 @@ const rerender = (status, previousStatus) => {
                 v-model:dragging="dragging"
                 @rerender="rerender"
                 :key="keys.inprogress"
+                :parent-id="parentId"
             />
         </Suspense>
         <Suspense>
@@ -51,6 +59,7 @@ const rerender = (status, previousStatus) => {
                 v-model:dragging="dragging"
                 @rerender="rerender"
                 :key="keys.done"
+                :parent-id="parentId"
             />
         </Suspense>
     </div>

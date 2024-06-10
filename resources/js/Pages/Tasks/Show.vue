@@ -68,7 +68,7 @@ const statusBadgeClass = computed(() => {
                 <h1 class="text-lg font-bold text-gray-700">Subtasks</h1>
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <Kanban v-if="kanban" />
+                <Kanban v-if="kanban" :parent-id="task?.id" />
                 <Suspense>
                     <TaskTable
                         v-if="!kanban"
