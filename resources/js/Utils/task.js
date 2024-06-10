@@ -151,6 +151,20 @@ export function useTaskApi(params = {}) {
             .put(route('api.tasks.restore', { task: id }));
     }
 
+    /**
+     * Request to get task that are valid to be parent of a task
+     *
+     * @param {Object|FormData} filter
+     * @returns {Promise}
+     */
+    const getParents = (filter) => {
+        return window.axios
+            .get(route('api.tasks.parents', {
+                filter,
+                per_page: perPage.value
+            }));
+    }
+
     return {
         data,
         total,
@@ -163,5 +177,6 @@ export function useTaskApi(params = {}) {
         update,
         destroy,
         restore,
+        getParents
     };
 }

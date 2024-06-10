@@ -7,6 +7,7 @@ use App\Http\Requests\Api\Tasks\CreateRequest;
 use App\Http\Requests\Api\Tasks\UpdateRequest;
 use App\Models\Status;
 use App\Models\Task;
+use App\QueryBuilders\Tasks\Filters\ExceptFilter;
 use App\QueryBuilders\Tasks\Filters\PublishedFilter;
 use App\QueryBuilders\Tasks\Filters\StatusFilter;
 use App\QueryBuilders\Tasks\Filters\TrashedFilter;
@@ -49,6 +50,28 @@ class TaskController extends Controller
                     'total' => $tasks->total()
                 ]
             );
+        } catch (Exception) {
+            return $this->error('Something went wrong while retrieving the tasks. Please try again later.');
+        }
+    }
+
+    /**
+     * Get list of tasks that are valid to be a parent.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function parents(Request $request): JsonResponse
+    {
+        try {
+            $tasks = QueryBuilder::for($request->user()->tasks()->published())
+                ->allowedFilters([
+                    'title',
+                    AllowedFilter::custom('except', new ExceptFilter),
+                ])
+                ->paginate($request->get('per_page', 10));
+
+            return $this->success('Tasks retrieved successfully.', $tasks->all());
         } catch (Exception) {
             return $this->error('Something went wrong while retrieving the tasks. Please try again later.');
         }

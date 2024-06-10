@@ -13,6 +13,7 @@ import InputError from '@/Components/InputError.vue';
 import Toggle from '@/Components/Toggle.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
+import Combobox from '@/Components/Combobox.vue';
 
 const props = defineProps({
     statuses: Array,
@@ -22,12 +23,13 @@ const props = defineProps({
     }
 });
 
-const { update, create } = useTaskApi();
+const { update, create, getParents } = useTaskApi();
 
 const url = useUrlSearchParams('history');
 
 const form = useForm({
     id: props.task?.id || null,
+    parent_id: props.task?.parent_id || null,
     title: props.task?.title || '',
     content: props.task?.content || '',
     images: [],
@@ -35,6 +37,15 @@ const form = useForm({
     publish: props.task?.published_at ? true : false,
     replace_images: false
 });
+
+const parents = ref([]);
+
+const getParentsList = async (value) => {
+    await getParents({ except: form.id, title: value })
+        .then(({ data }) => {
+            parents.value = data?.data?.map((parent) => ({ value: parent.id, label: parent.title }));
+        });
+}
 
 const success = ref(false);
 const message = ref(null);
@@ -103,6 +114,11 @@ const error = (error) => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                     <form class="flex flex-col gap-5 p-5 max-w-2xl m-auto" @submit.prevent enctype="multipart/form-data">
+                        <div class="flex flex-col gap-2">
+                            <InputLabel for="parent" value="Parent" />
+                            <Combobox id="parent" v-model="form.parent_id" :options="parents" @change="getParentsList" placeholder="Search parent by title..." />
+                        </div>
+
                         <div class="flex flex-col gap-2">
                             <InputLabel for="title" value="Title" required />
                             <TextInput

@@ -6,4 +6,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
     Route::name('api')->apiResource('/tasks', TaskController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::put('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('api.tasks.restore');
+    Route::get('/tasks/parents', [TaskController::class, 'parents'])->name('api.tasks.parents');
 });

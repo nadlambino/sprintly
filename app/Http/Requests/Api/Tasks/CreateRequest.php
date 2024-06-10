@@ -22,6 +22,7 @@ class CreateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'parent_id' => ['sometimes', 'nullable', 'exists:tasks,id'],
             'title'     => ['required', 'min:3', 'max:100', 'unique:tasks,title'],
             'content'   => ['required', 'min:3', 'max:10000'],
             'status_id' => ['required', 'exists:statuses,id'],
