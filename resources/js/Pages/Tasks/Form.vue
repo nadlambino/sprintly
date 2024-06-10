@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { useUrlSearchParams } from '@vueuse/core';
 import { useTaskApi } from '@/Utils/task';
@@ -46,6 +46,8 @@ const getParentsList = async (value) => {
             parents.value = data?.data?.map((parent) => ({ value: parent.id, label: parent.title }));
         });
 }
+
+onMounted(() => getParentsList());
 
 const success = ref(false);
 const message = ref(null);
