@@ -19,7 +19,7 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    Route::resource('/tasks', TaskController::class)->only(['index', 'create', 'edit']);
+    Route::resource('/tasks', TaskController::class)->only(['index', 'show', 'create', 'edit']);
     Route::get('/tasks/drafts', [TaskController::class, 'drafts'])->name('tasks.drafts');
     Route::get('/tasks/trashed', [TaskController::class, 'trashed'])->name('tasks.trashed');
 

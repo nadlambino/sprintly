@@ -77,6 +77,7 @@ export function useTaskApi(params = {}) {
                 status: status.value,
                 published: published.value,
                 trashed: trashed.value,
+                parent_id: params?.parent_id
             },
             sort: sort.value,
             include: 'status,images',

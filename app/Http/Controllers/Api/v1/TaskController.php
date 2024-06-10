@@ -32,6 +32,7 @@ class TaskController extends Controller
             $tasks = QueryBuilder::for($request->user()->tasks())
                 ->allowedFilters([
                     'title',
+                    AllowedFilter::exact('parent_id'),
                     AllowedFilter::custom('status', new StatusFilter),
                     AllowedFilter::custom('published', new PublishedFilter),
                     AllowedFilter::custom('trashed', new TrashedFilter)

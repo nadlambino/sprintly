@@ -31,6 +31,22 @@ class TaskController extends Controller
     }
 
     /**
+     * Render show page.
+     *
+     * @param Task $task
+     * @return Response
+     */
+    public function show(Task $task): Response
+    {
+        Gate::authorize('view', $task);
+
+        return Inertia::render('Tasks/Show', [
+            'task' => $task->load(['status', 'images']),
+            'statuses' => $this->statuses,
+        ]);
+    }
+
+    /**
      * Render create page.
      *
      * @return Response

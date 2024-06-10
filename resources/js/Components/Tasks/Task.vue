@@ -21,6 +21,7 @@ const emit = defineEmits(['destroy']);
 
 const showConfirmDelete = ref(false);
 const accentClass = computed(() => `border-t-${props.accentColor}`);
+const images = computed(() => Array.from(props.task.images).map((image) => window.location.origin + '/' + image.path));
 
 const { destroy } = useTaskApi  ();
 </script>
@@ -37,7 +38,7 @@ const { destroy } = useTaskApi  ();
     <div :data-id="task.id" :data-status="task.status.name" class="flex flex-col gap-5 border shadow-lg rounded-md p-3 border-t-4 hover:cursor-grab" :class="accentClass">
         <div class="flex justify-between items-center">
             <div class="w-[87%]">
-                <Link :href="route('tasks.edit', task.id)" class="text-blue-600 hover:text-blue-800">
+                <Link :href="route('tasks.show', task.id)" class="text-blue-600 hover:text-blue-800">
                     <h1 class="font-bold text-lg truncate" :title="task.title">{{ task.title }}</h1>
                 </Link>
             </div>
@@ -49,8 +50,8 @@ const { destroy } = useTaskApi  ();
             <p class="line-clamp-3 text-gray-700" :title="task.content">{{ task.content }}</p>
         </div>
         <div v-if="task.images.length > 0">
-            <img :src="task.images[0].path" :alt="task.title" class="w-full object-cover" />
-            <small class="text-muted" v-if="task.images.length > 1"> and {{ task.images.length - 1 }} more image(s)</small>
+            <img :src="images[0]" :alt="task.title" class="w-full object-cover" />
+            <small class="text-muted" v-if="images.length > 1"> and {{ images.length - 1 }} more image(s)</small>
         </div>
         <div class="flex flex-col text-muted text-xs">
             <div class="flex justify-between">

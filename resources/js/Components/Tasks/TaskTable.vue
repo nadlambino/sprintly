@@ -37,6 +37,10 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    viewable: {
+        type: Boolean,
+        default: false
+    },
     editable: {
         type: Boolean,
         default: false
@@ -44,6 +48,9 @@ const props = defineProps({
     publishable: {
         type: Boolean,
         default: false
+    },
+    parentId: {
+        default: null,
     }
 });
 
@@ -65,7 +72,8 @@ const {
     search: props.search || taskStore.search,
     per_page: props.perPage || taskStore.perPage,
     trashed: props.trashed,
-    published: props.published
+    published: props.published,
+    parent_id: props.parentId
 });
 </script>
 
@@ -73,6 +81,7 @@ const {
     <PaginatedTable :data="data?.pages" :headers="headers" :total="total" :is-empty="isEmpty" :is-requesting="isRequesting" :has-next-page="hasNextPage" label="tasks" @next="next">
         <template #actions="{ row }">
             <div class="flex gap-2">
+                <Link v-if="viewable" :href="route('tasks.show', row.id)" class="bg-muted hover:bg-muted/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">View</Link>
                 <Link v-if="editable" :href="route('tasks.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
                 <button v-if="publishable" @click="() => update(row.id, { publish: true }).then(refetch)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Publish</button>
                 <button v-if="deletable" @click="() => destroy(row.id).then(refetch)" class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
