@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { useUrlSearchParams } from '@vueuse/core';
+import { useTaskApi } from '@/Utils/task';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -20,6 +21,8 @@ const props = defineProps({
         default: () => ({})
     }
 });
+
+const { update, create } = useTaskApi();
 
 const url = useUrlSearchParams('history');
 
@@ -46,43 +49,36 @@ const errorHasImageServerError = computed(() => {
     return Object.keys(errors.value).some(key => key.toLowerCase().includes('images.'));
 });
 
-const submit = () => {
+const submit = async () => {
     success.value = false;
     errors.value = {};
-    const request = isNew.value ? create : update;
+    const data = form.data();
 
-    request().then(({ data }) => {
-        success.value = true;
-        message.value = data.message;
+    if (isNew.value) {
+        delete data.id;
+        delete data.replace_images;
 
-        if (isNew.value) form.reset();
-    }).catch((error) => {
-        success.value = false;
-        message.value = error?.response?.message || error?.response?.data?.message;
-        errors.value = error?.response?.errors || error?.response?.data?.errors;
-    });
+        return await create(data, { 'Content-Type': 'multipart/form-data' })
+            .then(then)
+            .catch(error);
+    }
+
+    return await update(data.id, data, { 'Content-Type': 'multipart/form-data' })
+        .then(then)
+        .catch(error);
 }
 
-const create = () => {
-    const data = form.data();
-    delete data.replace_images;
+const then = ({ data }) => {
+    success.value = true;
+    message.value = data.message;
 
-    return window.axios.post(route('api.tasks.store'), data, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    });
+    if (isNew.value) form.reset();
 }
 
-const update = () => {
-    const data = form.data();
-    data._method = 'PUT';
-
-    return window.axios.post(route('api.tasks.update', { task: form.id }), data, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    });
+const error = (error) => {
+    success.value = false;
+    message.value = error?.response?.message || error?.response?.data?.message;
+    errors.value = error?.response?.errors || error?.response?.data?.errors;
 }
 </script>
 

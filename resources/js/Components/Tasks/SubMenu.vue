@@ -1,15 +1,12 @@
 <script setup>
-import { useTasksStore } from '@/Stores/useTasksStore';
+import { computed, onMounted, watch } from 'vue';
+import { useTaskStore } from '@/Utils/task';
 import { Link } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AddIcon from '@/Icons/AddIcon.vue';
 import TextInput from '@/Components/TextInput.vue';
 import ButtonDropdown from '@/Components/ButtonDropdown.vue';
-import { computed } from 'vue';
-import { watch } from 'vue';
-import { onMounted } from 'vue';
 import Toggle from '../Toggle.vue';
-import { ref } from 'vue';
 import InputLabel from '../InputLabel.vue';
 
 const props = defineProps({
@@ -44,7 +41,8 @@ const props = defineProps({
     }
 });
 
-const tasksStore = useTasksStore();
+const taskStore = useTaskStore();
+
 const sortOptions = [
     { label: '&uarr; Created', value: 'created_at' },
     { label: '&darr; Created', value: '-created_at' },
@@ -71,15 +69,12 @@ const statusOptions = computed(() => {
 });
 
 const resetStatusFilter = () => {
-    tasksStore.status = props.filterable || !kanban.value ? 'all' : tasksStore.status;
+    taskStore.status = props.filterable || !kanban.value ? 'all' : taskStore.status;
 };
-
 onMounted(resetStatusFilter);
-
 watch(() => props.filterable, resetStatusFilter);
 
 const kanban = defineModel('kanban', { default: false });
-
 watch(kanban, resetStatusFilter);
 </script>
 
@@ -103,11 +98,11 @@ watch(kanban, resetStatusFilter);
             </Link>
         </div>
         <div v-if="filters" class="flex flex-col md:flex-row gap-3 items-end md:items-center">
-            <TextInput placeholder="Search by title..." class="min-w-full md:min-w-72" v-model="tasksStore.search" />
+            <TextInput placeholder="Search by title..." class="min-w-full md:min-w-72" v-model="taskStore.search" />
             <div class="flex gap-3">
-                <ButtonDropdown v-if="filterable || !kanban" v-model="tasksStore.status" :label="`Status: ${tasksStore.status}`" :options="statusOptions" placement="left-0" />
-                <ButtonDropdown v-model="tasksStore.sortBy" :label="`Sort: ${tasksStore.sortBy}`" :options="sortOptions" />
-                <ButtonDropdown v-model="tasksStore.perPage" :label="`Paginate: ${tasksStore.perPage}`" :options="pageOptions" />
+                <ButtonDropdown v-if="filterable || !kanban" v-model="taskStore.status" :label="`Status: ${taskStore.status}`" :options="statusOptions" placement="left-0" />
+                <ButtonDropdown v-model="taskStore.sortBy" :label="`Sort: ${taskStore.sortBy}`" :options="sortOptions" />
+                <ButtonDropdown v-model="taskStore.perPage" :label="`Paginate: ${taskStore.perPage}`" :options="pageOptions" />
                 <div v-if="toggleable" class="flex flex-col gap-1">
                     <InputLabel value="Kanban" class="text-[10px] uppercase text-muted" />
                     <Toggle v-model="kanban" />

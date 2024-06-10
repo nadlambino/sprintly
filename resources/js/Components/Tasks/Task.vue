@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import { useTaskApi } from '@/Utils/task';
 import DeleteIcon from '@/Icons/DeleteIcon.vue';
 import Alert from '@/Components/Alert.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -9,44 +10,31 @@ const props = defineProps({
     task: {
         type: Object,
         required: true,
+    },
+    accentColor: {
+        type: String,
+        default: 'gray-500',
     }
 });
 
 const emit = defineEmits(['destroy']);
 
 const showConfirmDelete = ref(false);
-const cardClass = computed(() => {
-    if (props.task.status.name === 'todo') {
-        return 'border-t-primary';
-    }
+const accentClass = computed(() => `border-t-${props.accentColor}`);
 
-    if (props.task.status.name === 'in progress') {
-        return 'border-t-yellow-500';
-    }
-
-    if (props.task.status.name === 'done') {
-        return 'border-t-green-500';
-    }
-
-    return 'border-t-gray-500';
-})
-
-const destroy = () => {
-    window.axios.delete(route('api.tasks.destroy', { task: props.task.id }))
-        .then(() => emit('destroy', props.task.id));
-}
+const { destroy } = useTaskApi  ();
 </script>
 
 <template>
     <Alert :show="showConfirmDelete" title="Confirm Delete" message="Are you sure you want to delete this task?" @close="showConfirmDelete = false">
         <template #actions>
-            <PrimaryButton class="flex gap-1 justify-center items-center" @click="destroy">
+            <PrimaryButton class="flex gap-1 justify-center items-center" @click="() => destroy(task.id).then(() => emit('destroy', task.id))">
                 Confirm
             </PrimaryButton>
         </template>
     </Alert>
 
-    <div :data-id="task.id" :data-status="task.status.name" class="flex flex-col gap-5 border shadow-md rounded-md p-3 border-t-4 hover:cursor-grab" :class="cardClass">
+    <div :data-id="task.id" :data-status="task.status.name" class="flex flex-col gap-5 border shadow-md rounded-md p-3 border-t-4 hover:cursor-grab" :class="accentClass">
         <div class="flex justify-between items-center">
             <div class="w-[87%]">
                 <Link :href="route('tasks.edit', task.id)" class="text-blue-600 hover:text-blue-800">

@@ -1,10 +1,10 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
+import { useStorage } from '@vueuse/core';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import Kanban from '@/Components/Tasks/Kanban.vue';
 import TaskTable from '@/Components/Tasks/TaskTable.vue';
-import { useStorage } from '@vueuse/core'
 
 const props = defineProps({
     statuses: Array,

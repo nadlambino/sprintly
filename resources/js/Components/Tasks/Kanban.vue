@@ -1,6 +1,6 @@
 <script setup>
-import Column from '@/Components/Tasks/Column.vue';
 import { ref, reactive } from 'vue';
+import Column from '@/Components/Tasks/Column.vue';
 
 const dragging = ref(false);
 const keys = reactive({
@@ -9,6 +9,12 @@ const keys = reactive({
     done: Math.random()
 })
 
+/**
+ * Forces a rerender by changing the column keys.
+ *
+ * @param {string} status
+ * @param {string} previousStatus
+ */
 const rerender = (status, previousStatus) => {
     keys[status] = Math.random();
     keys[previousStatus] = Math.random();
@@ -21,6 +27,7 @@ const rerender = (status, previousStatus) => {
             <Column
                 label="To Do"
                 status="todo"
+                accent-color="primary"
                 v-model:dragging="dragging"
                 @rerender="rerender"
                 :key="keys.todo"
@@ -30,6 +37,7 @@ const rerender = (status, previousStatus) => {
             <Column
                 label="In Progress"
                 status="in progress"
+                accent-color="yellow-500"
                 v-model:dragging="dragging"
                 @rerender="rerender"
                 :key="keys.inprogress"
@@ -39,6 +47,7 @@ const rerender = (status, previousStatus) => {
             <Column
                 label="Done"
                 status="done"
+                accent-color="green-500"
                 v-model:dragging="dragging"
                 @rerender="rerender"
                 :key="keys.done"

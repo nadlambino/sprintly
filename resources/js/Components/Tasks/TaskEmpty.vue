@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     status: String
-})
+});
 </script>
 
 <template>

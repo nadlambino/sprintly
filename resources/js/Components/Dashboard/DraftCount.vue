@@ -1,9 +1,9 @@
 <script setup>
 import Counter from '@/Components/Counter.vue';
-import { useTasks } from '@/Composables/useTasks';
+import { useTaskApi } from '@/Utils/task';
 
 
-const { total } = await useTasks({
+const { total } = await useTaskApi({
     status: 'all',
     published: false,
     per_page: 1

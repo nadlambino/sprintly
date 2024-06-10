@@ -1,6 +1,5 @@
 <script setup>
-import { useTasks } from '@/Composables/useTasks';
-import { useTasksStore } from '@/Stores/useTasksStore';
+import { useTaskApi, useTaskStore } from '@/Utils/task';
 import { Link } from '@inertiajs/vue3';
 import PaginatedTable from '@/Components/Table/PaginatedTable.vue';
 
@@ -48,30 +47,26 @@ const props = defineProps({
     }
 });
 
-const tasksStore = useTasksStore();
+const taskStore = useTaskStore();
 
-const { data, total, isRequesting, isEmpty, hasNextPage, refetch, next } = await useTasks({
-    status: props.status || tasksStore.status,
-    search: props.search || tasksStore.search,
-    per_page: props.perPage || tasksStore.perPage,
+const {
+    data,
+    total,
+    isRequesting,
+    isEmpty,
+    hasNextPage,
+    refetch,
+    next,
+    destroy,
+    restore,
+    update
+} = await useTaskApi({
+    status: props.status || taskStore.status,
+    search: props.search || taskStore.search,
+    per_page: props.perPage || taskStore.perPage,
     trashed: props.trashed,
     published: props.published
 });
-
-const destroy = (id) => {
-    window.axios.delete(route('api.tasks.destroy', { task: id }))
-        .then(() => refetch());
-}
-
-const publish = (id) => {
-    window.axios.put(route('api.tasks.update', { task: id }), { publish: true })
-        .then(() => refetch());
-}
-
-const restore = (id) => {
-    window.axios.put(route('api.tasks.restore', { task: id }))
-        .then(() => refetch());
-}
 </script>
 
 <template>
@@ -79,9 +74,9 @@ const restore = (id) => {
         <template #actions="{ row }">
             <div class="flex gap-2">
                 <Link v-if="editable" :href="route('tasks.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
-                <button v-if="publishable" @click="() => publish(row.id)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Publish</button>
-                <button v-if="deletable" @click="() => destroy(row.id)" class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
-                <button v-if="restorable" @click="() => restore(row.id)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Restore</button>
+                <button v-if="publishable" @click="() => update(row.id, { publish: true }).then(refetch)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Publish</button>
+                <button v-if="deletable" @click="() => destroy(row.id).then(refetch)" class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
+                <button v-if="restorable" @click="() => restore(row.id).then(refetch)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Restore</button>
             </div>
         </template>
     </PaginatedTable>

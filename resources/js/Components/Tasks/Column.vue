@@ -1,9 +1,8 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { useTasks } from '@/Composables/useTasks';
-import { useTasksStore } from '@/Stores/useTasksStore';
 import { useElementVisibility } from '@vueuse/core';
 import { VueDraggableNext } from 'vue-draggable-next';
+import { useTaskApi, useTaskStore } from '@/Utils/task';
 import Task from '@/Components/Tasks/Task.vue';
 import TaskSkeleton from '@/Components/Tasks/TaskSkeleton.vue';
 import TaskEmpty from '@/Components/Tasks/TaskEmpty.vue';
@@ -16,16 +15,29 @@ const props = defineProps({
     status: {
         type: String,
         required: true,
+    },
+    accentColor: {
+        type: String,
+        default: 'gray-500',
     }
 });
 
-const tasksStore = useTasksStore();
+const taskStore = useTaskStore();
 
-const { data, total, isRequesting, isEmpty, hasNextPage, refetch, next } = await useTasks({
+const {
+    data,
+    total,
+    isRequesting,
+    isEmpty,
+    hasNextPage,
+    refetch,
+    next,
+    update
+ } = await useTaskApi({
     status: props.status,
     published: true,
-    search: tasksStore.search,
-    per_page: tasksStore.perPage
+    search: taskStore.search,
+    per_page: taskStore.perPage
 });
 
 const target = ref(null);
@@ -45,7 +57,7 @@ const move = async (event) => {
         return;
     };
 
-    await window.axios.put(route('api.tasks.update', { task: id }), { status })
+    update(id, { status })
         .then(() => {
             emits('rerender', status?.replace(' ', ''), previousStatus?.replace(' ', ''));
         })
@@ -70,7 +82,7 @@ const move = async (event) => {
                     @drop.prevent="() => dragging = false"
                     @add="move"
                 >
-                    <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" />
+                    <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" :accent-color="accentColor" />
                 </VueDraggableNext>
             </div>
             <div v-if="hasNextPage" ref="target"></div>
