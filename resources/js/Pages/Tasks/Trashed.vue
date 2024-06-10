@@ -28,7 +28,7 @@ const headers = [
 
         <div class="p-5">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-between items-center py-3">
-                <h1 class="text-lg font-bold text-muted">Trashed</h1>
+                <h1 class="text-lg font-bold text-gray-700">Trashed</h1>
                 <small class="text-xs text-muted">Note: If the server worker is running, your trashed tasks will be deleted after {{ days_before_deletion }} day(s) of being trashed.</small>
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
