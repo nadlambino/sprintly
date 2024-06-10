@@ -47,6 +47,11 @@ watch(isVisible, (visible) => visible && next());
 const dragging = defineModel('dragging', { default: false});
 const emits = defineEmits(['rerender']);
 
+/**
+ * Move task to its new status.
+ *
+ * @param {*} event
+ */
 const move = async (event) => {
     const id = event?.item?.getAttribute('data-id');
     const status = event?.item?.parentElement?.getAttribute('data-status');
