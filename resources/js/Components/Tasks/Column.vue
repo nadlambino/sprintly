@@ -1,8 +1,8 @@
 <script setup>
+import { ref, watch } from 'vue';
 import { useTasks } from '@/Composables/useTasks';
 import { useTasksStore } from '@/Stores/useTasksStore';
-import { useElementVisibility } from '@vueuse/core'
-import { ref, watch } from 'vue';
+import { useElementVisibility } from '@vueuse/core';
 import { VueDraggableNext } from 'vue-draggable-next';
 import Task from '@/Components/Tasks/Task.vue';
 import TaskSkeleton from '@/Components/Tasks/TaskSkeleton.vue';
@@ -64,10 +64,10 @@ const move = async (event) => {
                 <VueDraggableNext
                     class="flex flex-col gap-5 relative"
                     :class="{ 'dragging': dragging }"
-                    @dragover="() => dragging = true"
-                    @drop.prevent="() => dragging = false"
                     :data-status="status"
                     group='tasks'
+                    @dragover="() => dragging = true"
+                    @drop.prevent="() => dragging = false"
                     @add="move"
                 >
                     <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" />
