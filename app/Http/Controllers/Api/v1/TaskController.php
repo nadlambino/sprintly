@@ -112,7 +112,10 @@ class TaskController extends Controller
         try {
             $data = array_filter($request->validated());
             $data['published_at'] = filter_var($request->get('publish', false), FILTER_VALIDATE_BOOL) ? now() : null;
-            $data['status_id'] = $status->whereIdOrName($request->validated('status_id'), $request->validated('status'))->first()?->id;
+
+            if ($statusId = $status->whereIdOrName($request->validated('status_id'), $request->validated('status'))->first()?->id) {
+                $data['status_id'] = $statusId;
+            }
 
             Task::deletePreviousUploads(filter_var($request->get('replace_images', false), FILTER_VALIDATE_BOOL));
 
