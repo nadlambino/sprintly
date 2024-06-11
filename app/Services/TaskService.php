@@ -12,6 +12,7 @@ class TaskService
     public const IN_PROGRESS = 2;
     public const DONE = 3;
     private bool $parentWasUpdated = false;
+    private bool $childrenWasUpdated = false;
 
     public function __construct(private Task $task) { }
 
@@ -34,9 +35,7 @@ class TaskService
             return;
         }
 
-        if ($this->isTaskMovingToDone()) {
-            $this->task->children()->notDone()->get()->each(fn (Task $task) => $task->update(['status_id' => $this->task->status_id]));
-        }
+        $this->updateChildrenStatusToWhen($this->task->status_id, $this->isTaskMovingToDone());
     }
 
     public function restore()
@@ -47,7 +46,7 @@ class TaskService
 
         $this->updateParentStatusToWhen($this->task->status_id, $this->isTaskNotDone() && $this->isParentDone());
 
-        if ($this->task->parent === null) {
+        if ($this->task->parent === null && ! $this->parentWasUpdated) {
             $this->task->update(['parent_id' => null]);
         }
     }
@@ -70,6 +69,19 @@ class TaskService
 
         $this->task->parent->update(['status_id' => $status]);
         $this->parentWasUpdated = true;
+
+        return $this;
+    }
+
+    private function updateChildrenStatusToWhen(int $status, bool $when): self
+    {
+        if ($this->childrenWasUpdated || ! $when) {
+            return $this;
+        }
+
+        if ($when) {
+            $this->task->children()->get()->each(fn (Task $task) => $task->update(['status_id' => $status]));
+        }
 
         return $this;
     }
