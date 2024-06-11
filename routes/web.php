@@ -16,9 +16,9 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    Route::resource('/tasks', TaskController::class)->only(['index', 'show', 'create', 'edit']);
     Route::get('/tasks/drafts', [TaskController::class, 'drafts'])->name('tasks.drafts');
     Route::get('/tasks/trashed', [TaskController::class, 'trashed'])->name('tasks.trashed');
+    Route::resource('/tasks', TaskController::class)->only(['index', 'show', 'create', 'edit']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
