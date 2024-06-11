@@ -9,7 +9,7 @@ export const useTaskStore = defineStore('tasks', () => {
     const search = ref(url.title || '');
     const sortBy = ref(url.sort || 'created_at');
     const perPage = ref(url.per_page || 10);
-    const status = ref(url.status);
+    const status = ref(url.status || 'all');
 
     watch(search, () => {
         url.title = search.value;
@@ -80,7 +80,7 @@ export function useTaskApi(params = {}) {
                 parent_id: params?.parent_id
             },
             sort: sort.value,
-            include: 'status,images',
+            include: 'status,images,parent,children',
             page: pageParam,
             per_page: perPage.value
         }));

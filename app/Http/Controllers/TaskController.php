@@ -41,7 +41,7 @@ class TaskController extends Controller
         Gate::authorize('view', $task);
 
         return Inertia::render('Tasks/Show', [
-            'task' => $task->load(['status', 'images']),
+            'task' => $task->load(['status', 'images', 'parent', 'parent.status', 'parent.images']),
             'statuses' => $this->statuses,
         ]);
     }

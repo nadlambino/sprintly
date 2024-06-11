@@ -37,7 +37,7 @@ class TaskController extends Controller
                     AllowedFilter::custom('published', new PublishedFilter),
                     AllowedFilter::custom('trashed', new TrashedFilter)
                 ])
-                ->allowedIncludes(['status', 'images'])
+                ->allowedIncludes(['status', 'images', 'parent', 'children'])
                 ->defaultSort('created_at')
                 ->allowedSorts(['title', 'created_at'])
                 ->paginate($request->get('per_page', 10));

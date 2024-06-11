@@ -35,18 +35,24 @@ const { destroy } = useTaskApi  ();
     </Alert>
 
     <div :data-id="task.id" :data-status="task.status.name" class="flex flex-col gap-5 border shadow-lg rounded-md p-3 border-t-4 hover:cursor-grab" :class="accentColor">
-        <div class="flex justify-between items-center">
-            <div class="w-[87%]">
-                <Link :href="route('tasks.show', task.id)" class="text-blue-600 hover:text-blue-800">
-                    <h1 class="font-bold text-lg truncate" :title="task.title">{{ task.title }}</h1>
-                </Link>
+        <div class="w-full">
+            <Link v-if="task.parent" :href="route('tasks.show', task.parent.id)" class="text-blue-600 hover:text-blue-800 text-xs line-clamp-1">{{ task.parent.title }}</Link>
+            <div class="flex justify-between items-center">
+                <div class="w-[87%]">
+                    <Link :href="route('tasks.show', task.id)" class="text-blue-600 hover:text-blue-800">
+                        <h1 class="font-bold text-lg truncate" :title="task.title">{{ task.title }}</h1>
+                    </Link>
+                </div>
+                <button type="button" @click="showConfirmDelete = true">
+                    <DeleteIcon class="text-gray-500 hover:text-red-500"/>
+                </button>
             </div>
-            <button type="button" @click="showConfirmDelete = true">
-                <DeleteIcon class="text-gray-500 hover:text-red-500"/>
-            </button>
         </div>
         <div>
             <p class="line-clamp-3 text-gray-700" :title="task.content">{{ task.content }}</p>
+        </div>
+        <div v-if="task.children?.length > 0">
+            <Link :href="route('tasks.show', task.id)" class="text-blue-600 hover:text-blue-800 text-xs">View subtasks</Link>
         </div>
         <div v-if="images.length > 0">
             <img :src="images[0]" :alt="task.title" class="w-full object-cover" />
