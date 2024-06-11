@@ -20,7 +20,6 @@ const props = defineProps({
 const emit = defineEmits(['destroy']);
 
 const showConfirmDelete = ref(false);
-const accentClass = computed(() => `border-t-${props.accentColor}`);
 const images = computed(() => Array.from(props.task.images).map((image) => window.location.origin + '/' + image.path));
 
 const { destroy } = useTaskApi  ();
@@ -35,7 +34,7 @@ const { destroy } = useTaskApi  ();
         </template>
     </Alert>
 
-    <div :data-id="task.id" :data-status="task.status.name" class="flex flex-col gap-5 border shadow-lg rounded-md p-3 border-t-4 hover:cursor-grab" :class="accentClass">
+    <div :data-id="task.id" :data-status="task.status.name" class="flex flex-col gap-5 border shadow-lg rounded-md p-3 border-t-4 hover:cursor-grab" :class="accentColor">
         <div class="flex justify-between items-center">
             <div class="w-[87%]">
                 <Link :href="route('tasks.show', task.id)" class="text-blue-600 hover:text-blue-800">
@@ -49,7 +48,7 @@ const { destroy } = useTaskApi  ();
         <div>
             <p class="line-clamp-3 text-gray-700" :title="task.content">{{ task.content }}</p>
         </div>
-        <div v-if="task.images.length > 0">
+        <div v-if="images.length > 0">
             <img :src="images[0]" :alt="task.title" class="w-full object-cover" />
             <small class="text-muted" v-if="images.length > 1"> and {{ images.length - 1 }} more image(s)</small>
         </div>
@@ -65,3 +64,21 @@ const { destroy } = useTaskApi  ();
         </div>
     </div>
 </template>
+
+<style scoped>
+.gray-500 {
+    @apply border-t-gray-500;
+}
+
+.primary {
+    @apply border-t-primary;
+}
+
+.yellow-500 {
+    @apply border-t-yellow-500;
+}
+
+.green-500 {
+    @apply border-t-green-500;
+}
+</style>
