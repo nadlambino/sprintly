@@ -6,38 +6,32 @@ use App\Models\Task;
 
 class TaskService
 {
+    use WithStatusChecks;
+
     public const TODO = 1;
     public const IN_PROGRESS = 2;
     public const DONE = 3;
+    private bool $parentWasUpdated = false;
 
-    public function __construct(private Task $task)
-    {
-
-    }
+    public function __construct(private Task $task) { }
 
     public function updateParent()
     {
-        if ($this->task->isDirty('status_id') === false || $this->task->parent === null) {
+        if (! $this->didStatusChanged() || ! $this->hasParent() || $this->isTaskWasUnpublished()) {
             return;
         }
 
-        if ($this->isTaskMovingFromDoneToPrevious() && $this->task->parent->status_id === self::DONE) {
-            $this->task->parent->update(['status_id' => $this->task->status_id]);
-        }
-
-        if ($this->isTaskMovingToDone() && $this->task->siblings()->notDone()->count() === 0) {
-            $this->task->parent->update(['status_id' => $this->task->status_id]);
-        }
+        $this->updateParentStatusToWhen($this->task->status_id, $this->isTaskWasRecentlyCreatedAndNotSetToDone())
+            ->updateParentStatusToWhen($this->task->status_id, $this->isTaskWasPublishedAndIsNotDone())
+            ->updateParentStatusToWhen($this->task->status_id, $this->isTaskMovingFromDoneToPrevious() && $this->isParentDone())
+            ->updateParentStatusToWhen(self::DONE,  ($areAllSiblingsDone = $this->areAllSiblingsDone()) && $this->isTaskMovingFromDoneToPrevious() && $this->isParentDone())
+            ->updateParentStatusToWhen(self::DONE, $this->isTaskMovingToDone() && $areAllSiblingsDone);
     }
 
     public function updateChildren()
     {
-        if ($this->task->isDirty('status_id') === false) {
+        if (! $this->didStatusChanged()) {
             return;
-        }
-
-        if ($this->isTaskMovingFromDoneToPrevious()) {
-            $this->task->children()->done()->get()->each(fn (Task $task) => $task->update(['status_id' => $this->task->status_id]));
         }
 
         if ($this->isTaskMovingToDone()) {
@@ -45,25 +39,14 @@ class TaskService
         }
     }
 
-    private function isTaskMovingFromDoneToPrevious(): bool
-    {
-        return $this->task->isDirty('status_id')
-            && $this->task->getOriginal('status_id') === self::DONE;
-    }
-
-    private function isTaskMovingToDone(): bool
-    {
-        return $this->task->isDirty('status_id')
-            && $this->task->status_id === self::DONE;
-    }
-
     public function restore()
     {
-        if ($this->task->parent_id === null) {
+        if (! $this->hasParent()) {
             return;
         }
 
-        // If it has parent_id but parent is null (probably deleted), then set its parent to null when restored.
+        $this->updateParentStatusToWhen($this->task->status_id, $this->isTaskNotDone() && $this->isParentDone());
+
         if ($this->task->parent === null) {
             $this->task->update(['parent_id' => null]);
         }
@@ -77,5 +60,17 @@ class TaskService
     public function forceDeleteChildren(): void
     {
         $this->task->children()->get()->each(fn (Task $task) => $task->forceDelete());
+    }
+
+    private function updateParentStatusToWhen(int $status, bool $when): self
+    {
+        if ($this->parentWasUpdated || ! $when) {
+            return $this;
+        }
+
+        $this->task->parent->update(['status_id' => $status]);
+        $this->parentWasUpdated = true;
+
+        return $this;
     }
 }

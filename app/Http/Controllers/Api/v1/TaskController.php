@@ -109,7 +109,7 @@ class TaskController extends Controller
      */
     public function update(UpdateRequest $request, Task $task, Status $status): JsonResponse
     {
-        try {
+        // try {
             $data = array_filter($request->validated());
 
             $data['published_at'] = match(true) {
@@ -125,9 +125,9 @@ class TaskController extends Controller
             $task->update($data);
 
             return $this->success('Task was successfully updated.', $task);
-        } catch (Exception) {
-            return $this->error('Something went wrong while updating the task. Please try again later.');
-        }
+        // } catch (Exception) {
+        //     return $this->error('Something went wrong while updating the task. Please try again later.');
+        // }
     }
 
     /**
