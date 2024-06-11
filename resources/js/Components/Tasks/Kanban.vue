@@ -9,11 +9,7 @@ const props = defineProps({
 });
 
 const dragging = ref(false);
-const keys = reactive({
-    todo: Math.random(),
-    inprogress: Math.random(),
-    done: Math.random()
-})
+const key = ref(Math.random());
 
 /**
  * Forces a rerender by changing the column keys.
@@ -21,9 +17,8 @@ const keys = reactive({
  * @param {string} status
  * @param {string} previousStatus
  */
-const rerender = (status, previousStatus) => {
-    keys[status] = Math.random();
-    keys[previousStatus] = Math.random();
+const rerender = () => {
+    key.value = Math.random();
 }
 </script>
 
@@ -36,7 +31,7 @@ const rerender = (status, previousStatus) => {
                 accent-color="primary"
                 v-model:dragging="dragging"
                 @rerender="rerender"
-                :key="keys.todo"
+                :key="key"
                 :parent-id="parentId"
             />
         </Suspense>
@@ -47,7 +42,7 @@ const rerender = (status, previousStatus) => {
                 accent-color="yellow-500"
                 v-model:dragging="dragging"
                 @rerender="rerender"
-                :key="keys.inprogress"
+                :key="key"
                 :parent-id="parentId"
             />
         </Suspense>
@@ -58,7 +53,7 @@ const rerender = (status, previousStatus) => {
                 accent-color="green-500"
                 v-model:dragging="dragging"
                 @rerender="rerender"
-                :key="keys.done"
+                :key="key"
                 :parent-id="parentId"
             />
         </Suspense>

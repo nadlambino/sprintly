@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Observers\TaskObserver;
+use App\Services\TaskService;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use NadLambino\Uploadable\Models\Traits\HasUpload;
 
+#[ObservedBy(TaskObserver::class)]
 class Task extends Model
 {
     use HasFactory, SoftDeletes, HasUpload;
@@ -103,6 +107,24 @@ class Task extends Model
     public function children(): HasMany
     {
         return $this->hasMany(Task::class, 'parent_id');
+    }
+
+    public function scopeSiblings($query): Builder
+    {
+        return $query
+            ->where('parent_id', $this->parent_id)
+            ->whereNot('id', $this->id)
+            ->published();
+    }
+
+    public function scopeNotDone($query): Builder
+    {
+        return $query->where('status_id', '!=', TaskService::DONE);
+    }
+
+    public function scopeDone($query): Builder
+    {
+        return $query->where('status_id', TaskService::DONE);
     }
 
     /**

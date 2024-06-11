@@ -26,7 +26,7 @@ const { destroy } = useTaskApi  ();
 </script>
 
 <template>
-    <Alert :show="showConfirmDelete" title="Confirm Delete" message="Are you sure you want to delete this task?" @close="showConfirmDelete = false">
+    <Alert :show="showConfirmDelete" title="Confirm Delete" message="Are you sure you want to delete this task? This will also delete all of its subtasks." @close="showConfirmDelete = false">
         <template #actions>
             <PrimaryButton class="flex gap-1 justify-center items-center" @click="() => destroy(task.id).then(() => emit('destroy', task.id))">
                 Confirm

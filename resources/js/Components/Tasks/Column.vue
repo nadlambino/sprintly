@@ -68,9 +68,13 @@ const move = async (event) => {
 
     update(id, { status })
         .then(() => {
-            emits('rerender', status?.replace(' ', ''), previousStatus?.replace(' ', ''));
+            rerender();
         })
         .finally(() => event?.item?.remove());
+}
+
+const rerender = () => {
+    emits('rerender');
 }
 </script>
 
@@ -91,7 +95,7 @@ const move = async (event) => {
                     @drop.prevent="() => dragging = false"
                     @add="move"
                 >
-                    <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" :accent-color="accentColor" />
+                    <Task v-for="task in page" :key="task.id" :task="task" @destroy="rerender" :accent-color="accentColor" />
                 </VueDraggableNext>
             </div>
             <div v-if="hasNextPage" ref="target"></div>
