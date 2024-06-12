@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Tasks;
 
+use App\Rules\Tasks\ValidParent;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
@@ -23,9 +24,9 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'parent_id' => ['sometimes', 'nullable', 'exists:tasks,id'],
-            'title'     => ['sometimes', 'min:3', 'max:100', 'unique:tasks,title,' . $this->route('task')->id],
-            'content'   => ['sometimes', 'min:3', 'max:10000'],
+            'parent_id' => ['sometimes', 'nullable', new ValidParent],
+            'title'     => ['sometimes', 'min:3', 'max:100'],
+            'content'   => ['sometimes', 'max:10000'],
             'status_id' => ['sometimes', 'exists:statuses,id'],
             'status'    => ['sometimes', 'exists:statuses,name'],
             'images'    => ['array'],

@@ -25,6 +25,7 @@ const props = defineProps({
 
 const { update, create, getParents } = useTaskApi();
 
+const isNew = computed(() => props.task?.id === undefined);
 const url = useUrlSearchParams('history');
 
 const form = useForm({
@@ -56,7 +57,6 @@ const errors = ref({});
 const images = computed(() => Array.from(form.images).map((image) => URL.createObjectURL(image)));
 const savedImages = computed(() => props.task?.images?.map((image) => window.location.origin + '/' + image.path));
 const hasServerError = computed(() => success.value === false && errors?.value?.length === 0 && message?.value !== null);
-const isNew = computed(() => props.task?.id === undefined);
 
 const errorHasImageServerError = computed(() => {
     return Object.keys(errors.value).some(key => key.toLowerCase().includes('images.'));
@@ -143,9 +143,7 @@ const error = (error) => {
                                 type="textarea"
                                 class="mt-1 block w-full"
                                 v-model="form.content"
-                                minlength="3"
                                 maxlength="10000"
-                                required
                             />
                             <InputError v-for="error in errors?.content || []" :message="error" />
                         </div>
