@@ -14,6 +14,7 @@ import Toggle from '@/Components/Toggle.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import Combobox from '@/Components/Combobox.vue';
+import collect from 'collect.js';
 
 const props = defineProps({
     statuses: Array,
@@ -34,7 +35,7 @@ const form = useForm({
     title: props.task?.title || '',
     content: props.task?.content || '',
     images: [],
-    status_id: props.task?.status_id || props.statuses?.find(s => s.name === url.status)?.id || props.statuses[0].id,
+    status_id: props.task?.status_id || collect(props.statuses).first()?.id,
     publish: props.task?.published_at ? true : false,
     replace_images: false
 });

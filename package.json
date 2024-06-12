@@ -20,6 +20,7 @@
     "dependencies": {
         "@tanstack/vue-query": "^5.40.1",
         "@vueuse/core": "^10.10.0",
+        "collect.js": "^4.36.1",
         "dayjs": "^1.11.11",
         "pinia": "^2.1.7",
         "vue-draggable-next": "^2.2.1"
