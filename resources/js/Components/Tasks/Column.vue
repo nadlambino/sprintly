@@ -15,16 +15,13 @@ const props = defineProps({
     statusId: {
         required: true,
     },
-    accentColor: {
-        type: String,
-        default: 'gray-500',
-    },
     parentId: {
         default: null
     }
 });
 
 const taskStore = useTaskStore();
+const statusColor = taskStore.statuses.find(status => status.id === props.statusId)?.color;
 
 const {
     data,
@@ -75,12 +72,12 @@ const move = async (event) => {
 
 <template>
     <div class="flex flex-col gap-5 bg-white overflow-hidden shadow-sm rounded-lg max-h-screen">
-        <div class="px-5 py-2 text-center font-bold bg-primary text-white">
+        <div class="px-5 py-2 text-center font-bold bg-primary text-white" :style="{ backgroundColor: statusColor }">
             <p class="uppercase text-sm font-normal">{{ label }} ({{ total }})</p>
         </div>
         <TaskEmpty v-if="isEmpty && ! dragging" class="mx-5" />
         <div ref="container" class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-full">
-            <div v-for="page in data?.pages">
+            <div v-for="page in data?.pages" class="h-full">
                 <VueDraggableNext
                     class="flex flex-col gap-5 relative"
                     :class="{ 'dragging': dragging }"
@@ -90,7 +87,7 @@ const move = async (event) => {
                     @drop.prevent="() => dragging = false"
                     @add="move"
                 >
-                    <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" :accent-color="accentColor" />
+                    <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" />
                 </VueDraggableNext>
             </div>
             <div v-if="hasNextPage" ref="target"></div>
@@ -102,6 +99,6 @@ const move = async (event) => {
 
 <style scoped>
     .dragging {
-        @apply opacity-50 border border-gray-400 border-dashed h-screen overflow-hidden;
+        @apply opacity-50 border border-gray-400 border-dashed h-full min-h-[200px] overflow-hidden;
     }
 </style>

@@ -11,10 +11,6 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    accentColor: {
-        type: String,
-        default: 'gray-500',
-    }
 });
 
 const emit = defineEmits(['destroy']);
@@ -34,7 +30,7 @@ const { destroy } = useTaskApi  ();
         </template>
     </Alert>
 
-    <div :data-id="task.id" :data-status="task.status.name" class="flex flex-col gap-5 border shadow-lg rounded-md p-3 border-t-4 hover:cursor-grab" :class="accentColor">
+    <div :data-id="task.id" :data-status="task.status.name" class="flex flex-col gap-5 border shadow-lg rounded-md p-3 border-t-4 hover:cursor-grab" :style="{ 'border-top-color': task?.status?.color }">
         <div class="w-full">
             <Link v-if="task.parent" :href="route('tasks.show', task.parent.id)" class="text-blue-600 hover:text-blue-800 text-xs line-clamp-1">{{ task.parent.title }}</Link>
             <div class="flex justify-between items-center">
@@ -70,21 +66,3 @@ const { destroy } = useTaskApi  ();
         </div>
     </div>
 </template>
-
-<style scoped>
-.gray-500 {
-    @apply border-t-gray-500;
-}
-
-.primary {
-    @apply border-t-primary;
-}
-
-.yellow-500 {
-    @apply border-t-yellow-500;
-}
-
-.green-500 {
-    @apply border-t-green-500;
-}
-</style>

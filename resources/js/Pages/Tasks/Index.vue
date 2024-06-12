@@ -23,7 +23,7 @@ const kanban = useStorage('kanban', true);
 
     <AuthenticatedLayout>
         <template #header>
-            <SubMenu :board="false" :toggleable="true" v-model:kanban="kanban" :statuses="statuses" />
+            <SubMenu :board="false" :toggleable="true" v-model:kanban="kanban" />
         </template>
 
         <div class="p-5">
