@@ -50,8 +50,8 @@ const getParentsList = async (value) => {
 }
 
 const setDefaultOptionsForParent = () => {
-    if (! isNew.value) {
-        parents.value = [{ value: form.parent_id, label: props.task?.parent.title }];
+    if (! isNew.value && props.task?.parent) {
+        parents.value = [{ value: form.parent_id, label: props.task?.parent?.title }];
     } else {
         getParentsList();
     }

@@ -1,4 +1,5 @@
 <script setup>
+import { onBeforeMount } from 'vue';
 import { useTaskApi, useTaskStore } from '@/Utils/task';
 import { Link } from '@inertiajs/vue3';
 import PaginatedTable from '@/Components/Table/PaginatedTable.vue';
@@ -75,6 +76,8 @@ const {
     published: props.published,
     parent_id: props.parentId
 });
+
+onBeforeMount(refetch);
 </script>
 
 <template>
