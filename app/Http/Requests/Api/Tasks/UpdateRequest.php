@@ -28,7 +28,6 @@ class UpdateRequest extends FormRequest
             'title'     => ['sometimes', 'min:3', 'max:100'],
             'content'   => ['sometimes', 'max:10000'],
             'status_id' => ['sometimes', 'exists:statuses,id'],
-            'status'    => ['sometimes', 'exists:statuses,name'],
             'images'    => ['array'],
             'images.*'  => ['image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:4096'],
         ];

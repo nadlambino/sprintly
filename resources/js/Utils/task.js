@@ -1,6 +1,6 @@
 import { useUrlSearchParams } from '@vueuse/core';
 import { defineStore } from 'pinia';
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, reactive } from 'vue';
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { useDebounce } from '@vueuse/core';
 
@@ -45,7 +45,7 @@ export const useTaskStore = defineStore('tasks', () => {
 export function useTaskApi(params = {}) {
     const taskStore = useTaskStore();
 
-    const status = ref(params?.status || taskStore.status);
+    const statusId = ref(params?.status_id);
     const sort  = ref(params?.sort || 'created_at');
     const published = ref(params?.published);
     const trashed = ref(params?.trashed);
@@ -72,15 +72,11 @@ export function useTaskApi(params = {}) {
         page.value = 1;
     });
 
-    watch(() => taskStore.status, () => {
-        status.value = taskStore.status;
-    });
-
     const get = async ({ pageParam = 1 }) => {
         const response = await window.axios.get(route('api.tasks.index', {
             filter: {
                 title: searchDebounce.value,
-                status_id: params?.status_id,
+                status_id: statusId.value,
                 published: published.value,
                 trashed: trashed.value,
                 parent_id: params?.parent_id
@@ -99,7 +95,7 @@ export function useTaskApi(params = {}) {
     }
 
     const { data, isPending, isFetching, isFetchingNextPage, refetch, fetchNextPage } = useInfiniteQuery({
-        queryKey: [{ status: params?.status_id, sort, published, trashed, searchDebounce, perPage }],
+        queryKey: [{ statusId, sort, published, trashed, searchDebounce, perPage }],
         queryFn: get,
         initialPageParam: 1,
         getNextPageParam: () => hasNextPage.value ? page.value : null,
@@ -187,4 +183,34 @@ export function useTaskApi(params = {}) {
         restore,
         getParents
     };
+}
+
+/**
+ * Generate random keys for each status that can be used in kanban column components
+ * This is use when a task is move from one status to another, then we update the
+ * keys of the two affected columns to force re-rendering to reflect data changes.
+ *
+ * @returns {Array<Object, Function>}
+ */
+export function useKanbanColumnKeys() {
+    const { statuses } = useTaskStore();
+
+    // Generate random keys for each status
+    // Returned format is: { [status.id]: Math.random()] }
+    const statusesKeys = collect(statuses)
+        .map((status) => ({ name: status.id, value: Math.random() }))
+        .pluck('value', 'name').all();
+
+    const keys = reactive(statusesKeys);
+
+    const update = (keyNames) => {
+        keyNames.forEach((key) => {
+            keys[key] = Math.random();
+        });
+    }
+
+    return [
+        keys,
+        update
+    ]
 }

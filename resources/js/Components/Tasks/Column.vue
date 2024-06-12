@@ -43,7 +43,7 @@ const {
     parent_id: props.parentId,
 });
 
-onMounted(refetch)
+onMounted(refetch);
 
 const target = ref(null);
 const isVisible = useElementVisibility(target);
@@ -59,22 +59,17 @@ const emits = defineEmits(['rerender']);
  */
 const move = async (event) => {
     const id = event?.item?.getAttribute('data-id');
-    const status = event?.item?.parentElement?.getAttribute('data-status');
+    const currentStatus = event?.item?.parentElement?.getAttribute('data-status');
+    const previousStatus = event?.from?.getAttribute('data-status');
 
-    if (!id || !status) {
+    if (!id || !currentStatus) {
         dragging.value = false;
         return;
     };
 
-    update(id, { status })
-        .then(() => {
-            rerender();
-        })
+    update(id, { status_id: currentStatus })
+        .then(() => emits('rerender', previousStatus, currentStatus))
         .finally(() => event?.item?.remove());
-}
-
-const rerender = () => {
-    emits('rerender');
 }
 </script>
 
@@ -95,7 +90,7 @@ const rerender = () => {
                     @drop.prevent="() => dragging = false"
                     @add="move"
                 >
-                    <Task v-for="task in page" :key="task.id" :task="task" @destroy="rerender" :accent-color="accentColor" />
+                    <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" :accent-color="accentColor" />
                 </VueDraggableNext>
             </div>
             <div v-if="hasNextPage" ref="target"></div>
