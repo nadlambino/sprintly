@@ -13,6 +13,18 @@ class Status extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'color',
+        'description',
+        'order',
+    ];
+
+    /**
      * Relation method between Status and Task.
      *
      * @return HasMany
