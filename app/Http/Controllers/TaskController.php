@@ -15,7 +15,7 @@ class TaskController extends Controller
 
     public function __construct()
     {
-        $this->statuses = Status::all(['id', 'name']);
+        $this->statuses = request()->user()->statuses->sortBy('order');
     }
 
     /**

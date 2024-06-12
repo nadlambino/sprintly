@@ -27,11 +27,17 @@ export const useTaskStore = defineStore('tasks', () => {
         url.status = status.value;
     });
 
+    const statuses = ref([]);
+
+    const setStatuses = (data) => statuses.value = data;
+
     return {
         search,
         sortBy,
         perPage,
-        status
+        status,
+        statuses,
+        setStatuses
     };
 });
 
@@ -74,7 +80,7 @@ export function useTaskApi(params = {}) {
         const response = await window.axios.get(route('api.tasks.index', {
             filter: {
                 title: searchDebounce.value,
-                status: status.value,
+                status_id: params?.status_id,
                 published: published.value,
                 trashed: trashed.value,
                 parent_id: params?.parent_id
@@ -93,10 +99,11 @@ export function useTaskApi(params = {}) {
     }
 
     const { data, isPending, isFetching, isFetchingNextPage, refetch, fetchNextPage } = useInfiniteQuery({
-        queryKey: [{ status, sort, published, trashed, searchDebounce, perPage }],
+        queryKey: [{ status: params?.status_id, sort, published, trashed, searchDebounce, perPage }],
         queryFn: get,
         initialPageParam: 1,
         getNextPageParam: () => hasNextPage.value ? page.value : null,
+        enabled: false
     });
 
     const isRequesting = computed(() => isPending.value || isFetching.value || isFetchingNextPage.value);

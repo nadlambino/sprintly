@@ -1,5 +1,6 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref } from 'vue';
+import { useTaskStore } from '@/Utils/task';
 import Column from '@/Components/Tasks/Column.vue';
 
 const props = defineProps({
@@ -8,53 +9,19 @@ const props = defineProps({
     }
 });
 
-const dragging = ref(false);
-const key = ref(Math.random());
+const { statuses } = useTaskStore();
 
-/**
- * Forces a rerender by changing the column keys.
- *
- * @param {string} status
- * @param {string} previousStatus
- */
-const rerender = () => {
-    key.value = Math.random();
-}
+const dragging = ref(false);
 </script>
 
 <template>
     <div class="flex flex-col md:grid md:grid-cols-3 gap-5">
-        <Suspense>
+        <Suspense v-for="status in statuses" :key="status.id">
             <Column
-                label="To Do"
-                status="todo"
-                accent-color="primary"
-                v-model:dragging="dragging"
-                @rerender="rerender"
-                :key="key"
+                :label="status.name"
+                :status-id="status.id"
                 :parent-id="parentId"
-            />
-        </Suspense>
-        <Suspense>
-            <Column
-                label="In Progress"
-                status="in progress"
-                accent-color="yellow-500"
                 v-model:dragging="dragging"
-                @rerender="rerender"
-                :key="key"
-                :parent-id="parentId"
-            />
-        </Suspense>
-        <Suspense>
-            <Column
-                label="Done"
-                status="done"
-                accent-color="green-500"
-                v-model:dragging="dragging"
-                @rerender="rerender"
-                :key="key"
-                :parent-id="parentId"
             />
         </Suspense>
     </div>

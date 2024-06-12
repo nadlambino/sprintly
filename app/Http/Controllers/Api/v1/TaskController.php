@@ -33,6 +33,7 @@ class TaskController extends Controller
                 ->allowedFilters([
                     'title',
                     AllowedFilter::exact('parent_id'),
+                    AllowedFilter::exact('status_id'),
                     AllowedFilter::custom('status', new StatusFilter),
                     AllowedFilter::custom('published', new PublishedFilter),
                     AllowedFilter::custom('trashed', new TrashedFilter)
@@ -51,7 +52,8 @@ class TaskController extends Controller
                     'total' => $tasks->total()
                 ]
             );
-        } catch (Exception) {
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage());
             return $this->error('Something went wrong while retrieving the tasks. Please try again later.');
         }
     }

@@ -1,6 +1,8 @@
 <script setup>
+import { onBeforeMount } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { useStorage } from '@vueuse/core';
+import { useTaskStore } from '@/Utils/task';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import Kanban from '@/Components/Tasks/Kanban.vue';
@@ -9,6 +11,9 @@ import TaskTable from '@/Components/Tasks/TaskTable.vue';
 const props = defineProps({
     statuses: Array,
 });
+
+const { setStatuses } = useTaskStore();
+onBeforeMount(() => setStatuses(props.statuses));
 
 const kanban = useStorage('kanban', true);
 </script>

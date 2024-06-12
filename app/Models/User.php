@@ -60,7 +60,7 @@ class User extends Authenticatable
         return $this->hasMany(Task::class);
     }
 
-    public function status(): HasMany
+    public function statuses(): HasMany
     {
         return $this->hasMany(Status::class);
     }

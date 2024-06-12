@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useElementVisibility } from '@vueuse/core';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { useTaskApi, useTaskStore } from '@/Utils/task';
@@ -12,8 +12,7 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    status: {
-        type: String,
+    statusId: {
         required: true,
     },
     accentColor: {
@@ -33,16 +32,18 @@ const {
     isRequesting,
     isEmpty,
     hasNextPage,
-    refetch,
     next,
-    update
+    update,
+    refetch
  } = await useTaskApi({
-    status: props.status,
+    status_id: props.statusId,
     published: true,
     search: taskStore.search,
     per_page: taskStore.perPage,
-    parent_id: props.parentId
+    parent_id: props.parentId,
 });
+
+onMounted(refetch)
 
 const target = ref(null);
 const isVisible = useElementVisibility(target);
@@ -59,7 +60,6 @@ const emits = defineEmits(['rerender']);
 const move = async (event) => {
     const id = event?.item?.getAttribute('data-id');
     const status = event?.item?.parentElement?.getAttribute('data-status');
-    const previousStatus = event?.item?.getAttribute('data-status');
 
     if (!id || !status) {
         dragging.value = false;
@@ -83,13 +83,13 @@ const rerender = () => {
         <div class="px-5 py-2 text-center font-bold bg-primary text-white">
             <p class="uppercase text-sm font-normal">{{ label }} ({{ total }})</p>
         </div>
-        <TaskEmpty v-if="isEmpty && ! dragging" class="mx-5" :status="status" />
+        <TaskEmpty v-if="isEmpty && ! dragging" class="mx-5" />
         <div ref="container" class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-full">
             <div v-for="page in data?.pages">
                 <VueDraggableNext
                     class="flex flex-col gap-5 relative"
                     :class="{ 'dragging': dragging }"
-                    :data-status="status"
+                    :data-status="statusId"
                     group='tasks'
                     @dragover="() => dragging = true"
                     @drop.prevent="() => dragging = false"
