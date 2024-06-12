@@ -6,11 +6,10 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AddIcon from '@/Icons/AddIcon.vue';
 import TextInput from '@/Components/TextInput.vue';
 import ButtonDropdown from '@/Components/ButtonDropdown.vue';
-import Toggle from '../Toggle.vue';
-import InputLabel from '../InputLabel.vue';
+import Toggle from '@/Components/Toggle.vue';
+import InputLabel from '@/Components/InputLabel.vue';
 
 const props = defineProps({
-    statuses: Array,
     create: {
         type: Boolean,
         default: true
@@ -56,7 +55,7 @@ const pageOptions = [
     { label: '100 Tasks', value: 100 },
 ];
 const statusOptions = computed(() => {
-    let options =  props.statuses?.map(status => {
+    let options =  taskStore.statuses?.map(status => {
         return {
             label: status.name,
             value: status.name

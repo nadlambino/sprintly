@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onBeforeMount } from 'vue';
 import { useElementVisibility } from '@vueuse/core';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { useTaskApi, useTaskStore } from '@/Utils/task';
@@ -43,7 +43,7 @@ const {
     parent_id: props.parentId,
 });
 
-onMounted(refetch);
+onBeforeMount(refetch);
 
 const target = ref(null);
 const isVisible = useElementVisibility(target);

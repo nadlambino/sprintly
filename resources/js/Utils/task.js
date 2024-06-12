@@ -105,6 +105,8 @@ export function useTaskApi(params = {}) {
     const isRequesting = computed(() => isPending.value || isFetching.value || isFetchingNextPage.value);
     const isEmpty = computed(() => !isRequesting.value && data?.value?.pages[0]?.length === 0);
 
+    watch([searchDebounce, statusId, sort, perPage], refetch);
+
     const next = () => {
         if (hasNextPage.value) fetchNextPage();
     }
