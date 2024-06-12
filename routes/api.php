@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\v1\StatusController;
 use App\Http\Controllers\Api\v1\TaskController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::name('api')->apiResource('/tasks', TaskController::class)->only(['index', 'store', 'update', 'destroy']);
-    Route::put('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('api.tasks.restore');
-    Route::get('/tasks/parents', [TaskController::class, 'parents'])->name('api.tasks.parents');
+Route::middleware('auth:sanctum')->name('api.')->group(function () {
+    Route::apiResource('/tasks', TaskController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::put('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('tasks.restore');
+    Route::get('/tasks/parents', [TaskController::class, 'parents'])->name('tasks.parents');
+
+    Route::apiResource('/statuses', StatusController::class)->only(['index', 'store', 'update', 'destroy']);
 });

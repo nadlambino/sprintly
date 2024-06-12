@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\WithCastableDates;
 use App\Observers\TaskObserver;
 use App\Services\TaskService;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -17,7 +18,7 @@ use NadLambino\Uploadable\Models\Traits\HasUpload;
 #[ObservedBy(TaskObserver::class)]
 class Task extends Model
 {
-    use HasFactory, SoftDeletes, HasUpload;
+    use HasFactory, SoftDeletes, HasUpload, WithCastableDates;
 
     protected $fillable = [
         'parent_id',
@@ -31,21 +32,6 @@ class Task extends Model
         'deleted_since',
         'to_be_deleted_at'
     ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'created_at'   => 'datetime:Y-m-d h:i A',
-            'updated_at'   => 'datetime:Y-m-d h:i A',
-            'deleted_at'   => 'datetime:Y-m-d h:i A',
-            'published_at' => 'datetime:Y-m-d h:i A',
-        ];
-    }
 
     /**
      * Get the deleted_since attribute.
