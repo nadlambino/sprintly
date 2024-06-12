@@ -8,7 +8,7 @@ export const useTaskStore = defineStore('tasks', () => {
     const url = useUrlSearchParams('history');
     const search = ref(url.title || '');
     const sortBy = ref(url.sort || 'created_at');
-    const perPage = ref(url.per_page || 10);
+    const perPage = ref(url.per_page || 5);
     const status = ref(url.status || 'all');
 
     watch(search, () => {
@@ -29,6 +29,10 @@ export const useTaskStore = defineStore('tasks', () => {
 
     const statuses = ref([]);
 
+    const getStatus = (filters) => {
+        return statuses.value.find(status => Object.entries(filters).every(([key, value]) => status[key] === value));
+    }
+
     const setStatuses = (data) => statuses.value = data;
 
     return {
@@ -37,6 +41,7 @@ export const useTaskStore = defineStore('tasks', () => {
         perPage,
         status,
         statuses,
+        getStatus,
         setStatuses
     };
 });
@@ -58,17 +63,21 @@ export function useTaskApi(params = {}) {
 
     watch(() => taskStore.search, () => {
         search.value = taskStore.search;
+        page.value = 1;
     });
 
     watch(() => taskStore.perPage, () => {
         perPage.value = taskStore.perPage;
+        page.value = 1;
     });
 
     watch(() => taskStore.sortBy, () => {
         sort.value = taskStore.sortBy;
+        page.value = 1;
     });
 
-    watch(() => taskStore.search, () => {
+    watch(() => taskStore.status, () => {
+        statusId.value = taskStore.getStatus({ name: taskStore.status })?.id;
         page.value = 1;
     });
 

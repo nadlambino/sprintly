@@ -5,7 +5,6 @@ import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import TaskTable from '@/Components/Tasks/TaskTable.vue';
 
 const props = defineProps({
-    statuses: Array,
     days_before_deletion: Number|String,
 });
 
@@ -23,7 +22,7 @@ const headers = [
 
     <AuthenticatedLayout>
         <template #header>
-            <SubMenu :trashed="false" :filterable="true" :statuses="statuses" />
+            <SubMenu :trashed="false" :filterable="true" />
         </template>
 
         <div class="p-5">

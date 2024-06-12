@@ -4,9 +4,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import TaskTable from '@/Components/Tasks/TaskTable.vue';
 
-const props = defineProps({
-    statuses: Array,
-});
 </script>
 
 <template>
@@ -14,7 +11,7 @@ const props = defineProps({
 
     <AuthenticatedLayout>
         <template #header>
-            <SubMenu :draft="false" :statuses="statuses" :filterable="true" />
+            <SubMenu :draft="false" :filterable="true" />
         </template>
 
         <div class="p-5">

@@ -49,6 +49,7 @@ const sortOptions = [
     { label: '&darr; Title', value: '-title' },
 ];
 const pageOptions = [
+    { label: '5 Tasks', value: 5 },
     { label: '10 Tasks', value: 10 },
     { label: '20 Tasks', value: 20 },
     { label: '50 Tasks', value: 50 },

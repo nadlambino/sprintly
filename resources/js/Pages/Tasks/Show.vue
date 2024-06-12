@@ -11,10 +11,6 @@ const props = defineProps({
     task: {
         type: Object,
     },
-    statuses: {
-        type: Array,
-        required: true,
-    },
 });
 
 const kanban = useStorage('kanban', true);
@@ -25,7 +21,7 @@ const kanban = useStorage('kanban', true);
 
     <AuthenticatedLayout>
         <template #header>
-            <SubMenu :statuses="statuses" :filterable="true" v-model:kanban="kanban" :toggleable="true" />
+            <SubMenu :filterable="true" v-model:kanban="kanban" :toggleable="true" />
         </template>
 
         <div class="p-5">
