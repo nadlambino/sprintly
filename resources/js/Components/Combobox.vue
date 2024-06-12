@@ -18,6 +18,16 @@ const input = ref(null);
 const search = ref('');
 const selected = ref('');
 
+const setDefaultSelected = () => {
+    if (props.options?.length) {
+        const option = props.options.find(option => option.value === model.value);
+
+        if (option) selected.value = option?.label;
+    }
+}
+
+watch(() => props.options, setDefaultSelected, { immediate: true });
+
 const open = () => {
     show.value = true;
 
@@ -46,8 +56,8 @@ const clear = () => {
 
 <template>
     <div ref="container" class="relative w-full">
-        <div class="flex py-1 gap-1 items-center w-full border border-gray-300 rounded-md shadow-sm">
-            <input class="border-0 w-full focus:ring-0 focus:outline-0 h-8 w-[96%] cursor-default" :placeholder="placeholder" readonly @focus="open" :value="selected" />
+        <div class="flex gap-1 items-center w-full border border-gray-300 py-1 px-3 rounded-md shadow-sm">
+            <input class="border-0 w-full focus:ring-0 focus:outline-0 h-8 p-0 cursor-default" :placeholder="placeholder" readonly @focus="open" :value="selected" />
             <small class="text-lg text-gray-400 cursor-pointer" @click="clear">&times;</small>
         </div>
         <div v-show="show" class="absolute bg-white shadow-xl rounded mt-1 border border-gray-100 w-full">
@@ -58,6 +68,7 @@ const clear = () => {
                         v-for="option in options"
                         :key="option.value"
                         class="capitalize cursor-pointer hover:bg-secondary p-2 border-b border-gray-100 truncate text-xs last:border-0"
+                        :class="{ 'bg-secondary': option.value === model }"
                         @click="() => select(option.value, option.label)"
                         >
                         {{ option.label }}

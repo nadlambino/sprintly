@@ -70,7 +70,7 @@ class TaskController extends Controller
 
         return Inertia::render('Tasks/Form', [
             'statuses' => $this->statuses,
-            'task' => $task->load(['status', 'images']),
+            'task' => $task->load(['status', 'images', 'parent']),
         ]);
     }
 

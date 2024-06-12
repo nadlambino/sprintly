@@ -48,7 +48,15 @@ const getParentsList = async (value) => {
         });
 }
 
-onMounted(() => getParentsList());
+const setDefaultOptionsForParent = () => {
+    if (! isNew.value) {
+        parents.value = [{ value: form.parent_id, label: props.task?.parent.title }];
+    } else {
+        getParentsList();
+    }
+}
+
+onMounted(setDefaultOptionsForParent);
 
 const success = ref(false);
 const message = ref(null);
