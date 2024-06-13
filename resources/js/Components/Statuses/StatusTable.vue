@@ -42,9 +42,12 @@ const { data, update, destroy, restore, refetch } = useStatusApi({
     <SimpleTable :data="data" :headers="headers" label="statuses" :total="data?.length || 0">
         <template #actions="{ row }">
             <div class="flex gap-2">
-                <Link v-if="editable" :href="route('statuses.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
-                <button v-if="deletable" @click="() => destroy(row.id).then(refetch)" class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
-                <button v-if="restorable" @click="() => restore(row.id).then(refetch)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Restore</button>
+                <p v-if="row.is_default" class="bg-gray-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Default</p>
+                <template v-else>
+                    <Link v-if="editable" :href="route('statuses.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
+                    <button v-if="deletable" @click="() => destroy(row.id).then(refetch)" class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
+                    <button v-if="restorable" @click="() => restore(row.id).then(refetch)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Restore</button>
+                </template>
             </div>
         </template>
     </SimpleTable>
