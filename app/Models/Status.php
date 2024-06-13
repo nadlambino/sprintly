@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 class Status extends Model
 {
@@ -24,6 +25,20 @@ class Status extends Model
         'description',
         'order',
     ];
+
+    protected $appends = [
+        'deleted_since',
+    ];
+
+    /**
+     * Get the deleted_since attribute.
+     *
+     * @return string|null
+     */
+    public function getDeletedSinceAttribute(): ?string
+    {
+        return $this->deleted_at ? Carbon::parse($this->deleted_at)->diffForHumans() : null;
+    }
 
     /**
      * Relation method between Status and Task.
