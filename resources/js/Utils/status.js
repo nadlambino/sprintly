@@ -15,7 +15,7 @@ export const useStatusStore = defineStore('statuses', () => {
     });
 
     const getStatus = (filters) => {
-        return collect(statuses.value).first((status) => Object.entries(filters).every(([key, value]) => status[key] === value));
+        return collect(statuses.value).first((status) => Object.entries(filters).every(([key, value]) => status[key] == value));
     }
 
     const setStatuses = (data) => statuses.value = data;

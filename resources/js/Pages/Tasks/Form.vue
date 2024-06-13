@@ -14,7 +14,6 @@ import Toggle from '@/Components/Toggle.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import Combobox from '@/Components/Combobox.vue';
-import collect from 'collect.js';
 
 const props = defineProps({
     task: {
@@ -158,7 +157,7 @@ const error = (error) => {
 
                         <div class="flex flex-col gap-2">
                             <InputLabel for="status" value="Status" required />
-                            <div class="flex gap-10">
+                            <div class="flex gap-5 flex-wrap">
                                 <div v-for="status in statusStore.statuses" class="flex gap-2 items-center">
                                     <RadioInput :key="status.id" :value="status.id" v-model="form.status_id" name="status" />
                                     <InputLabel :for="status.id" :value="status.name" class="capitalize cursor-pointer"/>
