@@ -24,7 +24,6 @@ const props = defineProps({
 const emit = defineEmits(['sort']);
 
 const sort = (event) => {
-    console.log(event);
     emit('sort', {
         id: event.item.getAttribute('data-id'),
         oldIndex: event.oldIndex,
