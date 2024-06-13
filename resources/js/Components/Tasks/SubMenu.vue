@@ -50,11 +50,11 @@ const sortOptions = [
     { label: '&darr; Title', value: '-title' },
 ];
 const pageOptions = [
-    { label: '5 Tasks', value: 5 },
-    { label: '10 Tasks', value: 10 },
-    { label: '20 Tasks', value: 20 },
-    { label: '50 Tasks', value: 50 },
-    { label: '100 Tasks', value: 100 },
+    { label: '5', value: 5 },
+    { label: '10', value: 10 },
+    { label: '20', value: 20 },
+    { label: '50', value: 50 },
+    { label: '100', value: 100 },
 ];
 const { statuses } = useStatusStore();
 const statusOptions = computed(() => {
@@ -102,8 +102,8 @@ watch(kanban, resetStatusFilter);
         <div v-if="filters" class="flex flex-col md:flex-row gap-3 items-end md:items-center">
             <TextInput placeholder="Search by title..." class="min-w-full md:min-w-72" v-model="taskStore.search" />
             <div class="flex gap-3">
-                <ButtonDropdown v-if="filterable || !kanban" v-model="taskStore.status" :label="`Status: ${taskStore.status}`" :options="statusOptions" placement="left-0" />
-                <ButtonDropdown v-model="taskStore.sortBy" :label="`Sort: ${taskStore.sortBy}`" :options="sortOptions" />
+                <ButtonDropdown v-if="filterable || !kanban" v-model="taskStore.status" :options="statusOptions" placement="left-0" />
+                <ButtonDropdown v-model="taskStore.sortBy" :options="sortOptions" />
                 <ButtonDropdown v-model="taskStore.perPage" :label="`Paginate: ${taskStore.perPage}`" :options="pageOptions" />
                 <div v-if="toggleable" class="flex flex-col gap-1">
                     <InputLabel value="Kanban" class="text-[10px] uppercase text-muted" />

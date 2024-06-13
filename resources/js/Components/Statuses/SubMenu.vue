@@ -56,7 +56,7 @@ const sortOptions = [
         <div v-if="filters" class="flex flex-col md:flex-row gap-3 items-end md:items-center">
             <TextInput placeholder="Search by name or color..." class="min-w-full md:min-w-72" v-model="statusStore.search" />
             <div class="flex gap-3">
-                <ButtonDropdown v-model="statusStore.sortBy" :label="`Sort: ${statusStore.sortBy}`" :options="sortOptions" />
+                <ButtonDropdown v-model="statusStore.sortBy" :options="sortOptions" />
             </div>
         </div>
     </div>
