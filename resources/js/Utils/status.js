@@ -1,20 +1,16 @@
 import { computed, ref, watch } from 'vue';
 import { useQuery } from '@tanstack/vue-query';
 import { defineStore } from 'pinia';
-import { useUrlSearchParams } from '@vueuse/core';
+import { useDebounce, useUrlSearchParams } from '@vueuse/core';
 
 export const useStatusStore = defineStore('statuses', () => {
     const url = useUrlSearchParams('history');
     const statuses = ref([]);
-    const status = ref(url.status);
-    const color = ref(url.color);
+    const search = ref(url.search);
+    const sortBy = ref(url.sort || 'order');
 
-    watch(status, () => {
-        url.status = status.value;
-    });
-
-    watch(color, () => {
-        url.color = color.value;
+    watch(search, () => {
+        url.search = search.value || null;
     });
 
     const getStatus = (filters) => {
@@ -27,29 +23,38 @@ export const useStatusStore = defineStore('statuses', () => {
         statuses,
         getStatus,
         setStatuses,
-        status,
-        color
+        search,
+        sortBy
     };
 });
 
 export function useStatusApi(params = {}) {
     const statusStore = useStatusStore();
-    const status = ref(params?.status || statusStore.status);
-    const color = ref(params?.color || statusStore.color);
+    const search = ref(params?.search || statusStore.search);
+    const searchDebounce = useDebounce(search, 500);
+    const sortBy = ref(params?.sort || statusStore.sortBy);
+
+    watch(() => statusStore.search, () => {
+        search.value = statusStore.search;
+    });
+
+    watch(() => statusStore.sortBy, () => {
+        sortBy.value = statusStore.sortBy;
+    });
 
     const get = async () => {
         const response = await window.axios.get(route('api.statuses.index', {
             filter: {
-                status: status.value,
-                color: color.value
-            }
+                search: searchDebounce.value,
+            },
+            sort: sortBy.value,
         }));
 
         return response?.data?.data || [];
     }
 
     const { data, isPending, isFetching, refetch } = useQuery({
-        queryKey: ['statuses'],
+        queryKey: ['statuses', { searchDebounce, sortBy }],
         queryFn: get,
     });
 

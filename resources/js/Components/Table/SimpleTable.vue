@@ -18,8 +18,6 @@ const emit = defineEmits(['next']);
 const target = ref(null);
 const isVisible = useElementVisibility(target);
 watch(isVisible, (visible) => visible && emit('next'));
-
-const totalShownData = computed(() => props.data?.reduce((total, page) => total + page.length, 0));
 </script>
 
 <template>
@@ -59,8 +57,5 @@ const totalShownData = computed(() => props.data?.reduce((total, page) => total 
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div class="flex justify-end items-center gap-3 mt-2">
-        <small class="text-muted">Showing {{ totalShownData }} of {{ total }} {{ label }}</small>
     </div>
 </template>

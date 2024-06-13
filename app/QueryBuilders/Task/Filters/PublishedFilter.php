@@ -1,18 +1,18 @@
 <?php
 
-namespace App\QueryBuilders\Tasks\Filters;
+namespace App\QueryBuilders\Task\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\Filters\Filter;
 
-class TrashedFilter implements Filter
+class PublishedFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property): void
     {
         $query->when(
             $value,
-            fn ($query) => $query->onlyTrashed(),
-            fn ($query) => $query->withoutTrashed()
+            fn ($query) => $query->whereNotNull('published_at'),
+            fn ($query) => $query->whereNull('published_at')
         );
     }
 }

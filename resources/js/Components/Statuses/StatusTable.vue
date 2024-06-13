@@ -17,7 +17,7 @@ const { data } = useStatusApi();
 </script>
 
 <template>
-    <SimpleTable :data="data" :headers="headers" label="statuses">
+    <SimpleTable :data="data" :headers="headers" label="statuses" :total="data?.length || 0">
         <template #actions="{ row }">
             <div class="flex gap-2">
                 <!-- <Link v-if="editable" :href="route('statuses.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>

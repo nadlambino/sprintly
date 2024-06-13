@@ -7,13 +7,13 @@ import { useStatusStore } from './status';
 
 export const useTaskStore = defineStore('tasks', () => {
     const url = useUrlSearchParams('history');
-    const search = ref(url.title || '');
+    const search = ref(url.title);
     const sortBy = ref(url.sort || 'created_at');
     const perPage = ref(url.per_page || 5);
     const status = ref(url.status || 'all');
 
     watch(search, () => {
-        url.title = search.value;
+        url.title = search.value || null;
     });
 
     watch(sortBy, () => {

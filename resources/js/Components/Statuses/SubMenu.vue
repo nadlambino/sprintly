@@ -1,5 +1,5 @@
 <script setup>
-import { useTaskStore } from '@/Utils/task';
+import { useStatusStore } from '@/Utils/status';
 import { Link } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AddIcon from '@/Icons/AddIcon.vue';
@@ -21,13 +21,15 @@ const props = defineProps({
     },
 });
 
-const taskStore = useTaskStore();
+const statusStore = useStatusStore();
 
 const sortOptions = [
+    { label: '&uarr; Order', value: 'order' },
+    { label: '&darr; Order', value: '-order' },
     { label: '&uarr; Created', value: 'created_at' },
     { label: '&darr; Created', value: '-created_at' },
-    { label: '&uarr; Title', value: 'title' },
-    { label: '&darr; Title', value: '-title' },
+    { label: '&uarr; Name', value: 'name' },
+    { label: '&darr; Name', value: '-name' },
 ];
 </script>
 
@@ -40,20 +42,14 @@ const sortOptions = [
                     <span>Create</span>
                 </PrimaryButton>
             </Link>
-            <Link v-if="board" :href="route('tasks.index')" class="text-primary hover:text-primary/80 hover:underline">
-                Board
-            </Link>
-            <Link v-if="draft" :href="route('tasks.drafts')" class="text-primary hover:text-primary/80 hover:underline">
-                Drafts
-            </Link>
             <Link v-if="trashed" :href="route('tasks.trashed')" class="text-primary hover:text-primary/80 hover:underline">
                 Trashed
             </Link>
         </div>
         <div v-if="filters" class="flex flex-col md:flex-row gap-3 items-end md:items-center">
-            <TextInput placeholder="Search by name or color..." class="min-w-full md:min-w-72" v-model="taskStore.search" />
+            <TextInput placeholder="Search by name or color..." class="min-w-full md:min-w-72" v-model="statusStore.search" />
             <div class="flex gap-3">
-                <ButtonDropdown v-model="taskStore.sortBy" :label="`Sort: ${taskStore.sortBy}`" :options="sortOptions" />
+                <ButtonDropdown v-model="statusStore.sortBy" :label="`Sort: ${statusStore.sortBy}`" :options="sortOptions" />
             </div>
         </div>
     </div>
