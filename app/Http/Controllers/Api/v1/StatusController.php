@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Status;
 use App\QueryBuilders\Status\Filters\SearchFilter;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -25,6 +27,19 @@ class StatusController extends Controller
             return $this->success('Statuses retrieved successfully.', $statuses);
         } catch (Exception) {
             return $this->error('Something went wrong while retrieving the statuses. Please try again later.');
+        }
+    }
+
+    public function destroy(Status $status)
+    {
+        try {
+            Gate::authorize('delete', $status);
+
+            $status->delete();
+
+            return $this->success('Status was successfully deleted.');
+        } catch (Exception) {
+            return $this->error('Something went wrong while deleting the status. Please try again later.');
         }
     }
 }

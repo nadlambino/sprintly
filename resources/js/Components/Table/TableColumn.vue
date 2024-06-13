@@ -11,7 +11,11 @@ const props = defineProps({
 const data = computed(() => {
     const dotted = props.column.split('.');
 
-    return dotted.reduce((object, key) => object[key] ?? null, props.row);
+    if (dotted.length === 0) {
+        return props.row[props.column];
+    }
+
+    return dotted.reduce((object, key) => object ? object[key] : null, props.row);
 });
 
 const asColor = computed(() => collect(props.headers).firstWhere('key', props.column)?.as_color);

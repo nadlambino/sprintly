@@ -6,7 +6,7 @@ import { useDebounce, useUrlSearchParams } from '@vueuse/core';
 export const useStatusStore = defineStore('statuses', () => {
     const url = useUrlSearchParams('history');
     const statuses = ref([]);
-    const search = ref(url.search);
+    const search = ref(url.search || '');
     const sortBy = ref(url.sort || 'order');
 
     watch(search, () => {
@@ -62,7 +62,7 @@ export function useStatusApi(params = {}) {
     const isEmpty = computed(() => !isRequesting.value && data?.value?.length === 0);
 
     /**
-     * Request to create a task
+     * Request to create a status
      *
      * @param {object|FormData} data
      * @param {object} headers
@@ -73,7 +73,7 @@ export function useStatusApi(params = {}) {
     }
 
     /**
-     * Request to update a task
+     * Request to update a status
      *
      * @param {string|number} id
      * @param {object|FormData} data
@@ -82,29 +82,29 @@ export function useStatusApi(params = {}) {
      */
     const update = (id, data, headers) => {
         return window.axios
-            .post(route('api.statuses.update', { task: id }), { ...data, _method: 'PUT' }, { headers });
+            .post(route('api.statuses.update', { status: id }), { ...data, _method: 'PUT' }, { headers });
     }
 
     /**
-     * Request to destroy a task
+     * Request to destroy a status
      *
      * @param {string|number} id
      * @returns {Promise}
      */
     const destroy = (id) => {
         return window.axios
-            .delete(route('api.statuses.destroy', { task: id }));
+            .delete(route('api.statuses.destroy', { status: id }));
     }
 
     /**
-     * Request to restore a task
+     * Request to restore a status
      *
      * @param {string|number} id
      * @returns {Promise}
      */
     const restore = (id) => {
         return window.axios
-            .put(route('api.statuses.restore', { task: id }));
+            .put(route('api.statuses.restore', { status: id }));
     }
 
     return {

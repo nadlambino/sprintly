@@ -41,6 +41,7 @@ class TaskController extends Controller
                 ->allowedIncludes(['status', 'images', 'parent', 'children'])
                 ->defaultSort('created_at')
                 ->allowedSorts(['title', 'created_at'])
+                ->whereHas('status')
                 ->paginate($request->get('per_page', 10));
 
             return $this->success(
