@@ -14,10 +14,6 @@ const headers = [
 
 const { data } = useStatusApi();
 
-onMounted(() => {
-    console.log(route('api.statuses.index'));
-});
-
 </script>
 
 <template>

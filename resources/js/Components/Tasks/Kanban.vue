@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
-import { useKanbanColumnKeys, useTaskStore } from '@/Utils/task';
+import { useKanbanColumnKeys } from '@/Utils/task';
+import { useStatusStore } from '@/Utils/status';
 import Column from '@/Components/Tasks/Column.vue';
 
 const props = defineProps({
@@ -9,7 +10,7 @@ const props = defineProps({
     }
 });
 
-const { statuses } = useTaskStore();
+const { statuses } = useStatusStore();
 const [keys, update] = useKanbanColumnKeys();
 
 const dragging = ref(false);

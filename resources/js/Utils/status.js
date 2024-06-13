@@ -1,9 +1,49 @@
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useQuery } from '@tanstack/vue-query';
+import { defineStore } from 'pinia';
+import { useUrlSearchParams } from '@vueuse/core';
 
-export function useStatusApi() {
+export const useStatusStore = defineStore('statuses', () => {
+    const url = useUrlSearchParams('history');
+    const statuses = ref([]);
+    const status = ref(url.status);
+    const color = ref(url.color);
+
+    watch(status, () => {
+        url.status = status.value;
+    });
+
+    watch(color, () => {
+        url.color = color.value;
+    });
+
+    const getStatus = (filters) => {
+        return statuses.value.find(status => Object.entries(filters).every(([key, value]) => status[key] === value));
+    }
+
+    const setStatuses = (data) => statuses.value = data;
+
+    return {
+        statuses,
+        getStatus,
+        setStatuses,
+        status,
+        color
+    };
+});
+
+export function useStatusApi(params = {}) {
+    const statusStore = useStatusStore();
+    const status = ref(params?.status || statusStore.status);
+    const color = ref(params?.color || statusStore.color);
+
     const get = async () => {
-        const response = await window.axios.get(route('api.statuses.index'));
+        const response = await window.axios.get(route('api.statuses.index', {
+            filter: {
+                status: status.value,
+                color: color.value
+            }
+        }));
 
         return response?.data?.data || [];
     }

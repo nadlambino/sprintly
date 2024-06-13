@@ -3,6 +3,7 @@ import { ref, watch, onBeforeMount } from 'vue';
 import { useElementVisibility } from '@vueuse/core';
 import { VueDraggableNext } from 'vue-draggable-next';
 import { useTaskApi, useTaskStore } from '@/Utils/task';
+import { useStatusStore } from '@/Utils/status';
 import Task from '@/Components/Tasks/Task.vue';
 import TaskSkeleton from '@/Components/Tasks/TaskSkeleton.vue';
 import TaskEmpty from '@/Components/Tasks/TaskEmpty.vue';
@@ -21,7 +22,8 @@ const props = defineProps({
 });
 
 const taskStore = useTaskStore();
-const statusColor = taskStore.statuses.find(status => status.id === props.statusId)?.color;
+const statusStore = useStatusStore();
+const statusColor = statusStore.statuses.find(status => status.id === props.statusId)?.color;
 
 const {
     data,

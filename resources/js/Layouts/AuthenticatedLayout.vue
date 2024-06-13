@@ -1,15 +1,15 @@
 <script setup>
 import { ref, onBeforeMount } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
-import { useTaskStore } from '@/Utils/task';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import { useStatusStore } from '@/Utils/status';
 
 const page = usePage();
-const { setStatuses } = useTaskStore();
+const { setStatuses } = useStatusStore();
 onBeforeMount(() => setStatuses(page.props?.statuses || []));
 
 const showingNavigationDropdown = ref(false);

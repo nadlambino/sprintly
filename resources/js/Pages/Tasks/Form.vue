@@ -1,7 +1,8 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { useTaskApi, useTaskStore } from '@/Utils/task';
+import { useTaskApi } from '@/Utils/task';
+import { useStatusStore } from '@/Utils/status';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -22,18 +23,18 @@ const props = defineProps({
     }
 });
 
-const taskStore = useTaskStore();
 const { update, create, getParents } = useTaskApi();
 
 const isNew = computed(() => props.task?.id === undefined);
 
+const statusStore = useStatusStore();
 const form = useForm({
     id: props.task?.id || null,
     parent_id: props.task?.parent_id || null,
     title: props.task?.title || '',
     content: props.task?.content || '',
     images: [],
-    status_id: props.task?.status_id || collect(taskStore.statuses).first()?.id,
+    status_id: props.task?.status_id || collect(statusStore.statuses).first()?.id,
     publish: props.task?.published_at ? true : false,
     replace_images: false
 });
@@ -158,7 +159,7 @@ const error = (error) => {
                         <div class="flex flex-col gap-2">
                             <InputLabel for="status" value="Status" required />
                             <div class="flex gap-10">
-                                <div v-for="status in taskStore.statuses" class="flex gap-2 items-center">
+                                <div v-for="status in statusStore.statuses" class="flex gap-2 items-center">
                                     <RadioInput :key="status.id" :value="status.id" v-model="form.status_id" name="status" />
                                     <InputLabel :for="status.id" :value="status.name" class="capitalize cursor-pointer"/>
                                 </div>

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { ref, watch, computed, reactive } from 'vue';
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { useDebounce } from '@vueuse/core';
+import { useStatusStore } from './status';
 
 export const useTaskStore = defineStore('tasks', () => {
     const url = useUrlSearchParams('history');
@@ -27,28 +28,18 @@ export const useTaskStore = defineStore('tasks', () => {
         url.status = status.value;
     });
 
-    const statuses = ref([]);
-
-    const getStatus = (filters) => {
-        return statuses.value.find(status => Object.entries(filters).every(([key, value]) => status[key] === value));
-    }
-
-    const setStatuses = (data) => statuses.value = data;
-
     return {
         search,
         sortBy,
         perPage,
         status,
-        statuses,
-        getStatus,
-        setStatuses
     };
 });
 
 
 export function useTaskApi(params = {}) {
     const taskStore = useTaskStore();
+    const { getStatus } = useStatusStore();
 
     const statusId = ref(params?.status_id);
     const sort  = ref(params?.sort || 'created_at');
@@ -77,7 +68,7 @@ export function useTaskApi(params = {}) {
     });
 
     watch(() => taskStore.status, () => {
-        statusId.value = taskStore.getStatus({ name: taskStore.status })?.id;
+        statusId.value = getStatus({ name: taskStore.status })?.id;
         page.value = 1;
     });
 
