@@ -69,6 +69,8 @@ const move = async (event) => {
     update(id, { status_id: currentStatus })
         .then(() => emits('rerender', previousStatus, currentStatus))
         .finally(() => event?.item?.remove());
+
+    dragging.value = false;
 }
 </script>
 
@@ -85,8 +87,8 @@ const move = async (event) => {
                     :class="{ 'dragging': dragging }"
                     :data-status="statusId"
                     group='tasks'
-                    @dragover="() => dragging = true"
-                    @drop.prevent="() => dragging = false"
+                    @dragstart="() => dragging = true"
+                    @dragend="() => dragging = false"
                     @add="move"
                 >
                     <Task v-for="task in page" :key="task.id" :task="task" @destroy="refetch" />
