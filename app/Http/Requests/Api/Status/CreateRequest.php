@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\Status;
 
 use App\Models\Status;
+use App\Rules\Status\UniqueName;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -25,7 +26,7 @@ class CreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          => ['required', 'min:3', 'max:50', 'unique:statuses,name'],
+            'name'          => ['required', 'min:3', 'max:50', new UniqueName],
             'description'   => ['sometimes', 'max:1000'],
             'color'         => ['required', 'hex_color'],
         ];

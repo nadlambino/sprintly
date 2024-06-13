@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Status;
 
+use App\Rules\Status\UniqueName;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -24,7 +25,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          => ['sometimes', 'min:3', 'max:50', 'unique:statuses,name,' . $this->route('status')->id],
+            'name'          => ['sometimes', 'min:3', 'max:50', new UniqueName],
             'description'   => ['sometimes', 'max:1000'],
             'color'         => ['sometimes', 'hex_color'],
         ];
