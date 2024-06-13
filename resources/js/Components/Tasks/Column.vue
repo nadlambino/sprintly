@@ -75,7 +75,7 @@ const move = async (event) => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-5 bg-white overflow-hidden shadow-sm rounded-lg max-h-screen">
+    <div class="flex flex-col gap-5 bg-white overflow-hidden shadow-lg rounded-lg max-h-screen">
         <div class="px-5 py-2 text-center font-bold bg-primary text-white" :style="{ backgroundColor: statusColor }">
             <p class="uppercase text-sm font-normal">{{ label }} ({{ total }})</p>
         </div>
