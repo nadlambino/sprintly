@@ -29,17 +29,28 @@ const props = defineProps({
     trashed: {
         type: Boolean,
         default: false
+    },
+    sortable: {
+        type: Boolean,
+        default: false
+    },
+    tableKey: {
+        default: Math.random()
     }
 })
 
-const { data, update, destroy, restore, refetch } = useStatusApi({
+const { data, destroy, restore, refetch, sort } = useStatusApi({
     trashed: props.trashed
 });
+
+const updateOrder = async ({ id, oldIndex, newIndex}) => {
+    await sort(id, { new_order: newIndex + 1, old_order: oldIndex + 1 });
+}
 
 </script>
 
 <template>
-    <SimpleTable :data="data" :headers="headers" label="statuses" :total="data?.length || 0">
+    <SimpleTable :data="data" :headers="headers" label="statuses" :total="data?.length || 0" :sortable="sortable" :table-key="tableKey" @sort="updateOrder">
         <template #actions="{ row }">
             <div class="flex gap-2">
                 <p v-if="row.is_default" class="bg-gray-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Default</p>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Status\CreateRequest;
+use App\Http\Requests\Api\Status\SortRequest;
 use App\Http\Requests\Api\Status\UpdateRequest;
 use App\Models\Status;
 use App\QueryBuilders\Filters\TrashedFilter;
@@ -59,6 +60,31 @@ class StatusController extends Controller
             return $this->success('Status was successfully updated.', $status);
         } catch (Exception) {
             return $this->error('Something went wrong while updating the status. Please try again later.');
+        }
+    }
+
+    public function sort(SortRequest $request, Status $status)
+    {
+        try {
+            $newOrder = $request->validated('new_order');
+            $oldOrder = $request->validated('old_order');
+
+            if ($oldOrder < $newOrder) {
+                Status::where('order', '>', $oldOrder)
+                    ->where('order', '<=', $newOrder)
+                    ->decrement('order');
+            } else {
+                Status::where('order', '<', $oldOrder)
+                    ->where('order', '>=', $newOrder)
+                    ->increment('order');
+            }
+
+            $status->order = $newOrder;
+            $status->save();
+
+            return $this->success('Statuses were successfully sorted.', $status);
+        } catch (Exception) {
+            return $this->error('Something went wrong while sorting the statuses. Please try again later.');
         }
     }
 

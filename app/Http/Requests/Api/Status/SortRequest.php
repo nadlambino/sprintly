@@ -2,18 +2,17 @@
 
 namespace App\Http\Requests\Api\Status;
 
-use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class UpdateRequest extends FormRequest
+class SortRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): Response
+    public function authorize(): bool
     {
-        return Gate::authorize('update', $this->route('status'));
+        return Gate::allows('sort', $this->route('status'));
     }
 
     /**
@@ -24,9 +23,8 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          => ['sometimes', 'min:3', 'max:50', 'unique:statuses,name'],
-            'description'   => ['sometimes', 'max:1000'],
-            'color'         => ['sometimes', 'hex_color'],
+            'new_order' => ['required', 'integer', 'gt:0'],
+            'old_order' => ['required', 'sometimes', 'integer', 'gt:0'],
         ];
     }
 }

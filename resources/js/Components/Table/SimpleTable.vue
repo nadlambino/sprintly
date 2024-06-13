@@ -1,6 +1,7 @@
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch } from 'vue';
 import { useElementVisibility } from '@vueuse/core';
+import { VueDraggableNext } from 'vue-draggable-next';
 import TableRow from './TableRow.vue';
 
 const props = defineProps({
@@ -10,14 +11,26 @@ const props = defineProps({
     isRequesting: Boolean,
     hasNextPage: Boolean,
     total: Number,
-    label: String
+    label: String,
+    sortable: {
+        type: Boolean,
+        default: false
+    },
+    tableKey: {
+        default: Math.random()
+    }
 });
 
-const emit = defineEmits(['next']);
+const emit = defineEmits(['sort']);
 
-const target = ref(null);
-const isVisible = useElementVisibility(target);
-watch(isVisible, (visible) => visible && emit('next'));
+const sort = (event) => {
+    console.log(event);
+    emit('sort', {
+        id: event.item.getAttribute('data-id'),
+        oldIndex: event.oldIndex,
+        newIndex: event.newIndex
+    });
+}
 </script>
 
 <template>
@@ -39,12 +52,20 @@ watch(isVisible, (visible) => visible && emit('next'));
                         No data available
                     </td>
                 </tr>
-                <TableRow v-for="row in data" :key="row.id" :headers="headers" :row="row" >
-                    <template #actions="{ row }">
-                        <slot name="actions" :row="row"></slot>
-                    </template>
-                </TableRow>
-                <tr v-if="hasNextPage" ref="target"></tr>
+                <VueDraggableNext v-if="sortable" :group="tableKey" style="display: contents; padding: 0" @end="sort">
+                    <TableRow v-for="row in data" :key="row.id" :headers="headers" :row="row" class="cursor-move" :data-id="row.id">
+                        <template #actions="{ row }">
+                            <slot name="actions" :row="row"></slot>
+                        </template>
+                    </TableRow>
+                </VueDraggableNext>
+                <template v-else>
+                    <TableRow v-for="row in data" :key="row.id" :headers="headers" :row="row">
+                        <template #actions="{ row }">
+                            <slot name="actions" :row="row"></slot>
+                        </template>
+                    </TableRow>
+                </template>
                 <tr v-if="isRequesting">
                     <td :colspan="headers.length + 1" class="text-center py-4 bg-gray-50">
                         Loading...

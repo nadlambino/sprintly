@@ -73,4 +73,12 @@ class StatusPolicy
         // This is to imply that the status is not existing rather than being not accessible.
         return auth()->check() && $user->id === $status->user_id && ! $status->is_default ? Response::allow() : Response::denyAsNotFound();
     }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function sort(User $user, Status $status): bool
+    {
+        return auth()->check() && $user->id === $status->user_id;
+    }
 }

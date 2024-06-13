@@ -109,6 +109,11 @@ export function useStatusApi(params = {}) {
             .put(route('api.statuses.restore', { status: id }));
     }
 
+    const sort = (id, data, headers) => {
+        return window.axios
+            .post(route('api.statuses.sort', { status: id }), { ...data, _method: 'PUT' }, { headers });
+    }
+
     return {
         data,
         isRequesting,
@@ -118,5 +123,6 @@ export function useStatusApi(params = {}) {
         update,
         destroy,
         restore,
+        sort
     };
 }

@@ -18,7 +18,7 @@ import SubMenu from '@/Components/Statuses/SubMenu.vue';
                 <h1 class="text-lg font-bold text-gray-700">Statuses</h1>
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <StatusTable deletable editable />
+                <StatusTable deletable editable sortable />
             </div>
         </div>
     </AuthenticatedLayout>
