@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Status\CreateRequest;
 use App\Models\Status;
 use App\QueryBuilders\Filters\TrashedFilter;
 use App\QueryBuilders\Status\Filters\SearchFilter;
@@ -29,6 +30,21 @@ class StatusController extends Controller
             return $this->success('Statuses retrieved successfully.', $statuses);
         } catch (Exception) {
             return $this->error('Something went wrong while retrieving the statuses. Please try again later.');
+        }
+    }
+
+    public function store(CreateRequest $request)
+    {
+        try {
+            if ($request->user()->statuses->count() >= 5) {
+                return $this->error('You have reached the maximum number of statuses allowed.');
+            }
+
+            $status = $request->user()->statuses()->create($request->validated());
+
+            return $this->success('Status was successfully created.', $status);
+        } catch (Exception) {
+            return $this->error('Something went wrong while creating the status. Please try again later.');
         }
     }
 

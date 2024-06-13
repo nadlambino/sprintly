@@ -2,6 +2,7 @@ import { computed, ref, watch } from 'vue';
 import { useQuery } from '@tanstack/vue-query';
 import { defineStore } from 'pinia';
 import { useDebounce, useUrlSearchParams } from '@vueuse/core';
+import collect from 'collect.js';
 
 export const useStatusStore = defineStore('statuses', () => {
     const url = useUrlSearchParams('history');
@@ -14,7 +15,7 @@ export const useStatusStore = defineStore('statuses', () => {
     });
 
     const getStatus = (filters) => {
-        return statuses.value.find(status => Object.entries(filters).every(([key, value]) => status[key] === value));
+        return collect(statuses.value).first((status) => Object.entries(filters).every(([key, value]) => status[key] === value));
     }
 
     const setStatuses = (data) => statuses.value = data;

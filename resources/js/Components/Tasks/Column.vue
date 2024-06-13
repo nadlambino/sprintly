@@ -23,7 +23,7 @@ const props = defineProps({
 
 const taskStore = useTaskStore();
 const statusStore = useStatusStore();
-const statusColor = statusStore.statuses.find(status => status.id === props.statusId)?.color;
+const statusColor = statusStore.getStatus({ id: props.statusId })?.color;
 
 const {
     data,

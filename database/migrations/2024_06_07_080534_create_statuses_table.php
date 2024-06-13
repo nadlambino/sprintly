@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('color');
             $table->string('description')->nullable();
-            $table->unsignedInteger('order');
+            $table->unsignedInteger('order')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

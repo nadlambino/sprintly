@@ -8,7 +8,7 @@ class UserObserver
 {
     public function created(User $user): void
     {
-        $user->status()->createMany([
+        $user->statuses()->createMany([
             [
                 'name' => 'Todo',
                 'color' => '#4B5563',

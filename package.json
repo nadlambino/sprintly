@@ -23,6 +23,7 @@
         "collect.js": "^4.36.1",
         "dayjs": "^1.11.11",
         "pinia": "^2.1.7",
-        "vue-draggable-next": "^2.2.1"
+        "vue-draggable-next": "^2.2.1",
+        "vue3-colorpicker": "^2.3.0"
     }
 }

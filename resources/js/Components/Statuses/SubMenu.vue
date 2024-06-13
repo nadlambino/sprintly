@@ -40,7 +40,7 @@ const sortOptions = [
 <template>
     <div class="flex flex-col md:flex-row gap-5 justify-between">
         <div class="flex gap-5 items-center">
-            <Link v-if="create" :href="route('tasks.create')">
+            <Link v-if="create" :href="route('statuses.create')">
                 <PrimaryButton class="flex gap-1 justify-center items-center">
                     <AddIcon class="text-white" />
                     <span>Create</span>
