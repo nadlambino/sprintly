@@ -126,4 +126,6 @@ return [
     'delete_trash_days_old' => env('DELETE_TRASH_DAYS_OLD', 30),
 
     'run_delete_every' => env('RUN_DELETE_EVERY', 'daily'),
+
+    'max_status_per_user' => env('MAX_STATUS_PER_USER', 5),
 ];

@@ -38,7 +38,7 @@ class StatusController extends Controller
     public function store(CreateRequest $request)
     {
         try {
-            if ($request->user()->statuses->count() >= 5) {
+            if ($request->user()->statuses->count() >= config('app.max_status_per_user')) {
                 return $this->error('You have reached the maximum number of statuses allowed.');
             }
 
