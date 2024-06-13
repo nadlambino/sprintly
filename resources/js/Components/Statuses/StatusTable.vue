@@ -7,6 +7,7 @@ const props = defineProps({
     headers: {
         type: Array,
         default: () => ([
+            { key: 'order', label: 'Order' },
             { key: 'name', label: 'Name' },
             { key: 'description', label: 'Description' },
             { key: 'color', label: 'Color', as_color: true },
@@ -46,7 +47,7 @@ const { data, destroy, restore, refetch } = useStatusApi({
 const sort = useStatusSort();
 
 const updateOrder = async ({ id, oldIndex, newIndex}) => {
-    sort(id, oldIndex, newIndex);
+    sort(id, oldIndex, newIndex).then(refetch);
 }
 
 </script>
