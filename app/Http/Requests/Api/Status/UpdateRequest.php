@@ -24,7 +24,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          => ['sometimes', 'min:3', 'max:50', 'unique:statuses,name'],
+            'name'          => ['sometimes', 'min:3', 'max:50', 'unique:statuses,name,' . $this->route('status')->id],
             'description'   => ['sometimes', 'max:1000'],
             'color'         => ['sometimes', 'hex_color'],
         ];
