@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Status\CreateRequest;
+use App\Http\Requests\Api\Status\UpdateRequest;
 use App\Models\Status;
 use App\QueryBuilders\Filters\TrashedFilter;
 use App\QueryBuilders\Status\Filters\SearchFilter;
@@ -45,6 +46,19 @@ class StatusController extends Controller
             return $this->success('Status was successfully created.', $status);
         } catch (Exception) {
             return $this->error('Something went wrong while creating the status. Please try again later.');
+        }
+    }
+
+    public function update(UpdateRequest $request, Status $status)
+    {
+        try {
+            Gate::authorize('update', $status);
+
+            $status->update($request->validated());
+
+            return $this->success('Status was successfully updated.', $status);
+        } catch (Exception) {
+            return $this->error('Something went wrong while updating the status. Please try again later.');
         }
     }
 

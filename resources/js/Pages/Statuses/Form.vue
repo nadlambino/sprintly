@@ -20,7 +20,7 @@ const props = defineProps({
     }
 });
 
-const { create } = useStatusApi();
+const { create, update } = useStatusApi();
 
 const isNew = computed(() => props.status?.id === undefined);
 

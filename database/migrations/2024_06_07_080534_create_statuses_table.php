@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('color');
             $table->string('description')->nullable();
             $table->unsignedInteger('order')->default(0);
+            $table->boolean('is_default')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -41,7 +41,7 @@ class StatusPolicy
     {
         // Deny as not found when the user doesn't own the status
         // This is to imply that the status is not existing rather than being not accessible.
-        return auth()->check() && $user->id === $status->user_id ? Response::allow() : Response::denyAsNotFound();
+        return auth()->check() && $user->id === $status->user_id && ! $status->is_default ? Response::allow() : Response::denyAsNotFound();
     }
 
     /**
@@ -51,7 +51,7 @@ class StatusPolicy
     {
         // Deny as not found when the user doesn't own the status
         // This is to imply that the status is not existing rather than being not accessible.
-        return auth()->check() && $user->id === $status->user_id ? Response::allow() : Response::denyAsNotFound();
+        return auth()->check() && $user->id === $status->user_id && ! $status->is_default ? Response::allow() : Response::denyAsNotFound();
     }
 
     /**
@@ -61,7 +61,7 @@ class StatusPolicy
     {
         // Deny as not found when the user doesn't own the status
         // This is to imply that the status is not existing rather than being not accessible.
-        return auth()->check() && $user->id === $status->user_id ? Response::allow() : Response::denyAsNotFound();
+        return auth()->check() && $user->id === $status->user_id && ! $status->is_default ? Response::allow() : Response::denyAsNotFound();
     }
 
     /**
@@ -71,6 +71,6 @@ class StatusPolicy
     {
         // Deny as not found when the user doesn't own the status
         // This is to imply that the status is not existing rather than being not accessible.
-        return auth()->check() && $user->id === $status->user_id ? Response::allow() : Response::denyAsNotFound();
+        return auth()->check() && $user->id === $status->user_id && ! $status->is_default ? Response::allow() : Response::denyAsNotFound();
     }
 }

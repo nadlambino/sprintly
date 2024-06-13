@@ -14,18 +14,21 @@ class UserObserver
                 'color' => '#4B5563',
                 'description' => 'To Do status',
                 'order' => 0,
+                'is_default' => true,
             ],
             [
                 'name' => 'In Progress',
                 'color' => '#F59E0B',
                 'description' => 'In Progress status',
                 'order' => 1,
+                'is_default' => true,
             ],
             [
                 'name' => 'Done',
                 'color' => '#10B981',
                 'description' => 'Done status',
                 'order' => 2,
+                'is_default' => true,
             ],
         ]);
     }
