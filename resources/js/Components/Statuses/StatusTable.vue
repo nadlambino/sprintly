@@ -1,5 +1,5 @@
 <script setup>
-import { useStatusApi } from '@/Utils/status';
+import { useStatusApi, useStatusSort } from '@/Utils/status';
 import { Link } from '@inertiajs/vue3';
 import SimpleTable from '@/Components/Table/SimpleTable.vue';
 
@@ -39,12 +39,14 @@ const props = defineProps({
     }
 })
 
-const { data, destroy, restore, refetch, sort } = useStatusApi({
+const { data, destroy, restore, refetch } = useStatusApi({
     trashed: props.trashed
 });
 
+const sort = useStatusSort();
+
 const updateOrder = async ({ id, oldIndex, newIndex}) => {
-    await sort(id, { new_order: newIndex + 1, old_order: oldIndex + 1 });
+    sort(id, oldIndex, newIndex);
 }
 
 </script>
