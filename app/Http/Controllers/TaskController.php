@@ -15,7 +15,7 @@ class TaskController extends Controller
 
     public function __construct()
     {
-        $this->statuses = request()->user()->statuses->sortBy('order');
+        $this->statuses = request()->user()->statuses()->orderBy('order')->get();
     }
 
     /**
