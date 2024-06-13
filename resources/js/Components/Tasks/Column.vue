@@ -78,7 +78,7 @@ const move = async (event) => {
             <p class="uppercase text-sm font-normal">{{ label }} ({{ total }})</p>
         </div>
         <TaskEmpty v-if="isEmpty && ! dragging" class="mx-5" />
-        <div ref="container" class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-full">
+        <div ref="container" class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-auto">
             <div v-for="page in data?.pages" class="h-full">
                 <VueDraggableNext
                     class="flex flex-col gap-5 relative"

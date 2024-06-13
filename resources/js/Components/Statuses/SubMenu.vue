@@ -9,15 +9,19 @@ import ButtonDropdown from '@/Components/ButtonDropdown.vue';
 const props = defineProps({
     create: {
         type: Boolean,
-        default: true
+        default: false
+    },
+    list: {
+        type: Boolean,
+        default: false
     },
     trashed: {
         type: Boolean,
-        default: true
+        default: false
     },
     filters: {
         type: Boolean,
-        default: true
+        default: false
     },
 });
 
@@ -42,7 +46,10 @@ const sortOptions = [
                     <span>Create</span>
                 </PrimaryButton>
             </Link>
-            <Link v-if="trashed" :href="route('tasks.trashed')" class="text-primary hover:text-primary/80 hover:underline">
+            <Link v-if="list" :href="route('statuses.index')" class="text-primary hover:text-primary/80 hover:underline">
+                List
+            </Link>
+            <Link v-if="trashed" :href="route('statuses.trashed')" class="text-primary hover:text-primary/80 hover:underline">
                 Trashed
             </Link>
         </div>

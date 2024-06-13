@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Status;
+use App\QueryBuilders\Filters\TrashedFilter;
 use App\QueryBuilders\Status\Filters\SearchFilter;
 use Exception;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ class StatusController extends Controller
             $statuses = QueryBuilder::for($request->user()->statuses())
                 ->allowedFilters([
                     AllowedFilter::custom('search', new SearchFilter),
+                    AllowedFilter::custom('trashed', new TrashedFilter),
                 ])
                 ->defaultSort('order')
                 ->allowedSorts(['order', 'created_at', 'name'])
@@ -40,6 +42,21 @@ class StatusController extends Controller
             return $this->success('Status was successfully deleted.');
         } catch (Exception) {
             return $this->error('Something went wrong while deleting the status. Please try again later.');
+        }
+    }
+
+    public function restore(int $id)
+    {
+        try {
+            $status = Status::onlyTrashed()->findOrFail($id);
+
+            Gate::authorize('restore', $status);
+
+            $status->restore();
+
+            return $this->success('Status was successfully restored.');
+        } catch (Exception) {
+            return $this->error('Something went wrong while restoring the status. Please try again later.');
         }
     }
 }

@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tasks/trashed', [TaskController::class, 'trashed'])->name('tasks.trashed');
     Route::resource('/tasks', TaskController::class)->only(['index', 'show', 'create', 'edit']);
 
+    Route::get('/statuses/trashed', [StatusController::class, 'trashed'])->name('statuses.trashed');
     Route::resource('/statuses', StatusController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

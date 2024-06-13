@@ -4,6 +4,16 @@ import { Link } from '@inertiajs/vue3';
 import SimpleTable from '@/Components/Table/SimpleTable.vue';
 
 const props = defineProps({
+    headers: {
+        type: Array,
+        default: () => ([
+            { key: 'name', label: 'Name' },
+            { key: 'description', label: 'Description' },
+            { key: 'color', label: 'Color', as_color: true },
+            { key: 'created_at', label: 'Created At' },
+            { key: 'updated_at', label: 'Updated At'}
+        ])
+    },
     editable: {
         type: Boolean,
         default: false
@@ -16,17 +26,15 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    trashed: {
+        type: Boolean,
+        default: false
+    }
 })
 
-const headers = [
-    { key: 'name', label: 'Name' },
-    { key: 'description', label: 'Description' },
-    { key: 'color', label: 'Color', as_color: true },
-    { key: 'created_at', label: 'Created At' },
-    { key: 'updated_at', label: 'Updated At'}
-];
-
-const { data, update, destroy, restore, refetch } = useStatusApi();
+const { data, update, destroy, restore, refetch } = useStatusApi({
+    trashed: props.trashed
+});
 
 </script>
 

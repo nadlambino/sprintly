@@ -10,7 +10,7 @@ import SubMenu from '@/Components/Statuses/SubMenu.vue';
 
     <AuthenticatedLayout>
         <template #header>
-            <SubMenu />
+            <SubMenu create trashed filters />
         </template>
 
         <div class="p-5">

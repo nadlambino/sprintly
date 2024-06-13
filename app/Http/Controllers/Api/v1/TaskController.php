@@ -10,7 +10,7 @@ use App\Models\Task;
 use App\QueryBuilders\Task\Filters\ExceptFilter;
 use App\QueryBuilders\Task\Filters\PublishedFilter;
 use App\QueryBuilders\Task\Filters\StatusFilter;
-use App\QueryBuilders\Task\Filters\TrashedFilter;
+use App\QueryBuilders\Filters\TrashedFilter;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

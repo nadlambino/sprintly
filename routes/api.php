@@ -10,4 +10,5 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
     Route::get('/tasks/parents', [TaskController::class, 'parents'])->name('tasks.parents');
 
     Route::apiResource('/statuses', StatusController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::put('/statuses/{status}/restore', [StatusController::class, 'restore'])->name('statuses.restore');
 });

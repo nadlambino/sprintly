@@ -10,4 +10,9 @@ class StatusController extends Controller
     {
         return Inertia::render('Statuses/Index');
     }
+
+    public function trashed()
+    {
+        return Inertia::render('Statuses/Trashed');
+    }
 }

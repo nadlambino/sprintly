@@ -46,6 +46,7 @@ export function useStatusApi(params = {}) {
         const response = await window.axios.get(route('api.statuses.index', {
             filter: {
                 search: searchDebounce.value,
+                trashed: params?.trashed,
             },
             sort: sortBy.value,
         }));
