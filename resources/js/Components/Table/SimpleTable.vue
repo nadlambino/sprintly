@@ -52,7 +52,7 @@ const sort = (event) => {
                     </td>
                 </tr>
                 <VueDraggableNext v-if="sortable" :group="tableKey" style="display: contents; padding: 0" @end="sort">
-                    <TableRow v-for="row in data" :key="row.id" :headers="headers" :row="row" class="cursor-move" :data-id="row.id">
+                    <TableRow v-for="row in data" :key="row.id" :headers="headers" :row="row" class="cursor-grab" :data-id="row.id">
                         <template #actions="{ row }">
                             <slot name="actions" :row="row"></slot>
                         </template>
