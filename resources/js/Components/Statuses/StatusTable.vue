@@ -40,7 +40,7 @@ const props = defineProps({
     }
 })
 
-const { data, isRequesting, destroy, restore, refetch } = useStatusApi({
+const { data, isRequesting, isEmpty, destroy, restore, refetch } = useStatusApi({
     trashed: props.trashed
 });
 
@@ -53,7 +53,7 @@ const updateOrder = async ({ id, oldIndex, newIndex}) => {
 </script>
 
 <template>
-    <SimpleTable :is-requesting="isRequesting" :data="data" :headers="headers" label="statuses" :total="data?.length || 0" :sortable="sortable" :table-key="tableKey" @sort="updateOrder">
+    <SimpleTable :is-empty="isEmpty" :is-requesting="isRequesting" :data="data" :headers="headers" label="statuses" :total="data?.length || 0" :sortable="sortable" :table-key="tableKey" @sort="updateOrder">
         <template #color="{ data }">
             <div class="w-6 h-6 rounded-full" :style="`background-color: ${data}`" :title="data"></div>
         </template>

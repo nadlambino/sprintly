@@ -30,8 +30,6 @@ const statusStore = useStatusStore();
 const sortOptions = [
     { label: '&uarr; Order', value: 'order' },
     { label: '&darr; Order', value: '-order' },
-    { label: '&uarr; Created', value: 'created_at' },
-    { label: '&darr; Created', value: '-created_at' },
     { label: '&uarr; Name', value: 'name' },
     { label: '&darr; Name', value: '-name' },
 ];

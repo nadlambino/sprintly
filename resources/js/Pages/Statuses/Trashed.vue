@@ -7,7 +7,7 @@ import StatusTable from '@/Components/Statuses/StatusTable.vue';
 const headers = [
     { key: 'name', label: 'Name' },
     { key: 'description', label: 'Description' },
-    { key: 'color', label: 'Color', as_color: true },
+    { key: 'color', label: 'Color' },
     { key: 'deleted_at', label: 'Trashed At', class: 'text-xs' },
     { key: 'deleted_since', label: 'Trashed Since', class: 'text-xs' },
 ];
