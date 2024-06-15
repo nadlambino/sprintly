@@ -31,6 +31,15 @@ class Status extends Model
         'deleted_since',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($status) {
+            $status->order = Status::where('user_id', $status->user_id)->max('order') + 1;
+        });
+    }
+
     /**
      * Get the deleted_since attribute.
      *
