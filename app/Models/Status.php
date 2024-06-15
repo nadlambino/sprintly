@@ -24,6 +24,7 @@ class Status extends Model
         'color',
         'description',
         'order',
+        'is_default',
     ];
 
     protected $appends = [
