@@ -1,6 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
-import { useElementVisibility } from '@vueuse/core';
+import { useSlots } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
 import TableRow from './TableRow.vue';
 
@@ -30,6 +29,8 @@ const sort = (event) => {
         newIndex: event.newIndex
     });
 }
+
+const slots = useSlots();
 </script>
 
 <template>
@@ -53,6 +54,14 @@ const sort = (event) => {
                 </tr>
                 <VueDraggableNext v-if="sortable" :group="tableKey" style="display: contents; padding: 0" @end="sort">
                     <TableRow v-for="row in data" :key="row.id" :headers="headers" :row="row" class="cursor-grab" :data-id="row.id">
+                        <template v-for="header in headers" :key="header.key" v-slot:[header.key]="{ data }">
+                            <template v-if="slots[header.key]">
+                                <slot :name="header.key" :data="data"></slot>
+                            </template>
+                            <template v-else>
+                                {{ data }}
+                            </template>
+                        </template>
                         <template #actions="{ row }">
                             <slot name="actions" :row="row"></slot>
                         </template>
@@ -60,6 +69,14 @@ const sort = (event) => {
                 </VueDraggableNext>
                 <template v-else>
                     <TableRow v-for="row in data" :key="row.id" :headers="headers" :row="row">
+                        <template v-for="header in headers" :key="header.key" v-slot:[header.key]="{ data }">
+                            <template v-if="slots[header.key]">
+                                <slot :name="header.key" :data="data"></slot>
+                            </template>
+                            <template v-else>
+                                {{ data }}
+                            </template>
+                        </template>
                         <template #actions="{ row }">
                             <slot name="actions" :row="row"></slot>
                         </template>
@@ -68,11 +85,6 @@ const sort = (event) => {
                 <tr v-if="isRequesting">
                     <td :colspan="headers.length + 1" class="text-center py-4 bg-gray-50">
                         Loading...
-                    </td>
-                </tr>
-                <tr v-if="!hasNextPage && !isRequesting && !isEmpty" class="text-center text-muted py-2">
-                    <td :colspan="headers.length + 1" class="py-4 bg-gray-50">
-                        No more data
                     </td>
                 </tr>
             </tbody>

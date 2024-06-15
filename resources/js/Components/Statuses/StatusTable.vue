@@ -10,7 +10,7 @@ const props = defineProps({
             { key: 'order', label: 'Order' },
             { key: 'name', label: 'Name' },
             { key: 'description', label: 'Description' },
-            { key: 'color', label: 'Color', as_color: true },
+            { key: 'color', label: 'Color' },
             { key: 'created_at', label: 'Created At' },
             { key: 'updated_at', label: 'Updated At'}
         ])
@@ -40,7 +40,7 @@ const props = defineProps({
     }
 })
 
-const { data, destroy, restore, refetch } = useStatusApi({
+const { data, isRequesting, destroy, restore, refetch } = useStatusApi({
     trashed: props.trashed
 });
 
@@ -53,7 +53,10 @@ const updateOrder = async ({ id, oldIndex, newIndex}) => {
 </script>
 
 <template>
-    <SimpleTable :data="data" :headers="headers" label="statuses" :total="data?.length || 0" :sortable="sortable" :table-key="tableKey" @sort="updateOrder">
+    <SimpleTable :is-requesting="isRequesting" :data="data" :headers="headers" label="statuses" :total="data?.length || 0" :sortable="sortable" :table-key="tableKey" @sort="updateOrder">
+        <template #color="{ data }">
+            <div class="w-6 h-6 rounded-full" :style="`background-color: ${data}`" :title="data"></div>
+        </template>
         <template #actions="{ row }">
             <div class="flex gap-2">
                 <p v-if="row.is_default" class="bg-gray-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Default</p>
