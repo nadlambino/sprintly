@@ -9,21 +9,21 @@ class StatusController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Statuses/Index');
+        return Inertia::render('Status/Index');
     }
 
     public function create()
     {
-        return Inertia::render('Statuses/Form');
+        return Inertia::render('Status/Form');
     }
 
     public function edit(Status $status)
     {
-        return Inertia::render('Statuses/Form', ['status' => $status]);
+        return Inertia::render('Status/Form', ['status' => $status]);
     }
 
     public function trashed()
     {
-        return Inertia::render('Statuses/Trashed');
+        return Inertia::render('Status/Trashed');
     }
 }

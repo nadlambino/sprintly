@@ -49,7 +49,7 @@ defineProps({
             <img :src="manage" alt="Manage Task" class="w-1/2" />
             <div class="flex flex-col gap-3">
                 <h1 class="text-3xl md:text-6xl font-bold text-primary">Manage</h1>
-                <p class="text-lg md:text-2xl text-gray-600">With Task Manager, you can easily manage your tasks</p>
+                <p class="text-lg md:text-2xl text-gray-600">With Sprintly, you can easily manage your tasks</p>
             </div>
         </div>
 

@@ -53,8 +53,7 @@ class TaskController extends Controller
                     'total' => $tasks->total()
                 ]
             );
-        } catch (Exception $exception) {
-            return $this->error($exception->getMessage());
+        } catch (Exception) {
             return $this->error('Something went wrong while retrieving the tasks. Please try again later.');
         }
     }

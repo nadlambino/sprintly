@@ -25,7 +25,7 @@ class TaskController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Tasks/Index', [
+        return Inertia::render('Task/Index', [
             'statuses' => $this->statuses,
         ]);
     }
@@ -40,7 +40,7 @@ class TaskController extends Controller
     {
         Gate::authorize('view', $task);
 
-        return Inertia::render('Tasks/Show', [
+        return Inertia::render('Task/Show', [
             'task' => $task->load(['status', 'images', 'parent', 'parent.status', 'parent.images']),
             'statuses' => $this->statuses,
         ]);
@@ -53,7 +53,7 @@ class TaskController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Tasks/Form', [
+        return Inertia::render('Task/Form', [
             'statuses' => $this->statuses,
         ]);
     }
@@ -68,7 +68,7 @@ class TaskController extends Controller
     {
         Gate::authorize('view', $task);
 
-        return Inertia::render('Tasks/Form', [
+        return Inertia::render('Task/Form', [
             'statuses' => $this->statuses,
             'task' => $task->load(['status', 'images', 'parent']),
         ]);
@@ -81,7 +81,7 @@ class TaskController extends Controller
      */
     public function drafts(): Response
     {
-        return Inertia::render('Tasks/Drafts', [
+        return Inertia::render('Task/Drafts', [
             'statuses' => $this->statuses,
         ]);
     }
@@ -93,7 +93,7 @@ class TaskController extends Controller
      */
     public function trashed(): Response
     {
-        return Inertia::render('Tasks/Trashed', [
+        return Inertia::render('Task/Trashed', [
             'statuses' => $this->statuses,
             'days_before_deletion' => config('app.delete_trash_days_old'),
         ]);
