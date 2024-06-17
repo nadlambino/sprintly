@@ -20,22 +20,15 @@ class UniqueName implements ValidationRule
 
         $currentStatus = request()->route('status');
 
-        $exists = request()->user()->statuses()
+        $status = request()->user()->statuses()
+            ->withTrashed()
             ->where('name', $value)
             ->when($currentStatus, fn ($query) => $query->where('id', '!=', $currentStatus->id))
-            ->exists();
+            ->first();
 
-        if ($exists) {
+        if ($status && ! $status->deleted_at) {
             $fail('Status with this name already exists.');
-        }
-
-        $exists = request()->user()->statuses()
-            ->onlyTrashed()
-            ->where('name', $value)
-            ->when($currentStatus, fn ($query) => $query->where('id', '!=', $currentStatus->id))
-            ->exists();;
-
-        if ($exists) {
+        } else if ($status && $status->deleted_at) {
             $fail('Status with this name already exists in your trash. Simply restore it.');
         }
     }
