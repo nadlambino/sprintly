@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, useSlots } from 'vue';
 import { useElementVisibility } from '@vueuse/core';
 import TableRow from './TableRow.vue';
 
@@ -20,6 +20,8 @@ const isVisible = useElementVisibility(target);
 watch(isVisible, (visible) => visible && emit('next'));
 
 const totalShownData = computed(() => props.data?.reduce((total, page) => total + page.length, 0));
+
+const slots = useSlots();
 </script>
 
 <template>
@@ -43,6 +45,14 @@ const totalShownData = computed(() => props.data?.reduce((total, page) => total 
                 </tr>
                 <template v-for="(page, index) in data" :key="index">
                     <TableRow v-for="row in page" :key="row.id" :headers="headers" :row="row" >
+                        <template v-for="header in headers" :key="header.key" v-slot:[header.key]="{ data }">
+                            <template v-if="slots[header.key]">
+                                <slot :name="header.key" :data="data"></slot>
+                            </template>
+                            <template v-else>
+                                {{ data }}
+                            </template>
+                        </template>
                         <template #actions="{ row }">
                             <slot name="actions" :row="row"></slot>
                         </template>
