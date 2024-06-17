@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\WithApiResponse;
 use App\Http\Requests\Api\Tasks\CreateRequest;
 use App\Http\Requests\Api\Tasks\UpdateRequest;
 use App\Models\Status;
@@ -20,6 +21,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
+    use WithApiResponse;
+
     /**
      * Get list of tasks.
      *
@@ -48,8 +51,8 @@ class TaskController extends Controller
                 'Tasks retrieved successfully.',
                 $tasks->all(),
                 [
-                    'has_next_page' => $hasNextPage = ($tasks->currentPage() < $tasks->lastPage()),
-                    'next_page' => $hasNextPage ? $tasks->currentPage() + 1 : null,
+                    'has_next_page' => $tasks->hasMorePages(),
+                    'next_page' => $tasks->hasMorePages() ? intval($request->get('page', 1)) + 1 : null,
                     'total' => $tasks->total()
                 ]
             );
@@ -90,7 +93,7 @@ class TaskController extends Controller
     {
         try {
             $data = $request->validated();
-            $publish = filter_var($request->get('publish', false), FILTER_VALIDATE_BOOL);
+            $publish = boolval($request->get('publish', false));
             $data['published_at'] = $publish ? now() : null;
 
             $task = $request->user()->tasks()->create($data);
@@ -109,20 +112,19 @@ class TaskController extends Controller
      * @param Status $status
      * @return JsonResponse
      */
-    public function update(UpdateRequest $request, Task $task, Status $status): JsonResponse
+    public function update(UpdateRequest $request, Task $task): JsonResponse
     {
         try {
             $data = array_filter($request->validated());
+            $published = boolval($request->get('publish', false));
 
             $data['published_at'] = match(true) {
-                $request->has('publish') && filter_var($request->get('publish', false), FILTER_VALIDATE_BOOL) => now(),
-                $request->has('publish') && !filter_var($request->get('publish', false), FILTER_VALIDATE_BOOL) => null,
-                default => $task->published_at
+                ! $request->has('publish') => $task->published_at,
+                $request->has('publish') && $published => now(),
+                $request->has('publish') && ! $published => null,
             };
 
-            $data['status_id'] = $status->whereIdOrName($request->validated('status_id'), $request->validated('status'))->first()?->id ?? $task->status_id;
-
-            Task::deletePreviousUploads(filter_var($request->get('replace_images', false), FILTER_VALIDATE_BOOL));
+            Task::deletePreviousUploads(boolval($request->get('replace_images', false)));
 
             $task->update($data);
 

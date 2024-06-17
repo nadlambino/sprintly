@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Traits\WithCastableDates;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\Scopes\TaskScopes;
+use App\Models\Shared\CastedDates;
+use App\Models\Shared\WithDeletedSince;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +15,9 @@ use NadLambino\Uploadable\Models\Traits\HasUpload;
 
 class Task extends Model
 {
-    use HasFactory, SoftDeletes, HasUpload, WithCastableDates;
+    use HasFactory, SoftDeletes, HasUpload, TaskScopes, WithDeletedSince, CastedDates {
+        casts as baseCasts;
+    }
 
     protected $fillable = [
         'parent_id',
@@ -25,18 +28,15 @@ class Task extends Model
     ];
 
     protected $appends = [
-        'deleted_since',
-        'to_be_deleted_at'
+        'to_be_deleted_at',
     ];
 
-    /**
-     * Get the deleted_since attribute.
-     *
-     * @return string|null
-     */
-    public function getDeletedSinceAttribute(): ?string
+    protected function casts(): array
     {
-        return $this->deleted_at ? Carbon::parse($this->deleted_at)->diffForHumans() : null;
+        return [
+            ...$this->baseCasts(),
+            'published_at' => self::DATETIME_CAST_FORMAT,
+        ];
     }
 
     /**
@@ -89,10 +89,5 @@ class Task extends Model
     public function children(): HasMany
     {
         return $this->hasMany(Task::class, 'parent_id');
-    }
-
-    public function scopePublished(Builder $query): Builder
-    {
-        return $query->whereNotNull('published_at');
     }
 }

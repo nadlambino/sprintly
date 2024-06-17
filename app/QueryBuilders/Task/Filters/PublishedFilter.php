@@ -7,12 +7,12 @@ use Spatie\QueryBuilder\Filters\Filter;
 
 class PublishedFilter implements Filter
 {
-    public function __invoke(Builder $query, $value, string $property): void
+    public function __invoke(Builder $query, mixed $value, string $property): void
     {
         $query->when(
-            $value,
-            fn ($query) => $query->whereNotNull('published_at'),
-            fn ($query) => $query->whereNull('published_at')
+            boolval($value),
+            fn ($query) => $query->published(),
+            fn ($query) => $query->drafts()
         );
     }
 }

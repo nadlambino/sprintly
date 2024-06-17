@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\WithApiResponse;
 use App\Http\Requests\Api\Status\CreateRequest;
 use App\Http\Requests\Api\Status\SortRequest;
 use App\Http\Requests\Api\Status\UpdateRequest;
@@ -17,6 +18,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class StatusController extends Controller
 {
+    use WithApiResponse;
+
     public function index(Request $request)
     {
         try {

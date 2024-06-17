@@ -10,7 +10,7 @@ class TrashedFilter implements Filter
     public function __invoke(Builder $query, $value, string $property): void
     {
         $query->when(
-            $value,
+            boolval($value),
             fn ($query) => $query->onlyTrashed(),
             fn ($query) => $query->withoutTrashed()
         );
