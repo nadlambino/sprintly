@@ -81,7 +81,7 @@ const move = async (event) => {
         </div>
         <TaskEmpty v-if="isEmpty && ! dragging" class="mx-5" />
         <div ref="container" class="flex flex-col gap-5 p-5 pt-0 overflow-y-auto h-auto">
-            <div v-for="page in data?.pages" class="h-full">
+            <div v-for="page in data?.pages">
                 <VueDraggableNext
                     class="flex flex-col gap-5 relative"
                     :class="{ 'dragging': dragging }"
