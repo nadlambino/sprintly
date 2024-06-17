@@ -24,7 +24,6 @@ class SortRequest extends FormRequest
     {
         return [
             'new_order' => ['required', 'integer', 'gt:0'],
-            'old_order' => ['required', 'sometimes', 'integer', 'gt:0'],
         ];
     }
 }

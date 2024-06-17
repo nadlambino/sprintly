@@ -70,16 +70,12 @@ class StatusController extends Controller
     {
         try {
             $newOrder = $request->validated('new_order');
-            $oldOrder = $request->validated('old_order');
+            $oldOrder = $status->order;
 
             if ($oldOrder < $newOrder) {
-                Status::where('order', '>=', $oldOrder)
-                    ->where('order', '<=', $newOrder)
-                    ->decrement('order');
+                Status::whereBetween('order', [$oldOrder, $newOrder])->decrement('order');
             } else {
-                Status::where('order', '<=', $oldOrder)
-                    ->where('order', '>=', $newOrder)
-                    ->increment('order');
+                Status::whereBetween('order', [$newOrder, $oldOrder])->increment('order');
             }
 
             $status->order = $newOrder;

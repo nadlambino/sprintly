@@ -133,7 +133,7 @@ export function useStatusSort() {
     const sort = (id, oldIndex, newIndex) => {
         if (oldIndex == newIndex) return (new Promise(() => {}));
 
-        return sortStatus(id, { new_order: newIndex + 1, old_order: oldIndex + 1 });
+        return sortStatus(id, { new_order: newIndex + 1 });
     }
 
     return sort;
