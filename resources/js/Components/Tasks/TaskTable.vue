@@ -3,12 +3,13 @@ import { onBeforeMount } from 'vue';
 import { useTaskApi, useTaskStore } from '@/Utils/task';
 import { Link } from '@inertiajs/vue3';
 import PaginatedTable from '@/Components/Table/PaginatedTable.vue';
+import Badge from '@/Components/Shared/Badge.vue';
 
 const props = defineProps({
     headers: {
         type: Array,
         default: () => [
-            { key: 'status.name', label: 'Status', class: 'uppercase text-xs font-bold' },
+            { key: 'status', label: 'Status', class: 'uppercase text-xs font-bold' },
             { key: 'title', label: 'Title', class: 'text-xs' },
             { key: 'created_at', label: 'Created At', class: 'text-xs' },
             { key: 'updated_at', label: 'Updated At', class: 'text-xs' },
@@ -82,6 +83,9 @@ onBeforeMount(refetch);
 
 <template>
     <PaginatedTable :data="data?.pages" :headers="headers" :total="total" :is-empty="isEmpty" :is-requesting="isRequesting" :has-next-page="hasNextPage" label="tasks" @next="next">
+        <template v-slot:['status']="{ data }">
+            <Badge :hex="data.color">{{ data.name }}</Badge>
+        </template>
         <template #actions="{ row }">
             <div class="flex gap-2">
                 <Link v-if="viewable" :href="route('tasks.show', row.id)" class="bg-muted hover:bg-muted/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">View</Link>

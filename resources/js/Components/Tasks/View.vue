@@ -1,24 +1,13 @@
 <script setup>
 import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import Badge from '@/Components/Shared/Badge.vue';
 
 const props = defineProps({
     task: Object,
 });
 
 const images = computed(() => props.task?.images?.map((image) => window.location.origin + '/' + image.path));
-const statusBadgeClass = computed(() => {
-    switch (props.task?.status?.name) {
-        case 'todo':
-            return 'bg-primary/10 text-primary';
-        case 'in progress':
-            return 'bg-yellow-100 text-yellow-500';
-        case 'done':
-            return 'bg-green-100 text-green-500';
-        default:
-            return 'bg-gray-100 text-gray-500';
-    }
-});
 </script>
 
 <template>
@@ -26,7 +15,7 @@ const statusBadgeClass = computed(() => {
         <div class="bg-white p-5 rounded-lg shadow-lg">
             <div class="flex justify-between items-center">
                 <Link :href="route('tasks.show', task?.id)"><h1 class="text-lg font-bold text-blue-600 hover:text-blue-800 capitalize underline">{{ task?.title }}</h1></Link>
-                <small class="px-2 py-1 rounded text-[10px] uppercase font-bold" :class="statusBadgeClass">{{ task?.status.name }}</small>
+                <Badge :hex="task?.status?.color">{{ task?.status?.name }}</Badge>
             </div>
             <div class="flex justify-between items-center mt-1">
                 <div class="flex gap-2 text-[13px]">
