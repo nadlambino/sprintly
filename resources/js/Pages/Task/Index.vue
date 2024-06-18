@@ -28,6 +28,7 @@ const kanban = useStorage('kanban', true);
                         v-if="!kanban"
                         :viewable="true"
                         :published="true"
+                        :progressible="true"
                         :trashed="false"
                         :deletable="true"
                         :editable="true"

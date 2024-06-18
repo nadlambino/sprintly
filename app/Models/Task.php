@@ -29,6 +29,7 @@ class Task extends Model
 
     protected $appends = [
         'to_be_deleted_at',
+        'is_progressible'
     ];
 
     protected function casts(): array
@@ -49,6 +50,16 @@ class Task extends Model
         return $this->deleted_at
             ? Carbon::parse($this->deleted_at)->addDays(config('app.delete_trash_days_old', 30))->endOfDay()->diffForHumans()
             : null;
+    }
+
+    /**
+     * Get the is_progressible attribute.
+     *
+     * @return bool
+     */
+    public function getIsProgressibleAttribute(): bool
+    {
+        return $this->status->next()->exists();
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\StatusScopes;
 use App\Models\Shared\CastedDates;
 use App\Models\Shared\WithDeletedSince;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Status extends Model
 {
-    use HasFactory, SoftDeletes, CastedDates, WithDeletedSince;
+    use HasFactory, SoftDeletes, CastedDates, WithDeletedSince, StatusScopes;
 
     /**
      * The attributes that are mass assignable.

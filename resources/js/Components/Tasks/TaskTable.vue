@@ -47,6 +47,10 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    progressible: {
+        type: Boolean,
+        default: false
+    },
     publishable: {
         type: Boolean,
         default: false
@@ -68,7 +72,8 @@ const {
     next,
     destroy,
     restore,
-    update
+    update,
+    progress
 } = await useTaskApi({
     status: props.status || taskStore.status,
     search: props.search || taskStore.search,
@@ -90,6 +95,7 @@ onBeforeMount(refetch);
             <div class="flex gap-2">
                 <Link v-if="viewable" :href="route('tasks.show', row.id)" class="bg-muted hover:bg-muted/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">View</Link>
                 <Link v-if="editable" :href="route('tasks.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
+                <button v-if="progressible && row.is_progressible" @click="() => progress(row.id, { progress: true }).then(refetch)" class="bg-yellow-500 hover:bg-yellow-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Progress</button>
                 <button v-if="publishable" @click="() => update(row.id, { publish: true }).then(refetch)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Publish</button>
                 <button v-if="deletable" @click="() => destroy(row.id).then(refetch)" class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
                 <button v-if="restorable" @click="() => restore(row.id).then(refetch)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Restore</button>

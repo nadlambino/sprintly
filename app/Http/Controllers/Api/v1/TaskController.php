@@ -99,8 +99,8 @@ class TaskController extends Controller
             $task = $request->user()->tasks()->create($data);
 
             return $this->success('Task was successfully created.', $task, status: 201);
-        } catch (Exception $exception) {
-            return $this->error('Something went wrong while creating the task. Please try again later.'. $exception->getMessage());
+        } catch (Exception) {
+            return $this->error('Something went wrong while creating the task. Please try again later.');
         }
     }
 
@@ -127,6 +127,31 @@ class TaskController extends Controller
             Task::deletePreviousUploads(boolval($request->get('replace_images', false)));
 
             $task->update($data);
+
+            return $this->success('Task was successfully updated.', $task);
+        } catch (Exception) {
+            return $this->error('Something went wrong while updating the task. Please try again later.');
+        }
+    }
+
+    /**
+     * Update task status.
+     *
+     * @param Task $task
+     * @return JsonResponse
+     */
+    public function progress(Task $task): JsonResponse
+    {
+        try {
+            Gate::authorize('update', $task);
+
+            $nextStatus = $task->status->next()->first();
+
+            if (! $nextStatus) {
+                return $this->success('Task is already on its final status.', $task);
+            }
+
+            $task->update(['status_id' => $nextStatus->id]);
 
             return $this->success('Task was successfully updated.', $task);
         } catch (Exception) {

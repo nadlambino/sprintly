@@ -136,6 +136,18 @@ export function useTaskApi(params = {}) {
     }
 
     /**
+     * Request to progress a task
+     *
+     * @param {string|number} id
+     * @param {object} headers
+     * @returns {Promise}
+     */
+    const progress = (id, headers) => {
+        return window.axios
+            .put(route('api.tasks.progress', { task: id }), {}, { headers });
+    }
+
+    /**
      * Request to destroy a task
      *
      * @param {string|number} id
@@ -181,6 +193,7 @@ export function useTaskApi(params = {}) {
         next,
         create,
         update,
+        progress,
         destroy,
         restore,
         getParents
