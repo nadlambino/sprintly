@@ -93,7 +93,7 @@ class TaskController extends Controller
     {
         try {
             $data = $request->validated();
-            $publish = boolval($request->get('publish', false));
+            $publish = filter_var($request->get('publish', false), FILTER_VALIDATE_BOOL);
             $data['published_at'] = $publish ? now() : null;
 
             $task = $request->user()->tasks()->create($data);
@@ -116,7 +116,7 @@ class TaskController extends Controller
     {
         try {
             $data = array_filter($request->validated());
-            $published = boolval($request->get('publish', false));
+            $published = filter_var($request->get('publish'), FILTER_VALIDATE_BOOL);
 
             $data['published_at'] = match(true) {
                 ! $request->has('publish') => $task->published_at,
@@ -124,7 +124,7 @@ class TaskController extends Controller
                 $request->has('publish') && ! $published => null,
             };
 
-            Task::deletePreviousUploads(boolval($request->get('replace_images', false)));
+            Task::deletePreviousUploads(filter_var($request->get('replace_images', false), FILTER_VALIDATE_BOOL));
 
             $task->update($data);
 

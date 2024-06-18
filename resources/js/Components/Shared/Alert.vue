@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import Modal from './Modal.vue';
+import Modal from '../Modal.vue';
 
 const props = defineProps({
     show: Boolean,

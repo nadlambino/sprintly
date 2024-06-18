@@ -10,7 +10,7 @@ class PublishedFilter implements Filter
     public function __invoke(Builder $query, mixed $value, string $property): void
     {
         $query->when(
-            boolval($value),
+            filter_var($value, FILTER_VALIDATE_BOOL),
             fn ($query) => $query->published(),
             fn ($query) => $query->drafts()
         );

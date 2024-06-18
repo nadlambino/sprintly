@@ -4,6 +4,7 @@ import { useTaskApi, useTaskStore } from '@/Utils/task';
 import { Link } from '@inertiajs/vue3';
 import PaginatedTable from '@/Components/Table/PaginatedTable.vue';
 import Badge from '@/Components/Shared/Badge.vue';
+import ConfirmButton from '@/Components/Shared/ConfirmButton.vue';
 
 const props = defineProps({
     headers: {
@@ -95,10 +96,34 @@ onBeforeMount(refetch);
             <div class="flex gap-2">
                 <Link v-if="viewable" :href="route('tasks.show', row.id)" class="bg-muted hover:bg-muted/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">View</Link>
                 <Link v-if="editable" :href="route('tasks.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
-                <button v-if="progressible && row.is_progressible" @click="() => progress(row.id, { progress: true }).then(refetch)" class="bg-yellow-500 hover:bg-yellow-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Progress</button>
-                <button v-if="publishable" @click="() => update(row.id, { publish: true }).then(refetch)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Publish</button>
-                <button v-if="deletable" @click="() => destroy(row.id).then(refetch)" class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
-                <button v-if="restorable" @click="() => restore(row.id).then(refetch)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Restore</button>
+                <ConfirmButton
+                     class="bg-yellow-500 hover:bg-yellow-400 text-white uppercase text-xs font-bold py-1 px-2 rounded"
+                     message="Are you sure you want to progress this?"
+                     v-if="progressible && row.is_progressible"
+                     @confirm="() => progress(row.id, { progress: true }).then(refetch)" >
+                     Progress
+                </ConfirmButton>
+                <ConfirmButton
+                    v-if="publishable"
+                    class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded"
+                    message="Are you sure you want to publish this?"
+                    @confirm="() => update(row.id, { publish: true }).then(refetch)">
+                    Publish
+                </ConfirmButton>
+                <ConfirmButton
+                    v-if="deletable"
+                    class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded"
+                    message="Are you sure you want to delete this?"
+                    @confirm="() => destroy(row.id).then(refetch)">
+                    Delete
+                </ConfirmButton>
+                <ConfirmButton
+                    v-if="restorable"
+                    class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded"
+                    message="Are you sure you want to restore this?"
+                    @confirm="() => restore(row.id).then(refetch)">
+                    Restore
+                </ConfirmButton>
             </div>
         </template>
     </PaginatedTable>
