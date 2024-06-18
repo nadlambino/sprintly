@@ -9,8 +9,6 @@ class SearchFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property): void
     {
-        $query->where('name', 'like', "%{$value}%")
-            ->orWhere('description', 'like', "%{$value}%")
-            ->orWhere('color', 'like', "%{$value}%");
+        $query->search($value);
     }
 }
