@@ -65,7 +65,7 @@ onUpdated(() => {
                     <li
                         v-for="option in options"
                         :key="option.value"
-                        class="capitalize cursor-pointer hover:bg-secondary p-2 border-b border-gray-100 truncate text-xs last:border-0"
+                        class="capitalize cursor-pointer hover:bg-secondary p-2 border-t border-gray-100 truncate text-xs last:border-0"
                         :class="{ 'bg-secondary': option.value === model }"
                         @click="() => select(option.value, option.label)"
                         >
