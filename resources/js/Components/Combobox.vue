@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onUpdated } from 'vue';
 import { debouncedRef } from '@vueuse/core';
 import { onClickOutside } from '@vueuse/core';
 import TextInput from '@/Components/TextInput.vue';
@@ -28,12 +28,6 @@ const setDefaultSelected = () => {
 
 watch(() => props.options, setDefaultSelected, { immediate: true });
 
-const open = () => {
-    show.value = true;
-
-    input.value?.focus();
-}
-
 const container = ref(null);
 onClickOutside(container, () => show.value = false);
 
@@ -52,12 +46,16 @@ const clear = () => {
     model.value = null;
     selected.value = '';
 }
+
+onUpdated(() => {
+    input.value?.focus();
+});
 </script>
 
 <template>
     <div ref="container" class="relative w-full">
         <div class="flex gap-1 items-center w-full border border-gray-300 py-1 px-3 rounded-md shadow-sm">
-            <input class="border-0 w-full focus:ring-0 focus:outline-0 h-8 p-0 cursor-default" :placeholder="placeholder" readonly @focus="open" :value="selected" />
+            <input class="border-0 w-full focus:ring-0 focus:outline-0 h-8 p-0 cursor-default" :placeholder="placeholder" readonly @focus="show = true" :value="selected" />
             <small class="text-lg text-gray-400 cursor-pointer" @click="clear">&times;</small>
         </div>
         <div v-show="show" class="absolute bg-white shadow-xl rounded mt-1 border border-gray-100 w-full">
