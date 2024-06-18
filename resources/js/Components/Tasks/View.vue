@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import Badge from '@/Components/Shared/Badge.vue';
+import ViewableImage from '@/Components/Shared/ViewableImage.vue';
 
 const props = defineProps({
     task: Object,
@@ -26,7 +27,7 @@ const images = computed(() => props.task?.images?.map((image) => window.location
             </div>
             <p class="text-gray-700 mt-5">{{ task?.content }}</p>
             <div class="flex flex-wrap gap-5 mt-5 justify-center">
-                <img v-for="(image, index) in images" :key="index" :src="image" :alt="task.title" class="w-full object-cover w-52 aspect-square" />
+                <ViewableImage v-for="(image, index) in images" :key="index" :src="image" :alt="task.title" class="object-cover border border-gray-200 w-52 aspect-square" />
             </div>
         </div>
     </div>
