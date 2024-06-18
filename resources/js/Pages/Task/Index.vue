@@ -26,6 +26,7 @@ const kanban = useStorage('kanban', true);
                 <Suspense>
                     <TaskTable
                         v-if="!kanban"
+                        :viewable="true"
                         :published="true"
                         :trashed="false"
                         :deletable="true"
