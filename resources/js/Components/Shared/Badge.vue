@@ -25,7 +25,7 @@ const textColor = computed(() => {
 
 <template>
     <span
-        class="text-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase"
+        class="text-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase text-nowrap"
         :style="`background-color: ${props.hex};`"
         :class="textColor"
     >
