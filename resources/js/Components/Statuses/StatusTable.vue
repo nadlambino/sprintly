@@ -23,6 +23,10 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    forceDeletable: {
+        type: Boolean,
+        default: false
+    },
     restorable: {
         type: Boolean,
         default: false
@@ -40,7 +44,7 @@ const props = defineProps({
     }
 })
 
-const { data, isRequesting, isEmpty, destroy, restore, refetch } = useStatusApi({
+const { data, isRequesting, isEmpty, destroy, forceDelete, restore, refetch } = useStatusApi({
     trashed: props.trashed
 });
 
@@ -63,6 +67,7 @@ const updateOrder = async ({ id, oldIndex, newIndex}) => {
                 <template v-else>
                     <Link v-if="editable" :href="route('statuses.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
                     <button v-if="deletable" @click="() => destroy(row.id).then(refetch)" class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
+                    <button v-if="forceDeletable" @click="() => forceDelete(row.id).then(refetch)" class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Delete</button>
                     <button v-if="restorable" @click="() => restore(row.id).then(refetch)" class="bg-green-500 hover:bg-green-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Restore</button>
                 </template>
             </div>

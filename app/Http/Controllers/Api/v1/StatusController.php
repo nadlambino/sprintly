@@ -100,6 +100,21 @@ class StatusController extends Controller
         }
     }
 
+    public function forceDelete(int $id)
+    {
+        try {
+            $status = Status::onlyTrashed()->findOrFail($id);
+
+            Gate::authorize('forceDelete', $status);
+
+            $status->forceDelete();
+
+            return $this->success('Status was successfully deleted permanently.');
+        } catch (Exception) {
+            return $this->error('Something went wrong while deleting the status permanently. Please try again later.');
+        }
+    }
+
     public function restore(int $id)
     {
         try {

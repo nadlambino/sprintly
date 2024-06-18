@@ -99,6 +99,17 @@ export function useStatusApi(params = {}) {
     }
 
     /**
+     * Request to force destroy a status
+     *
+     * @param {string|number} id
+     * @returns {Promise}
+     */
+    const forceDelete = (id) => {
+        return window.axios
+            .delete(route('api.statuses.force-delete', { status: id }));
+    }
+
+    /**
      * Request to restore a status
      *
      * @param {string|number} id
@@ -122,6 +133,7 @@ export function useStatusApi(params = {}) {
         create,
         update,
         destroy,
+        forceDelete,
         restore,
         sort
     };

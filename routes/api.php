@@ -11,5 +11,6 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
 
     Route::put('/statuses/{status}/restore', [StatusController::class, 'restore'])->name('statuses.restore');
     Route::put('/statuses/{status}/sort', [StatusController::class, 'sort'])->name('statuses.sort');
+    Route::delete('/statuses/{status}/force', [StatusController::class, 'forceDelete'])->name('statuses.force-delete');
     Route::apiResource('/statuses', StatusController::class)->only(['index', 'store', 'update', 'destroy']);
 });

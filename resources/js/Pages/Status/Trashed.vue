@@ -31,6 +31,7 @@ const headers = [
                         :restorable="true"
                         :trashed="true"
                         :headers="headers"
+                        :force-deletable="true"
                     />
                 </Suspense>
             </div>
