@@ -75,7 +75,7 @@ export function useTaskApi(params = {}) {
     const get = async ({ pageParam = 1 }) => {
         const response = await window.axios.get(route('api.tasks.index', {
             filter: {
-                title: searchDebounce.value,
+                search: searchDebounce.value,
                 status_id: statusId.value,
                 published: published.value,
                 trashed: trashed.value,

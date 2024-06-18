@@ -20,4 +20,12 @@ trait TaskScopes
     {
         return $query->whereNotNull('deleted_at');
     }
+
+    public function scopeSearch(Builder $query, mixed $search): Builder
+    {
+        return $query->where(function ($query) use ($search) {
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('content', 'like', "%{$search}%");
+        });
+    }
 }

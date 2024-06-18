@@ -100,7 +100,7 @@ watch(kanban, resetStatusFilter);
             </Link>
         </div>
         <div v-if="filters" class="flex flex-col md:flex-row gap-3 items-end md:items-center">
-            <TextInput placeholder="Search by title..." class="min-w-full md:min-w-72" v-model="taskStore.search" />
+            <TextInput placeholder="Search..." class="min-w-full md:min-w-72" v-model="taskStore.search" />
             <div class="flex gap-3">
                 <ButtonDropdown v-if="filterable || !kanban" v-model="taskStore.status" :options="statusOptions" placement="left-0" />
                 <ButtonDropdown v-model="taskStore.sortBy" :options="sortOptions" />

@@ -12,6 +12,7 @@ use App\QueryBuilders\Task\Filters\ExceptFilter;
 use App\QueryBuilders\Task\Filters\PublishedFilter;
 use App\QueryBuilders\Task\Filters\StatusFilter;
 use App\QueryBuilders\Filters\TrashedFilter;
+use App\QueryBuilders\Task\Filters\SearchFilter;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -34,9 +35,9 @@ class TaskController extends Controller
         try {
             $tasks = QueryBuilder::for($request->user()->tasks())
                 ->allowedFilters([
-                    'title',
                     AllowedFilter::exact('parent_id'),
                     AllowedFilter::exact('status_id'),
+                    AllowedFilter::custom('search', new SearchFilter),
                     AllowedFilter::custom('status', new StatusFilter),
                     AllowedFilter::custom('published', new PublishedFilter),
                     AllowedFilter::custom('trashed', new TrashedFilter)
