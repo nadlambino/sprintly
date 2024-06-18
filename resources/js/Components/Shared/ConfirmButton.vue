@@ -1,7 +1,7 @@
 <script setup>
 import { ref, useSlots } from 'vue';
 import Alert from '@/Components/Shared/Alert.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import PrimaryButton from '@/Components/Shared/PrimaryButton.vue';
 
 const props = defineProps({
     text: String,

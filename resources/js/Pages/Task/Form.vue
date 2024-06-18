@@ -4,16 +4,16 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import { useTaskApi } from '@/Utils/task';
 import { useStatusStore } from '@/Utils/status';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import TextInput from '@/Components/TextInput.vue';
-import RadioInput from '@/Components/RadioInput.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import InputLabel from '@/Components/Shared/InputLabel.vue';
+import TextInput from '@/Components/Shared/TextInput.vue';
+import RadioInput from '@/Components/Shared/RadioInput.vue';
+import PrimaryButton from '@/Components/Shared/PrimaryButton.vue';
 import Alert from '@/Components/Shared/Alert.vue';
-import InputError from '@/Components/InputError.vue';
-import Toggle from '@/Components/Toggle.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
+import InputError from '@/Components/Shared/InputError.vue';
+import Toggle from '@/Components/Shared/Toggle.vue';
+import SecondaryButton from '@/Components/Shared/SecondaryButton.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
-import Combobox from '@/Components/Combobox.vue';
+import Combobox from '@/Components/Shared/Combobox.vue';
 
 const props = defineProps({
     task: {

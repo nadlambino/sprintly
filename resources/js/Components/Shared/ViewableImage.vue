@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import Modal from '@/Components/Modal.vue';
+import Modal from '@/Components/Shared/Modal.vue';
 
 const props = defineProps({
     src: {

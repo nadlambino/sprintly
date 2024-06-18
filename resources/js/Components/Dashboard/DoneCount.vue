@@ -1,5 +1,5 @@
 <script setup>
-import Counter from '@/Components/Counter.vue';
+import Counter from '@/Components/Shared/Counter.vue';
 import { useTaskApi } from '@/Utils/task';
 
 

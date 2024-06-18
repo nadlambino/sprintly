@@ -1,10 +1,10 @@
 <script setup>
 import { useStatusStore } from '@/Utils/status';
 import { Link } from '@inertiajs/vue3';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import PrimaryButton from '@/Components/Shared/PrimaryButton.vue';
 import AddIcon from '@/Icons/AddIcon.vue';
-import TextInput from '@/Components/TextInput.vue';
-import ButtonDropdown from '@/Components/ButtonDropdown.vue';
+import TextInput from '@/Components/Shared/TextInput.vue';
+import ButtonDropdown from '@/Components/Shared/ButtonDropdown.vue';
 
 const props = defineProps({
     create: {

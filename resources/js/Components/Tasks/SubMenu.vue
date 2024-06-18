@@ -3,12 +3,12 @@ import { computed, onMounted, watch } from 'vue';
 import { useTaskStore } from '@/Utils/task';
 import { useStatusStore } from '@/Utils/status';
 import { Link } from '@inertiajs/vue3';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import PrimaryButton from '@/Components/Shared/PrimaryButton.vue';
 import AddIcon from '@/Icons/AddIcon.vue';
-import TextInput from '@/Components/TextInput.vue';
-import ButtonDropdown from '@/Components/ButtonDropdown.vue';
-import Toggle from '@/Components/Toggle.vue';
-import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/Shared/TextInput.vue';
+import ButtonDropdown from '@/Components/Shared/ButtonDropdown.vue';
+import Toggle from '@/Components/Shared/Toggle.vue';
+import InputLabel from '@/Components/Shared/InputLabel.vue';
 
 const props = defineProps({
     create: {

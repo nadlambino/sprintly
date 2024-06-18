@@ -2,7 +2,7 @@
 import { ref, watch, onUpdated } from 'vue';
 import { debouncedRef } from '@vueuse/core';
 import { onClickOutside } from '@vueuse/core';
-import TextInput from '@/Components/TextInput.vue';
+import TextInput from '@/Components/Shared/TextInput.vue';
 
 const props = defineProps({
     options: Array,

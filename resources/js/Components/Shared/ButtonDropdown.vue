@@ -1,9 +1,8 @@
 <script setup>
-import RadioInput from '@/Components/RadioInput.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import { ref } from 'vue';
-import { onClickOutside } from '@vueuse/core'
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
+import { onClickOutside } from '@vueuse/core';
+import RadioInput from '@/Components/Shared/RadioInput.vue';
+import InputLabel from '@/Components/Shared/InputLabel.vue';
 
 const props = defineProps({
     label: String,

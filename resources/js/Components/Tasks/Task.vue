@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/vue3';
 import { useTaskApi } from '@/Utils/task';
 import DeleteIcon from '@/Icons/DeleteIcon.vue';
 import Alert from '@/Components/Shared/Alert.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import PrimaryButton from '@/Components/Shared/PrimaryButton.vue';
 
 const props = defineProps({
     task: {
