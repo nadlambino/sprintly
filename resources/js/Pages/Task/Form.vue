@@ -144,7 +144,7 @@ const error = (error) => {
                         </div>
 
                         <div class="flex flex-col gap-2">
-                            <InputLabel for="content" value="Content" required />
+                            <InputLabel for="content" value="Content" />
                             <TextInput
                                 id="content"
                                 type="textarea"
@@ -156,7 +156,7 @@ const error = (error) => {
                         </div>
 
                         <div class="flex flex-col gap-2">
-                            <InputLabel for="status" value="Status" required />
+                            <InputLabel for="status" value="Status" />
                             <div class="flex gap-5 flex-wrap">
                                 <div v-for="status in statusStore.statuses" class="flex gap-2 items-center">
                                     <RadioInput :key="status.id" :value="status.id" v-model="form.status_id" name="status" />
