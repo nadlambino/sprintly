@@ -25,7 +25,7 @@ class TaskObserver
 
         $task = $task->fresh();
 
-        if (strtolower($task->status->name) === 'in progress') {
+        if (strtolower($task->status->name) === 'in progress' && ! $task->started_at) {
             $task->started_at = now();
         }
 

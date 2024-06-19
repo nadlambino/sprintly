@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount } from 'vue';
-import { useTaskApi, useTaskStore } from '@/Utils/task';
+import { useTaskApi, useTaskStore, useTimeSpent } from '@/Utils/task';
 import { Link } from '@inertiajs/vue3';
 import PaginatedTable from '@/Components/Table/PaginatedTable.vue';
 import Badge from '@/Components/Shared/Badge.vue';
@@ -12,9 +12,10 @@ const props = defineProps({
         default: () => [
             { key: 'status', label: 'Status' },
             { key: 'title', label: 'Title' },
-            { key: 'created_at', label: 'Created At', default: '-' },
-            { key: 'started_at', label: 'Started At', default: '-' },
-            { key: 'ended_at', label: 'Ended At', default: '-' },
+            { key: 'created_at', label: 'Created At', 'class': 'text-xs' },
+            { key: 'started_at', label: 'Started At', 'class': 'text-xs' },
+            { key: 'ended_at', label: 'Ended At', 'class': 'text-xs' },
+            { key: 'time_spent', label: 'Time Spent', 'class': 'text-xs' },
         ],
     },
     status: {
@@ -86,12 +87,17 @@ const {
 });
 
 onBeforeMount(refetch);
+
+const timespent = useTimeSpent();
 </script>
 
 <template>
     <PaginatedTable :data="data?.pages" :headers="headers" :total="total" :is-empty="isEmpty" :is-requesting="isRequesting" :has-next-page="hasNextPage" label="tasks" @next="next">
         <template #status="{ data }">
             <Badge :hex="data.color">{{ data.name }}</Badge>
+        </template>
+        <template #time_spent="{ data }">
+            <span class="text-nowrap">{{ timespent(data) }}</span>
         </template>
         <template #title="{ data, row }">
             <Link v-if="viewable" class="text-primary text-base hover:text-primary/80 hover:underline" :href="route('tasks.show', row.id)">{{ data }}</Link>

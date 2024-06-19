@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import { useTaskApi } from '@/Utils/task';
+import { useTaskApi, useTimeSpent } from '@/Utils/task';
 import DeleteIcon from '@/Icons/DeleteIcon.vue';
 import Alert from '@/Components/Shared/Alert.vue';
 import PrimaryButton from '@/Components/Shared/PrimaryButton.vue';
@@ -19,6 +19,8 @@ const showConfirmDelete = ref(false);
 const images = computed(() => Array.from(props.task.images).map((image) => window.location.origin + '/' + image.path));
 
 const { destroy } = useTaskApi  ();
+
+const timespent = useTimeSpent();
 </script>
 
 <template>
@@ -70,6 +72,10 @@ const { destroy } = useTaskApi  ();
             <div class="flex justify-between">
                 <small>Ended At</small>
                 <small>{{ task.ended_at }}</small>
+            </div>
+            <div class="flex justify-between">
+                <small>Time Spent</small>
+                <small>{{ timespent(task.time_spent) }}</small>
             </div>
         </div>
     </div>

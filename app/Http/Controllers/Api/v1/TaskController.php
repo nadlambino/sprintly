@@ -34,6 +34,7 @@ class TaskController extends Controller
     {
         try {
             $tasks = QueryBuilder::for($request->user()->tasks())
+                ->selectRaw('tasks.*, (TIMESTAMPDIFF(MINUTE, tasks.started_at, tasks.ended_at) / 60) as time_spent')
                 ->allowedFilters([
                     AllowedFilter::exact('parent_id'),
                     AllowedFilter::exact('status_id'),

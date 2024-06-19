@@ -234,3 +234,25 @@ export function useKanbanColumnKeys() {
         update
     ]
 }
+
+export function useTimeSpent() {
+    const format = (timespent) => {
+        console.log(timespent)
+        if (! timespent) return '';
+
+        timespent = parseFloat(timespent);
+        if (timespent < 1) {
+            const minutes = (Math.abs(timespent) * 60).toFixed(0);
+            const unit = minutes > 1 ? 'minutes' : 'minute';
+
+            return `${minutes} ${unit}`;
+        }
+
+        const hours = timespent;
+        const unit = hours > 1 ? 'hours' : 'hour';
+
+        return `${hours} ${unit}`;
+    }
+
+    return format;
+}
