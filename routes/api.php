@@ -8,6 +8,7 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
     Route::put('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('tasks.restore');
     Route::put('/tasks/{task}/progress', [TaskController::class, 'progress'])->name('tasks.progress');
     Route::get('/tasks/parents', [TaskController::class, 'parents'])->name('tasks.parents');
+    Route::get('/tasks/metrics', [TaskController::class, 'metrics'])->name('tasks.metrics');
     Route::apiResource('/tasks', TaskController::class)->only(['index', 'store', 'update', 'destroy']);
 
     Route::put('/statuses/{status}/restore', [StatusController::class, 'restore'])->name('statuses.restore');

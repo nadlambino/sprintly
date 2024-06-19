@@ -111,6 +111,10 @@ export function useTaskApi(params = {}) {
         if (hasNextPage.value) fetchNextPage();
     }
 
+    const getMetrics = () => {
+        return window.axios.get(route('api.tasks.metrics'));
+    }
+
     /**
      * Request to create a task
      *
@@ -191,6 +195,7 @@ export function useTaskApi(params = {}) {
         hasNextPage,
         refetch,
         next,
+        getMetrics,
         create,
         update,
         progress,

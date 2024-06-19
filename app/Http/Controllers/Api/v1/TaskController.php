@@ -84,6 +84,23 @@ class TaskController extends Controller
         }
     }
 
+    public function metrics(Request $request)
+    {
+        $total = $request->user()->tasks()->published()->whereHas('status')->count();
+        $metric = $request->user()
+            ->statuses()
+            ->select('name', 'color')
+            ->withCount(['tasks' => fn ($query) => $query->published()->whereHas('status')])
+            ->orderBy('order')
+            ->get()
+            ->setHidden(['deleted_since']);
+
+        return $this->success('Tasks metrics successfully retrieved.', [
+            'total' => $total,
+            'metrics' => $metric,
+        ]);
+    }
+
     /**
      * Store new task.
      *

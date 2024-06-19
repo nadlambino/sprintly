@@ -59,7 +59,7 @@ class Task extends Model
      */
     public function getIsProgressibleAttribute(): bool
     {
-        return $this->status->next()->exists();
+        return $this->status?->next()->exists() ?: false;
     }
 
     /**
