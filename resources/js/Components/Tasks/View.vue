@@ -18,8 +18,8 @@ const images = computed(() => props.task?.images?.map((image) => window.location
                 <Link :href="route('tasks.show', task?.id)"><h1 class="text-lg font-bold text-blue-600 hover:text-blue-800 capitalize underline">{{ task?.title }}</h1></Link>
                 <Badge :hex="task?.status?.color">{{ task?.status?.name }}</Badge>
             </div>
-            <div class="flex justify-between items-center mt-1">
-                <div class="flex gap-2 text-[13px]">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-1 mt-1">
+                <div class="flex flex-col md:flex-row md:gap-2 text-[13px]">
                     <small class="text-muted">Created at {{ task?.created_at }}</small>
                     <small class="text-muted">Published at {{ task?.published_at }}</small>
                 </div>

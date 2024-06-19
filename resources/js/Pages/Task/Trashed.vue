@@ -9,11 +9,11 @@ const props = defineProps({
 });
 
 const headers = [
-    { key: 'status.name', label: 'Status', class: 'uppercase text-xs font-bold' },
+    { key: 'status', label: 'Status', class: 'uppercase text-xs font-bold' },
     { key: 'title', label: 'Title', class: 'text-xs' },
     { key: 'deleted_at', label: 'Trashed At', class: 'text-xs' },
     { key: 'deleted_since', label: 'Trashed Since', class: 'text-xs' },
-    { key: 'to_be_deleted_at', label: 'To Be Deleted At', class: 'text-xs' },
+    { key: 'to_be_deleted_at', label: 'To Be Deleted On', class: 'text-xs' },
 ];
 </script>
 

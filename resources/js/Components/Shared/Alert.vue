@@ -30,7 +30,7 @@ const emit = defineEmits(['close']);
             <h1 class="text-base text-muted text-gray-700">{{ message }}</h1>
         </div>
         <div class="p-3 border-top border flex justify-end gap-2">
-            <SecondaryButton @click="visible = false; emit('close')">Close</SecondaryButton>
+            <SecondaryButton @click="visible = false; emit('close')" tabindex="0">Close</SecondaryButton>
             <slot name="actions" />
         </div>
     </Modal>
