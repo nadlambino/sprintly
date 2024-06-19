@@ -12,7 +12,7 @@ const props = defineProps({
     },
     size: {
         type: Number,
-        default: () => 300
+        default: () => 250
     }
 });
 
@@ -49,14 +49,14 @@ const segmentPaths = computed(() => {
     <div class="flex gap-5 md:gap-10 items-center justify-center user-select-none">
         <h1 v-if="! total" class="text-center text-muted">No data available for this chart.</h1>
         <template v-else>
-            <svg :width="size" :height="size" viewBox="-100 -100 200 200">
+            <svg :width="size" :height="size" :viewBox="`${-size / 2} ${-size / 2} ${size} ${size}`">
                 <g>
                     <template v-for="(segment, index) in segmentPaths">
                         <path v-if="segment.count > 0"
                             :d="segment.path"
                             :fill="segment.color"
                             :key="index"
-                            class="hover:opacity-90 transition duration-150 ease-in-out"
+                            class="hover:opacity-90 transition duration-150 ease-in-out hover:scale-105 hover:shadow-xl"
                         />
                         <text
                             v-if="segment.count > 0"
