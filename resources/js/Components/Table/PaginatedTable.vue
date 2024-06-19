@@ -45,9 +45,9 @@ const slots = useSlots();
                 </tr>
                 <template v-for="(page, index) in data" :key="index">
                     <TableRow v-for="row in page" :key="row.id" :headers="headers" :row="row" >
-                        <template v-for="header in headers" :key="header.key" v-slot:[header.key]="{ data }">
+                        <template v-for="header in headers" :key="header.key" v-slot:[header.key]="{ data, row }">
                             <template v-if="slots[header.key]">
-                                <slot :name="header.key" :data="data"></slot>
+                                <slot :name="header.key" :data="data" :row="row"></slot>
                             </template>
                             <template v-else>
                                 {{ data }}

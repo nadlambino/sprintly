@@ -22,7 +22,7 @@ const slots = useSlots()
 
 <template>
     <td class="px-6 py-4">
-        <slot v-if="slots[props.column]" :name="column" :data="data"></slot>
+        <slot v-if="slots[props.column]" :name="column" :data="data" :row="row"></slot>
         <template v-else>{{ data }}</template>
     </td>
 </template>
