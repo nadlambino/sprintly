@@ -14,7 +14,7 @@ const data = computed(() => {
         return props.row[props.column];
     }
 
-    return dotted.reduce((object, key) => object ? object[key] : null, props.row);
+    return dotted.reduce((object, key) => object ? object[key] : null, props.row) || props.headers.find((header) => header.key === props.column)?.default || null;
 });
 
 const slots = useSlots()

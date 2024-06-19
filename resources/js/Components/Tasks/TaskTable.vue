@@ -12,8 +12,9 @@ const props = defineProps({
         default: () => [
             { key: 'status', label: 'Status' },
             { key: 'title', label: 'Title' },
-            { key: 'created_at', label: 'Created At', class: 'text-xs' },
-            { key: 'updated_at', label: 'Updated At', class: 'text-xs' },
+            { key: 'created_at', label: 'Created At', default: '-' },
+            { key: 'started_at', label: 'Started At', default: '-' },
+            { key: 'ended_at', label: 'Ended At', default: '-' },
         ],
     },
     status: {
@@ -93,7 +94,7 @@ onBeforeMount(refetch);
             <Badge :hex="data.color">{{ data.name }}</Badge>
         </template>
         <template #title="{ data, row }">
-            <Link v-if="viewable" class="text-primary hover:text-primary/80 hover:underline" :href="route('tasks.show', row.id)">{{ data }}</Link>
+            <Link v-if="viewable" class="text-primary text-base hover:text-primary/80 hover:underline" :href="route('tasks.show', row.id)">{{ data }}</Link>
             <span v-else>{{ data }}</span>
         </template>
         <template #actions="{ row }">

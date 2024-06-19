@@ -63,6 +63,14 @@ const { destroy } = useTaskApi  ();
                 <small>Published At</small>
                 <small>{{ task.published_at }}</small>
             </div>
+            <div class="flex justify-between">
+                <small>Started At</small>
+                <small>{{ task.started_at }}</small>
+            </div>
+            <div class="flex justify-between">
+                <small>Ended At</small>
+                <small>{{ task.ended_at }}</small>
+            </div>
         </div>
     </div>
 </template>

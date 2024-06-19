@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Scopes\TaskScopes;
 use App\Models\Shared\CastedDates;
 use App\Models\Shared\WithDeletedSince;
+use App\Observers\TaskObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use NadLambino\Uploadable\Models\Traits\HasUpload;
 
+#[ObservedBy(TaskObserver::class)]
 class Task extends Model
 {
     use HasFactory, SoftDeletes, HasUpload, TaskScopes, WithDeletedSince, CastedDates {
@@ -37,6 +40,8 @@ class Task extends Model
         return [
             ...$this->baseCasts(),
             'published_at' => self::DATETIME_CAST_FORMAT,
+            'started_at'   => self::DATETIME_CAST_FORMAT,
+            'ended_at'     => self::DATETIME_CAST_FORMAT
         ];
     }
 
