@@ -9,10 +9,6 @@ final class TaskReport
 {
     protected Carbon $startOfWeek;
     protected Carbon $endOfWeek;
-    protected float $totalHoursSpentThisWeek;
-    protected float $totalHoursSpentLastWeek;
-    protected float $averageHoursSpentThisWeek;
-    protected float $averageHoursSpentLastWeek;
 
     public function __construct(protected User $user)
     {
@@ -22,70 +18,77 @@ final class TaskReport
 
     public function getTotalPublished(): int
     {
-        return $this->user
+        return once(fn () => $this->user
             ->tasks()
             ->published()
             ->whereHas('status')
-            ->count();
+            ->count()
+        );
     }
 
     public function getTotalPerStatus(): array
     {
-        return $this->user
+        return once(fn () => $this->user
             ->statuses()
             ->select('name', 'color')
             ->withCount(['tasks as count' => fn ($query) => $query->published()->whereHas('status')])
             ->orderBy('order')
             ->get()
             ->setHidden(['deleted_since'])
-            ->toArray();
+            ->toArray()
+        );
     }
 
     public function getTotalHoursSpentThisWeek(): float
     {
-        return $this->totalHoursSpentThisWeek ??= $this->user
+        return once(fn () => $this->user
             ->tasks()
             ->published()
             ->whereHas('status')
             ->whereBetween('ended_at', [$this->startOfWeek, $this->endOfWeek])
             ->selectRaw('SUM(TIMESTAMPDIFF(HOUR, started_at, ended_at)) as time_spent')
             ->first()
-            ->time_spent ?? 0;
+            ->time_spent ?? 0
+        );
     }
 
     public function getTotalHoursSpentLastWeek(): float
     {
-        $start = clone $this->startOfWeek;
-        $end = clone $this->endOfWeek;
+        return once(function() {
+            $start = clone $this->startOfWeek;
+            $end = clone $this->endOfWeek;
 
-        return $this->totalHoursSpentLastWeek ??= $this->user
-            ->tasks()
-            ->published()
-            ->whereHas('status')
-            ->whereBetween('ended_at', [$start->subWeek(), $end->subWeek()])
-            ->selectRaw('SUM(TIMESTAMPDIFF(HOUR, started_at, ended_at)) as time_spent')
-            ->first()
-            ->time_spent ?? 0;
+            return $this->user
+                ->tasks()
+                ->published()
+                ->whereHas('status')
+                ->whereBetween('ended_at', [$start->subWeek(), $end->subWeek()])
+                ->selectRaw('SUM(TIMESTAMPDIFF(HOUR, started_at, ended_at)) as time_spent')
+                ->first()
+                ->time_spent ?? 0;
+        });
     }
 
     public function getAverageHoursSpentThisWeek(): float
     {
-        return $this->averageHoursSpentThisWeek ??= $this->user
+        return once(fn () => $this->user
             ->tasks()
             ->published()
             ->whereHas('status')
             ->whereBetween('ended_at', [$this->startOfWeek, $this->endOfWeek])
             ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, started_at, ended_at)) as time_spent')
             ->first()
-            ->time_spent ?? 0;
+            ->time_spent ?? 0
+        );
     }
 
     public function getAverageHoursSpentLastWeek(): float
     {
-        $start = clone $this->startOfWeek;
-        $end = clone $this->endOfWeek;
+        return once(function () {
+            $start = clone $this->startOfWeek;
+            $end = clone $this->endOfWeek;
 
-        return $this->averageHoursSpentLastWeek ??= $this->user
+            return $this->user
             ->tasks()
             ->published()
             ->whereHas('status')
@@ -93,6 +96,7 @@ final class TaskReport
             ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, started_at, ended_at)) as time_spent')
             ->first()
             ->time_spent ?? 0;
+        });
     }
 
     public function getSpeedComparison(): string
