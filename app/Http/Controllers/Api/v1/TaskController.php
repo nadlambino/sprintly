@@ -13,6 +13,7 @@ use App\QueryBuilders\Task\Filters\PublishedFilter;
 use App\QueryBuilders\Task\Filters\StatusFilter;
 use App\QueryBuilders\Filters\TrashedFilter;
 use App\QueryBuilders\Task\Filters\SearchFilter;
+use App\Services\Task\TaskReport;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -87,18 +88,14 @@ class TaskController extends Controller
 
     public function metrics(Request $request)
     {
-        $total = $request->user()->tasks()->published()->whereHas('status')->count();
-        $metric = $request->user()
-            ->statuses()
-            ->select('name', 'color')
-            ->withCount(['tasks as count' => fn ($query) => $query->published()->whereHas('status')])
-            ->orderBy('order')
-            ->get()
-            ->setHidden(['deleted_since']);
+        $reports = new TaskReport($request->user());
 
         return $this->success('Tasks metrics successfully retrieved.', [
-            'total' => $total,
-            'metrics' => $metric,
+            'total' => $reports->getTotalPublished(),
+            'metrics' => $reports->getTotalPerStatus(),
+            'total_hours_spent_this_week' => $reports->getTotalHoursSpentThisWeek(),
+            'total_hours_spent_last_week' => $reports->getTotalHoursSpentLastWeek(),
+            'speed_comparison' => $reports->getSpeedComparison(),
         ]);
     }
 

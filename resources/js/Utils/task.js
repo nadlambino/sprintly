@@ -237,7 +237,6 @@ export function useKanbanColumnKeys() {
 
 export function useTimeSpent() {
     const format = (timespent) => {
-        console.log(timespent)
         if (! timespent) return '';
 
         timespent = parseFloat(timespent);

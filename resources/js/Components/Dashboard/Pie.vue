@@ -14,5 +14,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <PieChart :data="metrics" :total="total" />
+    <div class="w-full bg-white p-5 shadow-lg">
+        <PieChart :data="metrics" :total="total" />
+    </div>
 </template>

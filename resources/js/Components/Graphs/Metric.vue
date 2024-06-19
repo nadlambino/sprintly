@@ -40,7 +40,7 @@ const props = defineProps({
     }
 });
 
-const percentage = computed(() => Math.round(props.count / props.total * 100));
+const percentage = computed(() => Math.round(props.count / props.total * 100) || 0);
 </script>
 
 <template>

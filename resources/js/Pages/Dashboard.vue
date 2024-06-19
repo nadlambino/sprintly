@@ -26,7 +26,7 @@ onBeforeMount(() => {
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
         </template>
 
-        <div class="p-5 flex flex-col gap-5">
+        <div class="p-5 space-y-5">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <Metrics :metrics="metrics" :total="total" />
             </div>
