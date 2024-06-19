@@ -1,15 +1,15 @@
 <script setup>
-import { useTaskApi } from '@/Utils/task';
-import { ref } from 'vue';
 import Metric from '@/Components/Graphs/Metric.vue';
 
-const { getMetrics } = useTaskApi();
-const metrics = ref([]);
-const total = ref(0);
-
-await getMetrics().then(({ data }) => {
-    total.value = data.data?.total || 0;
-    metrics.value = data.data?.metrics || [];
+const props = defineProps({
+    total: {
+        type: Number,
+        default: 0
+    },
+    metrics: {
+        type: Array,
+        default: []
+    }
 });
 </script>
 

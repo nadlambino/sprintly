@@ -1,8 +1,21 @@
 <script setup>
+import { ref, onBeforeMount } from 'vue';
 import { Head } from '@inertiajs/vue3';
+import { useTaskApi } from '@/Utils/task';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Metrics from '@/Components/Dashboard/Metrics.vue';
 import Pie from '@/Components/Dashboard/Pie.vue';
+
+const { getMetrics } = useTaskApi();
+const metrics = ref([]);
+const total = ref(0);
+
+onBeforeMount(() => {
+    getMetrics().then(({ data }) => {
+        total.value = data.data?.total || 0;
+        metrics.value = data.data?.metrics || [];
+    });
+});
 </script>
 
 <template>
@@ -15,14 +28,10 @@ import Pie from '@/Components/Dashboard/Pie.vue';
 
         <div class="p-5 flex flex-col gap-5">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <Suspense>
-                    <Metrics />
-                </Suspense>
+                <Metrics :metrics="metrics" :total="total" />
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <Suspense>
-                    <Pie />
-                </Suspense>
+                <Pie :metrics="metrics" :total="total" />
             </div>
         </div>
     </AuthenticatedLayout>
