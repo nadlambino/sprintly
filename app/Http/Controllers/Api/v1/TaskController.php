@@ -90,7 +90,7 @@ class TaskController extends Controller
         $metric = $request->user()
             ->statuses()
             ->select('name', 'color')
-            ->withCount(['tasks' => fn ($query) => $query->published()->whereHas('status')])
+            ->withCount(['tasks as count' => fn ($query) => $query->published()->whereHas('status')])
             ->orderBy('order')
             ->get()
             ->setHidden(['deleted_since']);

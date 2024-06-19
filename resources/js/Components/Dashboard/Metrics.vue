@@ -1,7 +1,7 @@
 <script setup>
 import { useTaskApi } from '@/Utils/task';
 import { ref } from 'vue';
-import Metric from '@/Components/Dashboard/Metric.vue';
+import Metric from '@/Components/Graphs/Metric.vue';
 
 const { getMetrics } = useTaskApi();
 const metrics = ref([]);
@@ -19,7 +19,7 @@ await getMetrics().then(({ data }) => {
             v-for="(metric, index) in metrics"
             :key="index"
             :label="metric.name"
-            :count="metric.tasks_count"
+            :count="metric.count"
             :total="total"
             :size="120"
             :width="15"
