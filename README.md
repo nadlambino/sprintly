@@ -1,4 +1,4 @@
-# Task Management App
+# Sprintly - Simple Task Management Application
 
 ## Stack
 * PHP 8.3
@@ -18,17 +18,17 @@
 * MySQL
 
 ## Steps
-* Clone the <a href="https://github.com/nadlambino/task-manager.git">repository</a>
+* Clone the <a href="https://github.com/nadlambino/sprintly.git">repository</a>
 * Run `composer install` and `npm install`
-* Create a database named `task_manager` or any other name, just update what is on the `.env` file.
+* Create a database named `sprintly` or any other name, just update what is on the `.env` file.
 * Run `php artisan migrate:fresh --seed` to create the tables, seed a user and the statuses.
-* If you're running this app on Laravel Valet, Laravel Herd, or Laragon, you can access the site at <a href="http://task-manager.test">http://task-manager.test</a>
+* If you're running this app on Laravel Valet, Laravel Herd, or Laragon, you can access the site at <a href="http://sprintly.test">http://sprintly.test</a>
 * Else, run `php artisan serve --port=80`. Make sure that it is running on port `80` for sanctum to work and for the images to easily be accessible since they're uploaded locally.
 * Run `npm run dev`
 * You can now visit the app at <a href="http://localhost">http://localhost</a>
 
 ## Cron Job (Auto Deletion of Trashed Tasks)
-To automatically delete tasks that were already trashed for 30 days
+To automatically delete tasks that were already trashed
 * Customize the configs in `.env` file. Look for the `DELETE_TRASH_DAYS_OLD` and `RUN_DELETE_EVERY` keys
 * `DELETE_TRASH_DAYS_OLD` is the number of days a task is in the trash for it to be automatically deleted. 
 Change to `0` if you want to test deletion of tasks that are recently trashed.
