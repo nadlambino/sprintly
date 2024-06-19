@@ -95,6 +95,8 @@ class TaskController extends Controller
             'metrics' => $reports->getTotalPerStatus(),
             'total_hours_spent_this_week' => $reports->getTotalHoursSpentThisWeek(),
             'total_hours_spent_last_week' => $reports->getTotalHoursSpentLastWeek(),
+            'average_hours_spent_this_week' => $reports->getAverageHoursSpentThisWeek(),
+            'average_hours_spent_last_week' => $reports->getAverageHoursSpentLastWeek(),
             'speed_comparison' => $reports->getSpeedComparison(),
         ]);
     }

@@ -9,11 +9,13 @@ import Pie from '@/Components/Dashboard/Pie.vue';
 const { getMetrics } = useTaskApi();
 const metrics = ref([]);
 const total = ref(0);
+const speedComparison = ref('');
 
 onBeforeMount(() => {
     getMetrics().then(({ data }) => {
         total.value = data.data?.total || 0;
         metrics.value = data.data?.metrics || [];
+        speedComparison.value = data.data?.speed_comparison;
     });
 });
 </script>
@@ -27,6 +29,9 @@ onBeforeMount(() => {
         </template>
 
         <div class="p-5 space-y-5">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-between items-center py-3">
+                <h1 class="text-lg font-bold text-gray-700">{{ speedComparison }}</h1>
+            </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <Metrics :metrics="metrics" :total="total" />
             </div>

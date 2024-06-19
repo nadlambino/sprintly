@@ -95,7 +95,6 @@ final class TaskReport
             ->time_spent ?? 0;
     }
 
-
     public function getSpeedComparison(): string
     {
         $lastWeekHours = $this->getAverageHoursSpentLastWeek();
@@ -109,9 +108,9 @@ final class TaskReport
         $formattedPercentageChange = abs(number_format($percentageChange, 2));
 
         return match (true) {
-            $percentageChange > 0 => "You are slower this week. Time spent increased by " . $formattedPercentageChange . "%.",
-            $percentageChange < 0 => "You are faster this week. Time spent decreased by " . $formattedPercentageChange . "%.",
-            default => "Your pace is unchanged this week.",
+            $percentageChange > 0 => "You are slower this week. Average time spent increased by " . $formattedPercentageChange . "%.",
+            $percentageChange < 0 => "You are faster this week. Average time spent decreased by " . $formattedPercentageChange . "%.",
+            default => "Your pace is unchanged this week. Average time spent is " . $formattedPercentageChange . "%.",
         };
     }
 }

@@ -47,36 +47,39 @@ const segmentPaths = computed(() => {
 
 <template>
     <div class="flex gap-5 md:gap-10 items-center justify-center user-select-none">
-        <svg :width="size" :height="size" viewBox="-100 -100 200 200">
-            <g>
-                <template v-for="(segment, index) in segmentPaths">
-                    <path v-if="segment.count > 0"
-                        :d="segment.path"
-                        :fill="segment.color"
-                        :key="index"
-                        class="hover:opacity-90 transition duration-150 ease-in-out"
-                    />
-                    <text
-                        v-if="segment.count > 0"
-                        :x="segment.textX"
-                        :y="segment.textY"
-                        text-anchor="middle"
-                        fill="white"
-                        class="text-[10px] user-select-none"
-                        :key="'text-' + index">
-                        {{ segment.percentage }}%
-                    </text>
+        <h1 v-if="! total" class="text-center text-muted">No data available for this chart.</h1>
+        <template v-else>
+            <svg :width="size" :height="size" viewBox="-100 -100 200 200">
+                <g>
+                    <template v-for="(segment, index) in segmentPaths">
+                        <path v-if="segment.count > 0"
+                            :d="segment.path"
+                            :fill="segment.color"
+                            :key="index"
+                            class="hover:opacity-90 transition duration-150 ease-in-out"
+                        />
+                        <text
+                            v-if="segment.count > 0"
+                            :x="segment.textX"
+                            :y="segment.textY"
+                            text-anchor="middle"
+                            fill="white"
+                            class="text-[10px] user-select-none"
+                            :key="'text-' + index">
+                            {{ segment.percentage }}%
+                        </text>
+                    </template>
+                </g>
+            </svg>
+            <div class="flex flex-col p-2.5">
+                <template v-for="(segment, index) in segmentPaths" :key="'legend-' + index">
+                    <div v-if="segment.count > 0" class="flex items-center mb-1.5">
+                        <span class="block w-5 h-5 mr-2.5" :style="{ backgroundColor: segment.color }"></span>
+                        <span>{{ segment.name }}</span>
+                    </div>
                 </template>
-            </g>
-        </svg>
-        <div class="flex flex-col p-2.5">
-            <template v-for="(segment, index) in segmentPaths" :key="'legend-' + index">
-                <div v-if="segment.count > 0" class="flex items-center mb-1.5">
-                    <span class="block w-5 h-5 mr-2.5" :style="{ backgroundColor: segment.color }"></span>
-                    <span>{{ segment.name }}</span>
-                </div>
-            </template>
-        </div>
+            </div>
+        </template>
     </div>
 </template>
 
