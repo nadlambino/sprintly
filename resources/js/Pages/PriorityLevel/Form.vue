@@ -11,7 +11,8 @@ import PrimaryButton from '@/Components/Shared/PrimaryButton.vue';
 import Alert from '@/Components/Shared/Alert.vue';
 import InputError from '@/Components/Shared/InputError.vue';
 import SecondaryButton from '@/Components/Shared/SecondaryButton.vue';
-import SubMenu from '@/Components/Statuses/SubMenu.vue';
+import SubMenu from '@/Components/PriorityLevels/SubMenu.vue';
+import RangeInput from '@/Components/Shared/RangeInput.vue';
 
 const props = defineProps({
     priorityLevel: {
@@ -75,7 +76,7 @@ const error = (error) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <SubMenu trashed/>
+            <SubMenu list />
         </template>
         <Alert :show="success || hasServerError" :message="message" title="Priority Level">
             <template #actions>
@@ -118,14 +119,16 @@ const error = (error) => {
                         </div>
 
                         <div class="flex flex-col gap-2">
-                            <InputLabel for="score" value="Score" />
-                            <input
+                            <div class="flex justify-between items-center">
+                                <InputLabel for="score" :value="`Score (${form.score})`" />
+                                <small class="text-muted text-xs text-right">The higher the score, the more important the priority level is.</small>
+                            </div>
+                            <RangeInput
                                 id="score"
                                 type="range"
-                                class="mt-1 block w-full"
                                 v-model="form.score"
                                 min="1"
-                                max="5"
+                                max="10"
                                 step="1"
                                 required
                             />
@@ -139,7 +142,7 @@ const error = (error) => {
                         </div>
 
                         <div class="flex justify-end items-center gap-3 mt-2">
-                            <Link :href="route('statuses.index')">
+                            <Link :href="route('priority-levels.index')">
                                 <SecondaryButton>Cancel</SecondaryButton>
                             </Link>
                             <PrimaryButton class="w-24 flex justify-center" @click="() => submit(false)" :disabled="form.processing">{{ isNew ? 'Create' : 'Update' }}</PrimaryButton>

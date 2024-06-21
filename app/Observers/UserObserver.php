@@ -38,18 +38,21 @@ class UserObserver
                 'color' => '#10B981',
                 'description' => 'Low priority level',
                 'score' => 1,
+                'is_default' => true,
             ],
             [
                 'name' => 'Medium',
                 'color' => '#F59E0B',
                 'description' => 'Medium priority level',
                 'score' => 2,
+                'is_default' => true,
             ],
             [
                 'name' => 'High',
                 'color' => '#EF4444',
                 'description' => 'High priority level',
                 'score' => 3,
+                'is_default' => true,
             ],
         ]);
     }

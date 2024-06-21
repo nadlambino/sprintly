@@ -40,17 +40,14 @@ const { data, isRequesting, isEmpty, destroy, refetch } = usePriorityLevelApi();
         </template>
         <template #actions="{ row }">
             <div class="flex gap-2">
-                <p v-if="row.is_default" class="bg-gray-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">Default</p>
-                <template v-else>
-                    <Link v-if="editable" :href="route('priority-levels.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
-                    <ConfirmButton
-                        v-if="deletable"
-                        message="Are you sure you want to delete this?"
-                        @confirm="() => destroy(row.id).then(refetch)"
-                        class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">
-                        Delete
-                    </ConfirmButton>
-                </template>
+                <Link v-if="editable" :href="route('priority-levels.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
+                <ConfirmButton
+                    v-if="deletable"
+                    message="Are you sure you want to delete this?"
+                    @confirm="() => destroy(row.id).then(refetch)"
+                    class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">
+                    Delete
+                </ConfirmButton>
             </div>
         </template>
     </SimpleTable>

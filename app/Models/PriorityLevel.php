@@ -17,6 +17,7 @@ class PriorityLevel extends Model
         'description',
         'color',
         'score',
+        'is_default',
     ];
 
     public function user(): BelongsTo

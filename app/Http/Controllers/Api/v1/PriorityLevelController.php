@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\WithApiResponse;
 use App\QueryBuilders\PriorityLevel\PriorityLevelBuilder;
-use Exception;
 use Illuminate\Http\Request;
 
 class PriorityLevelController extends Controller

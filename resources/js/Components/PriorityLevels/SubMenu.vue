@@ -1,5 +1,5 @@
 <script setup>
-import { useStatusStore } from '@/Utils/status';
+import { usePriorityLevelStore } from '@/Utils/priority-level';
 import { Link } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/Shared/PrimaryButton.vue';
 import AddIcon from '@/Icons/AddIcon.vue';
@@ -21,7 +21,7 @@ const props = defineProps({
     },
 });
 
-const statusStore = useStatusStore();
+const priorityLevelStore = usePriorityLevelStore();
 
 const sortOptions = [
     { label: '&uarr; Score', value: 'score' },
@@ -45,9 +45,9 @@ const sortOptions = [
             </Link>
         </div>
         <div v-if="filters" class="flex flex-col md:flex-row gap-3 items-end md:items-center">
-            <TextInput placeholder="Search..." class="min-w-full md:min-w-72" v-model="statusStore.search" />
+            <TextInput placeholder="Search..." class="min-w-full md:min-w-72" v-model="priorityLevelStore.search" />
             <div class="flex gap-3">
-                <ButtonDropdown v-model="statusStore.sortBy" :options="sortOptions" />
+                <ButtonDropdown v-model="priorityLevelStore.sortBy" :options="sortOptions" />
             </div>
         </div>
     </div>
