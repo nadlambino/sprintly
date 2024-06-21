@@ -42,8 +42,6 @@ class Task extends Model
         return [
             ...$this->baseCasts(),
             'published_at' => self::DATETIME_CAST_FORMAT,
-            'start_at'     => self::DATETIME_CAST_FORMAT,
-            'due_at'       => self::DATETIME_CAST_FORMAT,
             'started_at'   => self::DATETIME_CAST_FORMAT,
             'ended_at'     => self::DATETIME_CAST_FORMAT
         ];

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Traits;
 
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 
@@ -13,12 +11,12 @@ trait WithApiResponse
      * A method that returns a JSON response with optional message, data, and metadata.
      *
      * @param ?string $message The message to be included in the response.
-     * @param array|Collection|Model|EloquentCollection $data The data to be included in the response.
+     * @param mixed $data The data to be included in the response.
      * @param array $metadata Additional metadata to be included in the response.
      * @param int $status The HTTP status code for the response.
      * @return JsonResponse The JSON response containing message, data, and metadata.
      */
-    public function success(?string $message = null, array|Collection|Model|EloquentCollection $data = [], array $metadata = [], int $status = 200): JsonResponse
+    public function success(?string $message = null, mixed $data = [], array $metadata = [], int $status = 200): JsonResponse
     {
         return response()->json([
             'message' => $message,

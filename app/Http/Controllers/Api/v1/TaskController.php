@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\WithApiResponse;
 use App\Http\Requests\Api\Tasks\CreateRequest;
 use App\Http\Requests\Api\Tasks\UpdateRequest;
+use App\Http\Resources\TaskResource;
 use App\Models\Status;
 use App\Models\Task;
 use App\QueryBuilders\Task\TaskBuilder;
@@ -37,7 +38,7 @@ class TaskController extends Controller
 
             return $this->success(
                 'Tasks retrieved successfully.',
-                $tasks->all(),
+                TaskResource::collection($tasks->all()),
                 [
                     'has_next_page' => $tasks->hasMorePages(),
                     'next_page' => $tasks->hasMorePages() ? intval($request->get('page', 1)) + 1 : null,

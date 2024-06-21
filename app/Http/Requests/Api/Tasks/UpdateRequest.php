@@ -28,6 +28,8 @@ class UpdateRequest extends FormRequest
             'title'     => ['sometimes', 'min:3', 'max:100'],
             'content'   => ['sometimes', 'max:10000'],
             'status_id' => ['sometimes', 'exists:statuses,id'],
+            'start_at'  => ['sometimes', 'nullable', 'date'],
+            'due_at'    => ['sometimes', 'nullable', 'date', 'after:start_at'],
             'images'    => ['array'],
             'images.*'  => ['image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:4096'],
         ];
