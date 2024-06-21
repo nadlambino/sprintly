@@ -9,10 +9,7 @@ use App\Http\Requests\Api\Tasks\UpdateRequest;
 use App\Models\Status;
 use App\Models\Task;
 use App\QueryBuilders\Task\Filters\ExceptFilter;
-use App\QueryBuilders\Task\Filters\PublishedFilter;
-use App\QueryBuilders\Task\Filters\StatusFilter;
-use App\QueryBuilders\Filters\TrashedFilter;
-use App\QueryBuilders\Task\Filters\SearchFilter;
+use App\QueryBuilders\Task\TaskBuilder;
 use App\Services\Task\TaskReport;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -31,23 +28,12 @@ class TaskController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request, TaskBuilder $task): JsonResponse
     {
         try {
-            $tasks = QueryBuilder::for($request->user()->tasks())
-                ->selectRaw('tasks.*, (TIMESTAMPDIFF(MINUTE, tasks.started_at, tasks.ended_at) / 60) as time_spent')
-                ->allowedFilters([
-                    AllowedFilter::exact('parent_id'),
-                    AllowedFilter::exact('status_id'),
-                    AllowedFilter::custom('search', new SearchFilter),
-                    AllowedFilter::custom('status', new StatusFilter),
-                    AllowedFilter::custom('published', new PublishedFilter),
-                    AllowedFilter::custom('trashed', new TrashedFilter)
-                ])
-                ->allowedIncludes(['status', 'images', 'parent', 'children'])
-                ->defaultSort('created_at')
-                ->allowedSorts(['title', 'created_at'])
-                ->whereHas('status')
+            $tasks = $task->of($request->user())
+                ->filters(['status_id' => 1])
+                ->build()
                 ->paginate($request->get('per_page', 10));
 
             return $this->success(
