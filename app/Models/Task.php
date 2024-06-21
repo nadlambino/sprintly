@@ -27,7 +27,9 @@ class Task extends Model
         'title',
         'content',
         'status_id',
-        'published_at'
+        'published_at',
+        'start_at',
+        'due_at'
     ];
 
     protected $appends = [
@@ -40,6 +42,8 @@ class Task extends Model
         return [
             ...$this->baseCasts(),
             'published_at' => self::DATETIME_CAST_FORMAT,
+            'start_at'     => self::DATETIME_CAST_FORMAT,
+            'due_at'       => self::DATETIME_CAST_FORMAT,
             'started_at'   => self::DATETIME_CAST_FORMAT,
             'ended_at'     => self::DATETIME_CAST_FORMAT
         ];

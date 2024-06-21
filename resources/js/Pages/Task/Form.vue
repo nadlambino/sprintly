@@ -15,6 +15,7 @@ import SecondaryButton from '@/Components/Shared/SecondaryButton.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import Combobox from '@/Components/Shared/Combobox.vue';
 import ConfirmButton from '@/Components/Shared/ConfirmButton.vue';
+import DateTimePicker from '@/Components/Shared/DateTimePicker.vue';
 
 const props = defineProps({
     task: {
@@ -35,6 +36,8 @@ const form = useForm({
     content: props.task?.content || '',
     images: [],
     status_id: props.task?.status_id || collect(statusStore.statuses).first()?.id,
+    start_at: props.task?.start_at || null,
+    due_at: props.task?.due_at || null,
     publish: props.task?.published_at ? true : false,
     replace_images: false
 });
@@ -139,7 +142,6 @@ const error = (error) => {
                                 placeholder="Task Summary..."
                                 minlength="3"
                                 maxlength="100"
-                                required
                             />
                             <InputError v-for="error in errors?.title || []" :message="error" />
                         </div>
@@ -165,6 +167,19 @@ const error = (error) => {
                                 </div>
                             </div>
                             <InputError v-for="error in errors?.status_id || []" :message="error" />
+                        </div>
+
+                        <div class="flex flex-col md:flex-row gap-5">
+                            <div class="flex flex-col gap-2 w-full">
+                                <InputLabel for="start_at" value="Start At" />
+                                <DateTimePicker v-model="form.start_at" id="start_at" />
+                                <InputError v-for="error in errors?.start_at || []" :message="error" />
+                            </div>
+                            <div class="flex flex-col gap-2 w-full">
+                                <InputLabel for="due_at" value="Due At" />
+                                <DateTimePicker v-model="form.due_at" id="due_at" />
+                                <InputError v-for="error in errors?.due_at || []" :message="error" />
+                            </div>
                         </div>
 
                         <div class="flex flex-col gap-2">

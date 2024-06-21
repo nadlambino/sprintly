@@ -21,6 +21,8 @@ const images = computed(() => Array.from(props.task.images).map((image) => windo
 const { destroy } = useTaskApi  ();
 
 const timespent = useTimeSpent();
+
+const showDates = ref(false);
 </script>
 
 <template>
@@ -56,7 +58,8 @@ const timespent = useTimeSpent();
             <img :src="images[0]" :alt="task.title" class="w-full object-cover" />
             <small class="text-muted" v-if="images.length > 1"> and {{ images.length - 1 }} more image(s)</small>
         </div>
-        <div class="flex flex-col text-muted text-xs">
+        <small class="cursor-pointer text-primary hover:text-primary/80 hover:underline" @click="showDates = !showDates">{{  showDates ? 'Hide' : 'Show' }} Dates</small>
+        <div class="flex flex-col text-muted text-xs" v-show="showDates">
             <div class="flex justify-between">
                 <small>Created At</small>
                 <small>{{ task.created_at }}</small>
@@ -64,6 +67,14 @@ const timespent = useTimeSpent();
             <div class="flex justify-between">
                 <small>Published At</small>
                 <small>{{ task.published_at }}</small>
+            </div>
+            <div class="flex justify-between">
+                <small>Start At</small>
+                <small>{{ task.start_at }}</small>
+            </div>
+            <div class="flex justify-between">
+                <small>Due At</small>
+                <small>{{ task.due_at }}</small>
             </div>
             <div class="flex justify-between">
                 <small>Started At</small>
