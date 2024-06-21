@@ -102,7 +102,7 @@ final class TaskReport
         });
     }
 
-    public function getSpeedComparison(): string
+    public function getSpeedSummary(): string
     {
         $lastWeekHours = $this->getAverageHoursSpentLastWeek();
         $thisWeekHours = $this->getAverageHoursSpentThisWeek();
