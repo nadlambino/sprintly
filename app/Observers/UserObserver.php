@@ -31,5 +31,26 @@ class UserObserver
                 'is_default' => true,
             ],
         ]);
+
+        $user->priorityLevels()->createMany([
+            [
+                'name' => 'Low',
+                'color' => '#10B981',
+                'description' => 'Low priority level',
+                'score' => 1,
+            ],
+            [
+                'name' => 'Medium',
+                'color' => '#F59E0B',
+                'description' => 'Medium priority level',
+                'score' => 2,
+            ],
+            [
+                'name' => 'High',
+                'color' => '#EF4444',
+                'description' => 'High priority level',
+                'score' => 3,
+            ],
+        ]);
     }
 }
