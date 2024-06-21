@@ -79,6 +79,11 @@ class Task extends Model
         return $this->belongsTo(Status::class);
     }
 
+    public function priorityLevel(): BelongsTo
+    {
+        return $this->belongsTo(PriorityLevel::class);
+    }
+
     /**
      * Relation method between Task and User
      *
