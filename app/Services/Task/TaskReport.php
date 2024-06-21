@@ -3,23 +3,26 @@
 namespace App\Services\Task;
 
 use App\Models\User;
+use App\QueryBuilders\Task\TaskBuilder;
 use Carbon\Carbon;
 
 final class TaskReport
 {
+    protected TaskBuilder $task;
     protected Carbon $startOfWeek;
     protected Carbon $endOfWeek;
 
     public function __construct(protected User $user)
     {
+        $this->task = (new TaskBuilder())->of($user);
         $this->startOfWeek = now()->startOfWeek()->startOfDay();
         $this->endOfWeek = now()->endOfWeek()->startOfDay();
     }
 
     public function getTotalPublished(): int
     {
-        return once(fn () => $this->user
-            ->tasks()
+        return once(fn () => $this->task
+            ->build()
             ->published()
             ->whereHas('status')
             ->count()
@@ -41,8 +44,8 @@ final class TaskReport
 
     public function getTotalHoursSpentThisWeek(): float
     {
-        return once(fn () => $this->user
-            ->tasks()
+        return once(fn () => $this->task
+            ->build()
             ->published()
             ->whereHas('status')
             ->whereBetween('ended_at', [$this->startOfWeek, $this->endOfWeek])
@@ -58,8 +61,8 @@ final class TaskReport
             $start = clone $this->startOfWeek;
             $end = clone $this->endOfWeek;
 
-            return $this->user
-                ->tasks()
+            return $this->task
+                ->build()
                 ->published()
                 ->whereHas('status')
                 ->whereBetween('ended_at', [$start->subWeek(), $end->subWeek()])
@@ -71,8 +74,8 @@ final class TaskReport
 
     public function getAverageHoursSpentThisWeek(): float
     {
-        return once(fn () => $this->user
-            ->tasks()
+        return once(fn () => $this->task
+            ->build()
             ->published()
             ->whereHas('status')
             ->whereBetween('ended_at', [$this->startOfWeek, $this->endOfWeek])
@@ -88,14 +91,14 @@ final class TaskReport
             $start = clone $this->startOfWeek;
             $end = clone $this->endOfWeek;
 
-            return $this->user
-            ->tasks()
-            ->published()
-            ->whereHas('status')
-            ->whereBetween('ended_at', [$start->subWeek(), $end->subWeek()])
-            ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, started_at, ended_at)) as time_spent')
-            ->first()
-            ->time_spent ?? 0;
+            return $this->task
+                ->build()
+                ->published()
+                ->whereHas('status')
+                ->whereBetween('ended_at', [$start->subWeek(), $end->subWeek()])
+                ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, started_at, ended_at)) as time_spent')
+                ->first()
+                ->time_spent ?? 0;
         });
     }
 

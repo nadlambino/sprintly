@@ -34,7 +34,7 @@ trait Builder
 
     public function source(array|Collection $source): static
     {
-        $this->source = is_array($source) ? collect($source) : $source;
+        $this->source = is_array($source) ? $source : $source->toArray();
 
         return $this;
     }
