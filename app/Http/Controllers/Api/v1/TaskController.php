@@ -8,15 +8,12 @@ use App\Http\Requests\Api\Tasks\CreateRequest;
 use App\Http\Requests\Api\Tasks\UpdateRequest;
 use App\Models\Status;
 use App\Models\Task;
-use App\QueryBuilders\Task\Filters\ExceptFilter;
 use App\QueryBuilders\Task\TaskBuilder;
 use App\Services\Task\TaskReport;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use NadLambino\QueryBuilder\AllowedFilter;
-use NadLambino\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
@@ -32,8 +29,9 @@ class TaskController extends Controller
     {
         try {
             $tasks = $task->of($request->user())
-                ->filters(['status_id' => 1])
                 ->build()
+                ->selectRaw('tasks.*, (TIMESTAMPDIFF(MINUTE, tasks.started_at, tasks.ended_at) / 60) as time_spent')
+                ->whereHas('status')
                 ->paginate($request->get('per_page', 10));
 
             return $this->success(
@@ -56,14 +54,12 @@ class TaskController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function parents(Request $request): JsonResponse
+    public function parents(Request $request, TaskBuilder $task): JsonResponse
     {
         try {
-            $tasks = QueryBuilder::for($request->user()->tasks()->published())
-                ->allowedFilters([
-                    'title',
-                    AllowedFilter::custom('except', new ExceptFilter),
-                ])
+            $tasks = $task->of($request->user())
+                ->build()
+                ->published()
                 ->paginate($request->get('per_page', 10));
 
             return $this->success('Tasks retrieved successfully.', $tasks->all());
