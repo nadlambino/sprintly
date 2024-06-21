@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->string('name');
             $table->string('description');
+            $table->integer('score')->default(1);
             $table->string('color');
             $table->timestamps();
         });

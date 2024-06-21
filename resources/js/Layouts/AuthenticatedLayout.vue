@@ -43,6 +43,9 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('statuses.index')" :active="route().current()?.includes('statuses')">
                                     Statuses
                                 </NavLink>
+                                <NavLink :href="route('priority-levels.index')" :active="route().current()?.includes('priority-levels')">
+                                    Priority Levels
+                                </NavLink>
                             </div>
                         </div>
 
@@ -131,6 +134,9 @@ const showingNavigationDropdown = ref(false);
                         </ResponsiveNavLink>
                         <ResponsiveNavLink :href="route('statuses.index')" :active="route().current()?.includes('statuses')">
                             Statuses
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('priority-levels.index')" :active="route().current()?.includes('priority-levels')">
+                            Priority Levels
                         </ResponsiveNavLink>
                     </div>
 
