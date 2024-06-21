@@ -14,14 +14,15 @@ final class TaskReport
 
     public function __construct(protected User $user)
     {
-        $this->task = (new TaskBuilder())->of($user);
+        $this->task = (new TaskBuilder())->of($user)->source([]);
         $this->startOfWeek = now()->startOfWeek()->startOfDay();
         $this->endOfWeek = now()->endOfWeek()->startOfDay();
     }
 
     public function getTotalPublished(): int
     {
-        return once(fn () => $this->task
+        return once(fn () => TaskBuilder::make()
+            ->of($this->user)
             ->build()
             ->published()
             ->whereHas('status')
@@ -44,7 +45,8 @@ final class TaskReport
 
     public function getTotalHoursSpentThisWeek(): float
     {
-        return once(fn () => $this->task
+        return once(fn () => TaskBuilder::make()
+            ->of($this->user)
             ->build()
             ->published()
             ->whereHas('status')
@@ -61,7 +63,8 @@ final class TaskReport
             $start = clone $this->startOfWeek;
             $end = clone $this->endOfWeek;
 
-            return $this->task
+            return TaskBuilder::make()
+                ->of($this->user)
                 ->build()
                 ->published()
                 ->whereHas('status')
@@ -74,7 +77,8 @@ final class TaskReport
 
     public function getAverageHoursSpentThisWeek(): float
     {
-        return once(fn () => $this->task
+        return once(fn () => TaskBuilder::make()
+            ->of($this->user)
             ->build()
             ->published()
             ->whereHas('status')
@@ -91,7 +95,8 @@ final class TaskReport
             $start = clone $this->startOfWeek;
             $end = clone $this->endOfWeek;
 
-            return $this->task
+            return TaskBuilder::make()
+                ->of($this->user)
                 ->build()
                 ->published()
                 ->whereHas('status')

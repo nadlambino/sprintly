@@ -11,6 +11,11 @@ trait Builder
 
     protected array $source;
 
+    public static function make(): static
+    {
+        return new static();
+    }
+
     public function filters(array $filters): static
     {
         $this->source['filter'] = $filters;

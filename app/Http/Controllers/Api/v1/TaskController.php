@@ -25,10 +25,11 @@ class TaskController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function index(Request $request, TaskBuilder $task): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
-            $tasks = $task->of($request->user())
+            $tasks = TaskBuilder::make()
+                ->of($request->user())
                 ->build()
                 ->selectRaw('tasks.*, (TIMESTAMPDIFF(MINUTE, tasks.started_at, tasks.ended_at) / 60) as time_spent')
                 ->whereHas('status')
@@ -54,10 +55,11 @@ class TaskController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function parents(Request $request, TaskBuilder $task): JsonResponse
+    public function parents(Request $request): JsonResponse
     {
         try {
-            $tasks = $task->of($request->user())
+            $tasks = TaskBuilder::make()
+                ->of($request->user())
                 ->build()
                 ->published()
                 ->paginate($request->get('per_page', 10));
