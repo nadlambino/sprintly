@@ -3,7 +3,7 @@
 namespace App\QueryBuilders\Status\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\QueryBuilder\Filters\Filter;
+use NadLambino\QueryBuilder\Filters\Filter;
 
 class SearchFilter implements Filter
 {

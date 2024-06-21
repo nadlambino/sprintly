@@ -13,8 +13,8 @@ use App\QueryBuilders\Status\Filters\SearchFilter;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
+use NadLambino\QueryBuilder\AllowedFilter;
+use NadLambino\QueryBuilder\QueryBuilder;
 
 class StatusController extends Controller
 {

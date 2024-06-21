@@ -18,8 +18,8 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
+use NadLambino\QueryBuilder\AllowedFilter;
+use NadLambino\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
