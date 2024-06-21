@@ -12,7 +12,8 @@ const props = defineProps({
         default: () => [
             { key: 'status', label: 'Status' },
             { key: 'title', label: 'Title' },
-            { key: 'created_at', label: 'Created At', 'class': 'text-xs' },
+            { key: 'start_at', label: 'Start At', 'class': 'text-xs' },
+            { key: 'due_at', label: 'Due At', 'class': 'text-xs' },
             { key: 'started_at', label: 'Started At', 'class': 'text-xs' },
             { key: 'ended_at', label: 'Ended At', 'class': 'text-xs' },
             { key: 'time_spent', label: 'Time Spent', 'class': 'text-xs' },
