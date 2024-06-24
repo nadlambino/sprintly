@@ -18,7 +18,7 @@ class UniqueName implements ValidationRule
             return;
         }
 
-        $currentPriorityLevel = request()->route('priorityLevel');
+        $currentPriorityLevel = request()->route('priority_level');
 
         $exists = request()->user()->priorityLevels()
             ->where('name', $value)

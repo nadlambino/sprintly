@@ -74,7 +74,7 @@ export function usePriorityLevelApi(params = {}) {
      */
     const update = (id, data, headers) => {
         return window.axios
-            .post(route('api.priority-levels.update', { 'priority-level': id }), { ...data, _method: 'PUT' }, { headers });
+            .post(route('api.priority-levels.update', { priority_level: id }), { ...data, _method: 'PUT' }, { headers });
     }
 
     /**
@@ -85,29 +85,7 @@ export function usePriorityLevelApi(params = {}) {
      */
     const destroy = (id) => {
         return window.axios
-            .delete(route('api.priority-levels.destroy', { 'priority-level': id }));
-    }
-
-    /**
-     * Request to force destroy a priority-level
-     *
-     * @param {string|number} id
-     * @returns {Promise}
-     */
-    const forceDelete = (id) => {
-        return window.axios
-            .delete(route('api.priority-levels.force-delete', { 'priority-level': id }));
-    }
-
-    /**
-     * Request to restore a priority-level
-     *
-     * @param {string|number} id
-     * @returns {Promise}
-     */
-    const restore = (id) => {
-        return window.axios
-            .put(route('api.priority-levels.restore', { 'priority-level': id }));
+            .delete(route('api.priority-levels.destroy', { priority_level: id }));
     }
 
     return {
