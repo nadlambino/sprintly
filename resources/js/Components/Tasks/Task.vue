@@ -5,6 +5,7 @@ import { useTaskApi, useTimeSpent } from '@/Utils/task';
 import DeleteIcon from '@/Icons/DeleteIcon.vue';
 import Alert from '@/Components/Shared/Alert.vue';
 import PrimaryButton from '@/Components/Shared/PrimaryButton.vue';
+import Badge from '../Shared/Badge.vue';
 
 const props = defineProps({
     task: {
@@ -47,6 +48,7 @@ const showDates = ref(false);
                     <DeleteIcon class="text-gray-500 hover:text-red-500"/>
                 </button>
             </div>
+            <Badge :hex="task.priority_level.color">{{ task.priority_level.name }}</Badge>
         </div>
         <div>
             <p class="line-clamp-3 text-gray-700" :title="task.content">{{ task.content }}</p>
