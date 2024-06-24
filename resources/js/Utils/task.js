@@ -82,7 +82,7 @@ export function useTaskApi(params = {}) {
                 parent_id: params?.parent_id
             },
             sort: sort.value,
-            include: 'status,images,parent,children',
+            include: 'status,images,parent,children,priorityLevel',
             page: pageParam,
             per_page: perPage.value
         }));

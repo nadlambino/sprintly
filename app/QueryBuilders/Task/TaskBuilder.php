@@ -42,7 +42,7 @@ class TaskBuilder
                 AllowedFilter::custom('except', new ExceptFilter),
                 AllowedFilter::custom('ended_at_between', new EndAtBetweenFilter),
             ])
-            ->allowedIncludes(['status', 'images', 'parent', 'children'])
+            ->allowedIncludes(['status', 'images', 'parent', 'children', 'priorityLevel'])
             ->defaultSort('created_at')
             ->allowedSorts(['title', 'created_at']);
     }

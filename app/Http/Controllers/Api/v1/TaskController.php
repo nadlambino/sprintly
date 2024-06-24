@@ -29,26 +29,22 @@ class TaskController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        try {
-            $tasks = TaskBuilder::make()
-                ->of($request->user())
-                ->build()
-                ->selectRaw('tasks.*, (TIMESTAMPDIFF(MINUTE, tasks.started_at, tasks.ended_at) / 60) as time_spent')
-                ->whereHas('status')
-                ->paginate($request->get('per_page', 10));
+        $tasks = TaskBuilder::make()
+            ->of($request->user())
+            ->build()
+            ->selectRaw('tasks.*, (TIMESTAMPDIFF(MINUTE, tasks.started_at, tasks.ended_at) / 60) as time_spent')
+            ->whereHas('status')
+            ->paginate($request->get('per_page', 10));
 
-            return $this->success(
-                'Tasks retrieved successfully.',
-                TaskResource::collection($tasks->all()),
-                [
-                    'has_next_page' => $tasks->hasMorePages(),
-                    'next_page' => $tasks->hasMorePages() ? intval($request->get('page', 1)) + 1 : null,
-                    'total' => $tasks->total()
-                ]
-            );
-        } catch (Exception) {
-            return $this->error('Something went wrong while retrieving the tasks. Please try again later.');
-        }
+        return $this->success(
+            'Tasks retrieved successfully.',
+            TaskResource::collection($tasks->all()),
+            [
+                'has_next_page' => $tasks->hasMorePages(),
+                'next_page' => $tasks->hasMorePages() ? intval($request->get('page', 1)) + 1 : null,
+                'total' => $tasks->total()
+            ]
+        );
     }
 
     /**

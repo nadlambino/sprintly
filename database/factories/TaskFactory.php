@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\PriorityLevel;
 use App\Models\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -26,6 +27,7 @@ class TaskFactory extends Factory
             'published_at' => $publishedAt = Carbon::yesterday()->subDays(rand(1, 30)),
             'started_at' => $startedAt = Carbon::parse($publishedAt)->addDays(rand(1, 14)),
             'ended_at' => Carbon::parse($startedAt)->addDays(rand(1, 14)),
+            'priority_level_id' => PriorityLevel::where('user_id', 1)->inRandomOrder()->first()->id
         ];
     }
 }

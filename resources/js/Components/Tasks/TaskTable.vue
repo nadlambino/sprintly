@@ -12,6 +12,7 @@ const props = defineProps({
         default: () => [
             { key: 'status', label: 'Status' },
             { key: 'title', label: 'Title' },
+            { key: 'priority_level', label: 'Priority Level' },
             { key: 'start_at', label: 'Start At', 'class': 'text-xs' },
             { key: 'due_at', label: 'Due At', 'class': 'text-xs' },
             { key: 'started_at', label: 'Started At', 'class': 'text-xs' },
@@ -95,6 +96,9 @@ const timespent = useTimeSpent();
 <template>
     <PaginatedTable :data="data?.pages" :headers="headers" :total="total" :is-empty="isEmpty" :is-requesting="isRequesting" :has-next-page="hasNextPage" label="tasks" @next="next">
         <template #status="{ data }">
+            <Badge :hex="data.color">{{ data.name }}</Badge>
+        </template>
+        <template #priority_level="{ data }">
             <Badge :hex="data.color">{{ data.name }}</Badge>
         </template>
         <template #time_spent="{ data }">
