@@ -29,7 +29,8 @@ class Task extends Model
         'status_id',
         'published_at',
         'start_at',
-        'due_at'
+        'due_at',
+        'priority_level_id',
     ];
 
     protected $appends = [

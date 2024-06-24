@@ -3,6 +3,7 @@ import { computed, ref, onMounted } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { useTaskApi } from '@/Utils/task';
 import { useStatusStore } from '@/Utils/status';
+import { usePriorityLevelApi } from '@/Utils/priority-level';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputLabel from '@/Components/Shared/InputLabel.vue';
 import TextInput from '@/Components/Shared/TextInput.vue';
@@ -14,8 +15,10 @@ import Toggle from '@/Components/Shared/Toggle.vue';
 import SecondaryButton from '@/Components/Shared/SecondaryButton.vue';
 import SubMenu from '@/Components/Tasks/SubMenu.vue';
 import Combobox from '@/Components/Shared/Combobox.vue';
+import SelectInput from '@/Components/Shared/SelectInput.vue';
 import ConfirmButton from '@/Components/Shared/ConfirmButton.vue';
 import DateTimePicker from '@/Components/Shared/DateTimePicker.vue';
+import { watch } from 'vue';
 
 const props = defineProps({
     task: {
@@ -38,6 +41,7 @@ const form = useForm({
     status_id: props.task?.status_id || collect(statusStore.statuses).first()?.id,
     start_at: props.task?.start_at || null,
     due_at: props.task?.due_at || null,
+    priority_level_id: props.task?.priority_level_id,
     publish: props.task?.published_at ? true : false,
     replace_images: false
 });
@@ -60,6 +64,10 @@ const setDefaultOptionsForParent = () => {
 }
 
 onMounted(setDefaultOptionsForParent);
+
+const { data: priorityLevels } = usePriorityLevelApi();
+const priorityOptions = computed(() => priorityLevels.value?.map((priority) => ({ value: priority.id, label: priority.name })) || []);
+watch(priorityOptions, () => form.priority_level_id = priorityOptions.value[0].value);
 
 const success = ref(false);
 const message = ref(null);
@@ -167,6 +175,15 @@ const error = (error) => {
                                 </div>
                             </div>
                             <InputError v-for="error in errors?.status_id || []" :message="error" />
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <InputLabel for="priority-level" value="Priority" />
+                            <SelectInput
+                                id="priority-level"
+                                v-model="form.priority_level_id"
+                                :options="priorityOptions"
+                            />
                         </div>
 
                         <div class="flex flex-col md:flex-row gap-5">

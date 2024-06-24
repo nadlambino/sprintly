@@ -8,13 +8,11 @@ use Carbon\Carbon;
 
 final class TaskReport
 {
-    protected TaskBuilder $task;
     protected Carbon $startOfWeek;
     protected Carbon $endOfWeek;
 
     public function __construct(protected User $user)
     {
-        $this->task = (new TaskBuilder())->of($user)->source([]);
         $this->startOfWeek = now()->startOfWeek()->startOfDay();
         $this->endOfWeek = now()->endOfWeek()->startOfDay();
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Tasks;
 
+use App\Rules\Task\ValidPriorityLevel;
 use App\Rules\Tasks\ValidParent;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,14 +24,15 @@ class CreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'parent_id' => ['sometimes', 'nullable', new ValidParent],
-            'title'     => ['required', 'min:3', 'max:100'],
-            'content'   => ['sometimes', 'max:10000'],
-            'status_id' => ['required', 'exists:statuses,id'],
-            'start_at'  => ['sometimes', 'nullable', 'date'],
-            'due_at'    => ['sometimes', 'nullable', 'date', 'after:start_at'],
-            'images'    => ['array'],
-            'images.*'  => ['image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:4096'],
+            'parent_id'         => ['sometimes', 'nullable', new ValidParent],
+            'title'             => ['required', 'min:3', 'max:100'],
+            'content'           => ['sometimes', 'max:10000'],
+            'status_id'         => ['required', 'exists:statuses,id'],
+            'start_at'          => ['sometimes', 'nullable', 'date'],
+            'due_at'            => ['sometimes', 'nullable', 'date', 'after:start_at'],
+            'priority_level_id' => ['required', new ValidPriorityLevel],
+            'images'            => ['array'],
+            'images.*'          => ['image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:4096'],
         ];
     }
 
