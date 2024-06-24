@@ -5,6 +5,7 @@ namespace App\QueryBuilders\Task;
 use App\Models\Task;
 use App\QueryBuilders\Builder as QueryBuildersBuilder;
 use App\QueryBuilders\Filters\TrashedFilter;
+use App\QueryBuilders\Task\Filters\EndAtBetweenFilter;
 use App\QueryBuilders\Task\Filters\ExceptFilter;
 use App\QueryBuilders\Task\Filters\PublishedFilter;
 use App\QueryBuilders\Task\Filters\SearchFilter;
@@ -39,6 +40,7 @@ class TaskBuilder
                 AllowedFilter::custom('published', new PublishedFilter),
                 AllowedFilter::custom('trashed', new TrashedFilter),
                 AllowedFilter::custom('except', new ExceptFilter),
+                AllowedFilter::custom('ended_at_between', new EndAtBetweenFilter),
             ])
             ->allowedIncludes(['status', 'images', 'parent', 'children'])
             ->defaultSort('created_at')

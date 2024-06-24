@@ -11,6 +11,7 @@ use App\Models\Status;
 use App\Models\Task;
 use App\QueryBuilders\Task\TaskBuilder;
 use App\Services\Task\TaskReport;
+use App\Services\Task\TaskReportService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -73,7 +74,7 @@ class TaskController extends Controller
 
     public function metrics(Request $request)
     {
-        $reports = new TaskReport($request->user());
+        $reports = new TaskReportService($request->user());
 
         return $this->success('Tasks metrics successfully retrieved.', [
             'total' => $reports->getTotalPublished(),
