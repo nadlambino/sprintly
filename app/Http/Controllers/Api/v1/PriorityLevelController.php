@@ -8,7 +8,10 @@ use App\Http\Requests\Api\PriorityLevel\CreateRequest;
 use App\Http\Requests\PriorityLevel\UpdateRequest;
 use App\Models\PriorityLevel;
 use App\QueryBuilders\PriorityLevel\PriorityLevelBuilder;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PriorityLevelController extends Controller
 {
@@ -21,20 +24,37 @@ class PriorityLevelController extends Controller
             ->build()
             ->get();
 
-        return $this->success('Statuses retrieved successfully.', $priorityLevels);
+        return $this->success('Priority levels retrieved successfully.', $priorityLevels);
     }
 
     public function store(CreateRequest $request)
     {
         $priorityLevel = $request->user()->priorityLevels()->create($request->validated());
 
-        return $this->success('Status created successfully.', $priorityLevel);
+        return $this->success('Priority level created successfully.', $priorityLevel);
     }
 
     public function update(UpdateRequest $request, PriorityLevel $priorityLevel)
     {
         $priorityLevel->update($request->validated());
 
-        return $this->success('Status updated successfully.', $priorityLevel);
+        return $this->success('Priority level updated successfully.', $priorityLevel);
+    }
+
+    public function destroy(PriorityLevel $priorityLevel)
+    {
+        try {
+            Gate::allows('delete', $priorityLevel);
+
+            $priorityLevel->delete();
+
+            return $this->success('Priority level deleted successfully.');
+        } catch (Exception $exception) {
+            if ($exception instanceof QueryException) {
+                return $this->error('This priority level cannot be deleted because it is in use.');
+            }
+
+            return $this->error('Something went wrong while deleting the priority level. Please try again later.');
+        }
     }
 }
