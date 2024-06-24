@@ -30,7 +30,7 @@ const form = useForm({
     name: props.priorityLevel?.name || '',
     description: props.priorityLevel?.description || '',
     color: props.priorityLevel?.color || '#000000',
-    score: props.priorityLevel?.score || 0
+    score: props.priorityLevel?.score || 1
 });
 
 const success = ref(false);
