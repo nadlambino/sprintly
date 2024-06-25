@@ -3,17 +3,24 @@
 namespace App\QueryBuilders;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
 
 trait Builder
 {
     protected Builder|Relation $builder;
 
-    protected array $source;
+    protected array $source = [];
+
+    protected bool $notFromRequest = false;
+
+    public function __construct(Request $request = null)
+    {
+        $this->source = $request?->all() ?? [];
+    }
 
     public static function make(): static
     {
-        return new static();
+        return new static(request());
     }
 
     public function filters(array $filters): static
@@ -25,7 +32,7 @@ trait Builder
 
     public function includes(array $includes): static
     {
-        $this->source['include'] = $includes;
+        $this->source['include'] = implode(',', $includes);
 
         return $this;
     }
@@ -37,21 +44,36 @@ trait Builder
         return $this;
     }
 
-    public function source(array|Collection $source): static
+    public function notFromRequest(): static
     {
-        $this->source = is_array($source) ? $source : $source->toArray();
+        $this->notFromRequest = true;
+        $this->source = [];
 
         return $this;
     }
 
+    public function mergeFilterToRequest(array $filters): static
+    {
+        $this->source['filter'] = array_merge(request('filter', []), $filters);
+
+        return $this;
+    }
+
+    public function mergeIncludeToRequest(array $includes): static
+    {
+        $this->source['include'] = request('include', '') . ',' . implode(',', $includes);
+
+        return $this;
+    }
+
+
     /**
      * Get the source to be used in the query.
-     * We return null so that it will use the request object as the source.
      *
-     * @return array|null
+     * @return array
      */
-    protected function getSource(): ?array
+    protected function getSource(): array
     {
-        return isset($this->source) ? $this->source : null;
+        return $this->notFromRequest ? $this->source : request()->all();
     }
 }
