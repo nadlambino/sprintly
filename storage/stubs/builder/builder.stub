@@ -1,0 +1,35 @@
+<?php
+
+namespace {{namespace}};
+
+use App\Models\{{model}};
+use App\QueryBuilders\Builder as BaseBuilder;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use NadLambino\QueryBuilder\AllowedFilter;
+use NadLambino\QueryBuilder\QueryBuilder;
+
+class {{class}}
+{
+    use BaseBuilder;
+
+    public function of(Authenticatable|Model $owner): static
+    {
+        $this->builder = $owner->{{relation}}();
+
+        return $this;
+    }
+
+    public function build(): QueryBuilder
+    {
+        $builder = isset($this->builder) ? $this->builder : {{model}}::query();
+
+        return QueryBuilder::for($builder, $this->getSource())
+            ->allowedFilters([
+                AllowedFilter::exact('id')
+            ])
+            ->allowedIncludes([])
+            ->defaultSort('id')
+            ->allowedSorts(['id']);
+    }
+}
