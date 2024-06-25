@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\WithApiResponse;
 use App\Http\Requests\Api\PriorityLevel\CreateRequest;
-use App\Http\Requests\PriorityLevel\UpdateRequest;
+use App\Http\Requests\Api\PriorityLevel\UpdateRequest;
 use App\Models\PriorityLevel;
 use App\QueryBuilders\PriorityLevel\PriorityLevelBuilder;
 use Exception;
