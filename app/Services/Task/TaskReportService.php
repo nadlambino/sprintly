@@ -21,9 +21,10 @@ final class TaskReportService
     {
         return once(fn () => TaskBuilder::make()
             ->of($this->user)
-            ->source([])
+            ->filters([
+                'published' => true
+            ])
             ->build()
-            ->published()
             ->whereHas('status')
             ->count()
         );
@@ -47,10 +48,10 @@ final class TaskReportService
         return once(fn () => TaskBuilder::make()
             ->of($this->user)
             ->filters([
+                'published' => true,
                 'ended_at_between' => [$this->startOfWeek, $this->endOfWeek]
             ])
             ->build()
-            ->published()
             ->whereHas('status')
             ->selectRaw('SUM(TIMESTAMPDIFF(HOUR, started_at, ended_at)) as time_spent')
             ->first()
@@ -65,12 +66,12 @@ final class TaskReportService
             $end = clone $this->endOfWeek;
 
             return TaskBuilder::make()
+                ->of($this->user)
                 ->filters([
+                    'published' => true,
                     'ended_at_between' => [$start->subWeek(), $end->subWeek()]
                 ])
-                ->of($this->user)
                 ->build()
-                ->published()
                 ->whereHas('status')
                 ->selectRaw('SUM(TIMESTAMPDIFF(HOUR, started_at, ended_at)) as time_spent')
                 ->first()
@@ -83,10 +84,10 @@ final class TaskReportService
         return once(fn () => TaskBuilder::make()
             ->of($this->user)
             ->filters([
+                'published' => true,
                 'ended_at_between' => [$this->startOfWeek, $this->endOfWeek]
             ])
             ->build()
-            ->published()
             ->whereHas('status')
             ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, started_at, ended_at)) as time_spent')
             ->first()
@@ -103,10 +104,10 @@ final class TaskReportService
             return TaskBuilder::make()
                 ->of($this->user)
                 ->filters([
+                    'published' => true,
                     'ended_at_between' => [$start->subWeek(), $end->subWeek()]
                 ])
                 ->build()
-                ->published()
                 ->whereHas('status')
                 ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, started_at, ended_at)) as time_spent')
                 ->first()
