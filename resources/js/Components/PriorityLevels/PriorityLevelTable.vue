@@ -42,7 +42,7 @@ const { data, isRequesting, isEmpty, destroy, refetch } = usePriorityLevelApi();
             <div class="flex gap-2">
                 <Link v-if="editable" :href="route('priority-levels.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white uppercase text-xs font-bold py-1 px-2 rounded">Edit</Link>
                 <ConfirmButton
-                    v-if="deletable"
+                    v-if="deletable && !row.is_default"
                     message="Are you sure you want to delete this?"
                     @confirm="() => destroy(row.id).then(refetch)"
                     class="bg-red-500 hover:bg-red-400 text-white uppercase text-xs font-bold py-1 px-2 rounded">

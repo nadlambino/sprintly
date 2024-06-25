@@ -33,6 +33,8 @@ const form = useForm({
     score: props.priorityLevel?.score || 1
 });
 
+const isDefault = computed(() => props.priorityLevel?.is_default && ! isNew.value || false);
+
 const success = ref(false);
 const message = ref(null);
 const errors = ref({});
@@ -50,6 +52,10 @@ const submit = async () => {
         return await create(data)
             .then(then)
             .catch(error);
+    }
+
+    if (isDefault.value) {
+        delete data.name;
     }
 
     return await update(data.id, data)
@@ -102,6 +108,7 @@ const error = (error) => {
                                 minlength="3"
                                 maxlength="50"
                                 required
+                                :disabled="isDefault"
                             />
                             <InputError v-for="error in errors?.name || []" :message="error" />
                         </div>

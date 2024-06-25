@@ -36,7 +36,12 @@ class PriorityLevelController extends Controller
 
     public function update(UpdateRequest $request, PriorityLevel $priorityLevel)
     {
-        $priorityLevel->update($request->validated());
+        $data = $request->validated();
+        if ($priorityLevel->is_default) {
+            unset($data['name']);
+        }
+
+        $priorityLevel->update($data);
 
         return $this->success('Priority level updated successfully.', $priorityLevel);
     }

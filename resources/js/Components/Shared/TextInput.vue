@@ -27,7 +27,7 @@ defineExpose({ focus: () => input.value.focus() });
 <template>
     <textarea
         v-if="type === 'textarea'"
-        class="border-gray-300 focus:border-primary focus:ring-primary rounded-md shadow-sm"
+        class="border-gray-300 focus:border-primary focus:ring-primary rounded-md shadow-sm disabled:cursor-not-allowed disabled:bg-gray-100"
         rows="5"
         v-model="model"
         ref="input"
@@ -35,7 +35,7 @@ defineExpose({ focus: () => input.value.focus() });
     <input
         v-else
         :type="type"
-        class="border-gray-300 focus:border-primary focus:ring-primary rounded-md shadow-sm"
+        class="border-gray-300 focus:border-primary focus:ring-primary rounded-md shadow-sm disabled:cursor-not-allowed disabled:bg-gray-100"
         v-model="model"
         ref="input"
     />
