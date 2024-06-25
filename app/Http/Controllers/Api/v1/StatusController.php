@@ -93,10 +93,14 @@ class StatusController extends Controller
         }
     }
 
-    public function forceDelete(int $id)
+    public function forceDelete(int $id, Request $request)
     {
         try {
-            $status = Status::onlyTrashed()->findOrFail($id);
+            $status = StatusBuilder::make()
+                ->of($request->user())
+                ->filters(['trashed' => true])
+                ->build()
+                ->findOrFail($id);
 
             Gate::authorize('forceDelete', $status);
 
@@ -108,10 +112,14 @@ class StatusController extends Controller
         }
     }
 
-    public function restore(int $id)
+    public function restore(int $id, Request $request)
     {
         try {
-            $status = Status::onlyTrashed()->findOrFail($id);
+            $status = StatusBuilder::make()
+                ->of($request->user())
+                ->filters(['trashed' => true])
+                ->build()
+                ->findOrFail($id);
 
             Gate::authorize('restore', $status);
 
