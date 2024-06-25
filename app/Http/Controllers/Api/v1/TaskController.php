@@ -118,9 +118,9 @@ class TaskController extends Controller
             $published = filter_var($request->get('publish'), FILTER_VALIDATE_BOOL);
 
             $data['published_at'] = match(true) {
-                ! $request->has('publish') => $task->published_at,
-                $request->has('publish') && $published => now(),
-                $request->has('publish') && ! $published => null,
+                $request->has('publish') && $published && ! $task->published_at => now(),
+                $request->has('publish') && ! $published && $task->published_at => null,
+                default                                                         => $task->published_at,
             };
 
             Task::deletePreviousUploads(filter_var($request->get('replace_images', false), FILTER_VALIDATE_BOOL));
@@ -181,12 +181,18 @@ class TaskController extends Controller
      * Restore task.
      *
      * @param int $id
+     * @param Request $request
      * @return JsonResponse
      */
-    public function restore(int $id): JsonResponse
+    public function restore(int $id, Request $request): JsonResponse
     {
         try {
-            $task = Task::onlyTrashed()->findOrFail($id);
+            $task = TaskBuilder::make()
+                ->of($request->user())
+                ->filters(['id' => $id])
+                ->build()
+                ->onlyTrashed()
+                ->firstOrFail();
 
             Gate::authorize('restore', $task);
 

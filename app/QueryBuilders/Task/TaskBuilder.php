@@ -33,6 +33,7 @@ class TaskBuilder
         return QueryBuilder::for($builder, $this->getSource())
             ->allowedFilters([
                 'title',
+                AllowedFilter::exact('id'),
                 AllowedFilter::exact('parent_id'),
                 AllowedFilter::exact('status_id'),
                 AllowedFilter::custom('search', new SearchFilter),
