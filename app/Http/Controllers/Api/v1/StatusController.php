@@ -57,23 +57,27 @@ class StatusController extends Controller
 
     public function sort(SortRequest $request, Status $status)
     {
-        try {
-            $newOrder = $request->validated('new_order');
-            $oldOrder = $status->order;
+        $newOrder = $request->validated('new_order');
+        $oldOrder = $status->order;
 
-            if ($oldOrder < $newOrder) {
-                Status::whereBetween('order', [$oldOrder, $newOrder])->decrement('order');
-            } else {
-                Status::whereBetween('order', [$newOrder, $oldOrder])->increment('order');
-            }
-
-            $status->order = $newOrder;
-            $status->save();
-
-            return $this->success('Statuses were successfully sorted.', $status);
-        } catch (Exception) {
-            return $this->error('Something went wrong while sorting the statuses. Please try again later.');
+        if ($oldOrder < $newOrder) {
+            StatusBuilder::make()
+                ->of($request->user())
+                ->filters(['order_between' => [$oldOrder, $newOrder]])
+                ->build()
+                ->decrement('order');
+        } else {
+            StatusBuilder::make()
+                ->of($request->user())
+                ->filters(['order_between' => [$newOrder, $oldOrder]])
+                ->build()
+                ->increment('order');
         }
+
+        $status->order = $newOrder;
+        $status->save();
+
+        return $this->success('Statuses were successfully sorted.', $status);
     }
 
     public function destroy(Status $status)
