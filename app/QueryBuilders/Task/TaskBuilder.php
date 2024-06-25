@@ -3,7 +3,7 @@
 namespace App\QueryBuilders\Task;
 
 use App\Models\Task;
-use App\QueryBuilders\Builder as QueryBuildersBuilder;
+use App\QueryBuilders\Builder as BaseBuilder;
 use App\QueryBuilders\Filters\TrashedFilter;
 use App\QueryBuilders\Task\Filters\EndAtBetweenFilter;
 use App\QueryBuilders\Task\Filters\ExceptFilter;
@@ -17,7 +17,7 @@ use NadLambino\QueryBuilder\QueryBuilder;
 
 class TaskBuilder
 {
-    use QueryBuildersBuilder;
+    use BaseBuilder;
 
     public function of(Authenticatable|Model $owner): static
     {
