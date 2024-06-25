@@ -8,13 +8,10 @@ use App\Http\Requests\Api\Status\CreateRequest;
 use App\Http\Requests\Api\Status\SortRequest;
 use App\Http\Requests\Api\Status\UpdateRequest;
 use App\Models\Status;
-use App\QueryBuilders\Filters\TrashedFilter;
-use App\QueryBuilders\Status\Filters\SearchFilter;
+use App\QueryBuilders\Status\StatusBuilder;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use NadLambino\QueryBuilder\AllowedFilter;
-use NadLambino\QueryBuilder\QueryBuilder;
 
 class StatusController extends Controller
 {
@@ -22,20 +19,12 @@ class StatusController extends Controller
 
     public function index(Request $request)
     {
-        try {
-            $statuses = QueryBuilder::for($request->user()->statuses())
-                ->allowedFilters([
-                    AllowedFilter::custom('search', new SearchFilter),
-                    AllowedFilter::custom('trashed', new TrashedFilter),
-                ])
-                ->defaultSort('order')
-                ->allowedSorts(['order', 'created_at', 'name'])
-                ->get();
+        $statuses = StatusBuilder::make()
+            ->of($request->user())
+            ->build()
+            ->get();
 
-            return $this->success('Statuses retrieved successfully.', $statuses);
-        } catch (Exception) {
-            return $this->error('Something went wrong while retrieving the statuses. Please try again later.');
-        }
+        return $this->success('Statuses retrieved successfully.', $statuses);
     }
 
     public function store(CreateRequest $request)
