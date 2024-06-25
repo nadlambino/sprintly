@@ -18,7 +18,7 @@ class CreateBuilderFilterClass extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Creates a builder filter class.';
+    protected $description = 'Create a new builder filter class.';
 
     protected function getStub()
     {
