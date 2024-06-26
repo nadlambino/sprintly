@@ -27,7 +27,7 @@ class TaskController extends Controller
             $tasks = TaskBuilder::make()
                 ->of($request->user())
                 ->build()
-                ->selectRaw('tasks.*, (TIMESTAMPDIFF(MINUTE, tasks.started_at, tasks.ended_at) / 60) as time_spent')
+                ->timeSpent()
                 ->whereHas('status')
                 ->paginate($request->get('per_page', 10));
 
@@ -71,19 +71,10 @@ class TaskController extends Controller
     public function metrics(Request $request): TaskReportResource
     {
         try {
-            $reports = new ReportService($request->user());
-
-            return (new TaskReportResource([
-                'total' => $reports->getTotalPublished(),
-                'metrics' => $reports->getTotalPerStatus(),
-                'total_hours_spent_this_week' => $reports->getTotalHoursSpentThisWeek(),
-                'total_hours_spent_last_week' => $reports->getTotalHoursSpentLastWeek(),
-                'average_hours_spent_this_week' => $reports->getAverageHoursSpentThisWeek(),
-                'average_hours_spent_last_week' => $reports->getAverageHoursSpentLastWeek(),
-                'speed_comparison' => $reports->getSpeedSummary()
-            ]))->additional([
-                'message' => 'Task reports retrieved successfully.',
-            ]);
+            return (new TaskReportResource(new ReportService($request->user())))
+                ->additional([
+                    'message' => 'Task reports retrieved successfully.',
+                ]);
         } catch (Exception $exception) {
             throw new ApiException(message: 'Error while retrieving reports', errors: [$exception->getMessage()]);
         }

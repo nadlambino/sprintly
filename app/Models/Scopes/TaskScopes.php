@@ -28,4 +28,9 @@ trait TaskScopes
                 ->orWhere('content', 'like', "%{$search}%");
         });
     }
+
+    public function scopeTimeSpent(Builder $query): Builder
+    {
+        return $query->selectRaw('tasks.*, (TIMESTAMPDIFF(MINUTE, tasks.started_at, tasks.ended_at) / 60) as time_spent');
+    }
 }
