@@ -25,6 +25,7 @@ trait Builder
 
     public function filters(array $filters): static
     {
+        $this->notFromRequest = true;
         $this->source['filter'] = $filters;
 
         return $this;
@@ -32,6 +33,7 @@ trait Builder
 
     public function includes(array $includes): static
     {
+        $this->notFromRequest = true;
         $this->source['include'] = implode(',', $includes);
 
         return $this;
@@ -39,6 +41,7 @@ trait Builder
 
     public function sort(string $sort): static
     {
+        $this->notFromRequest = true;
         $this->source['sort'] = $sort;
 
         return $this;
