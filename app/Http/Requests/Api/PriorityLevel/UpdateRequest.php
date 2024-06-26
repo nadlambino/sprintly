@@ -30,4 +30,13 @@ class UpdateRequest extends FormRequest
             'color'       => ['sometimes', 'hex_color'],
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $priorityLevel = $this->route('priority_level');
+
+        if ($priorityLevel?->is_default) {
+            $this->offsetUnset('name');
+        }
+    }
 }
