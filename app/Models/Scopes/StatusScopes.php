@@ -14,7 +14,10 @@ trait StatusScopes
      */
     public function scopeNext(Builder $query): Builder
     {
-        return $query->where('order', '>', $this->order)->where('user_id', $this->user_id)->orderBy('order', 'asc')->limit(1);
+        return $query->where('order', '>', $this->order)
+            ->where('user_id', $this->user_id)
+            ->orderBy('order', 'asc')
+            ->limit(1);
     }
 
     public function scopeSearch(Builder $query, mixed $search): Builder

@@ -30,6 +30,7 @@ class StatusBuilder
         return QueryBuilder::for($builder, $this->getSource())
             ->allowedFilters([
                 AllowedFilter::exact('id'),
+                AllowedFilter::exact('name'),
                 AllowedFilter::custom('search', new SearchFilter),
                 AllowedFilter::custom('trashed', new TrashedFilter),
                 AllowedFilter::custom('order_between', new OrderBetweenFilter),
