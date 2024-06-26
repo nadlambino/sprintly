@@ -43,4 +43,18 @@ class CreateRequest extends FormRequest
             'images.*' => 'Image is unreadable. Please try a different image.',
         ];
     }
+
+    public function validated($key = null, $default = null)
+    {
+        $data = parent::validated($key, $default);
+
+        if (func_num_args() >= 1) {
+            return $data;
+        }
+
+        $publish = filter_var($this->get('publish', false), FILTER_VALIDATE_BOOL);
+        $data['published_at'] = $publish ? now() : null;
+
+        return $data;
+    }
 }

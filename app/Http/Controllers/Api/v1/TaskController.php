@@ -2,57 +2,50 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\WithApiResponse;
 use App\Http\Requests\Api\Tasks\CreateRequest;
 use App\Http\Requests\Api\Tasks\UpdateRequest;
+use App\Http\Resources\TaskReportResource;
 use App\Http\Resources\TaskResource;
-use App\Models\Status;
 use App\Models\Task;
 use App\QueryBuilders\Task\TaskBuilder;
 use App\Services\Task\ReportService;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Gate;
 
 class TaskController extends Controller
 {
     use WithApiResponse;
 
-    /**
-     * Get list of tasks.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): ResourceCollection
     {
-        $tasks = TaskBuilder::make()
-            ->of($request->user())
-            ->build()
-            ->selectRaw('tasks.*, (TIMESTAMPDIFF(MINUTE, tasks.started_at, tasks.ended_at) / 60) as time_spent')
-            ->whereHas('status')
-            ->paginate($request->get('per_page', 10));
+        try {
+            $tasks = TaskBuilder::make()
+                ->of($request->user())
+                ->build()
+                ->selectRaw('tasks.*, (TIMESTAMPDIFF(MINUTE, tasks.started_at, tasks.ended_at) / 60) as time_spent')
+                ->whereHas('status')
+                ->paginate($request->get('per_page', 10));
 
-        return $this->success(
-            'Tasks retrieved successfully.',
-            TaskResource::collection($tasks->all()),
-            [
-                'has_next_page' => $tasks->hasMorePages(),
-                'next_page' => $tasks->hasMorePages() ? intval($request->get('page', 1)) + 1 : null,
-                'total' => $tasks->total()
-            ]
-        );
+            return TaskResource::collection($tasks->all())
+                ->additional([
+                    'message' => 'Tasks retrieved successfully.',
+                    'metadata' => [
+                        'has_next_page' => $tasks->hasMorePages(),
+                        'next_page' => $tasks->hasMorePages() ? intval($request->get('page', 1)) + 1 : null,
+                        'total' => $tasks->total()
+                    ]
+                ]);
+        } catch (Exception $exception) {
+            throw new ApiException(message: 'Error while retrieving tasks', errors: [$exception->getMessage()]);
+        }
     }
 
-    /**
-     * Get list of tasks that are valid to be a parent.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function parents(Request $request): JsonResponse
+    public function parents(Request $request): ResourceCollection
     {
         try {
             $tasks = TaskBuilder::make()
@@ -61,76 +54,72 @@ class TaskController extends Controller
                 ->published()
                 ->paginate($request->get('per_page', 10));
 
-            return $this->success('Tasks retrieved successfully.', $tasks->all());
-        } catch (Exception) {
-            return $this->error('Something went wrong while retrieving the tasks. Please try again later.');
+            return TaskResource::collection($tasks->all())
+                ->additional([
+                    'message' => 'Parent tasks retrieved successfully.',
+                    'metadata' => [
+                        'has_next_page' => $tasks->hasMorePages(),
+                        'next_page' => $tasks->hasMorePages() ? intval($request->get('page', 1)) + 1 : null,
+                        'total' => $tasks->total()
+                    ]
+                ]);
+        } catch (Exception $exception) {
+            throw new ApiException(message: 'Error while retrieving parent tasks', errors: [$exception->getMessage()]);
         }
     }
 
-    public function metrics(Request $request)
-    {
-        $reports = new ReportService($request->user());
-
-        return $this->success('Tasks metrics successfully retrieved.', [
-            'total' => $reports->getTotalPublished(),
-            'metrics' => $reports->getTotalPerStatus(),
-            'total_hours_spent_this_week' => $reports->getTotalHoursSpentThisWeek(),
-            'total_hours_spent_last_week' => $reports->getTotalHoursSpentLastWeek(),
-            'average_hours_spent_this_week' => $reports->getAverageHoursSpentThisWeek(),
-            'average_hours_spent_last_week' => $reports->getAverageHoursSpentLastWeek(),
-            'speed_comparison' => $reports->getSpeedSummary(),
-        ]);
-    }
-
-    /**
-     * Store new task.
-     *
-     * @param CreateRequest $request
-     * @return JsonResponse
-     */
-    public function store(CreateRequest $request): JsonResponse
+    public function metrics(Request $request): TaskReportResource
     {
         try {
-            $data = $request->validated();
-            $publish = filter_var($request->get('publish', false), FILTER_VALIDATE_BOOL);
-            $data['published_at'] = $publish ? now() : null;
+            $reports = new ReportService($request->user());
 
-            $task = $request->user()->tasks()->create($data);
-
-            return $this->success('Task was successfully created.', $task, status: 201);
-        } catch (Exception) {
-            return $this->error('Something went wrong while creating the task. Please try again later.');
+            return (new TaskReportResource([
+                'total' => $reports->getTotalPublished(),
+                'metrics' => $reports->getTotalPerStatus(),
+                'total_hours_spent_this_week' => $reports->getTotalHoursSpentThisWeek(),
+                'total_hours_spent_last_week' => $reports->getTotalHoursSpentLastWeek(),
+                'average_hours_spent_this_week' => $reports->getAverageHoursSpentThisWeek(),
+                'average_hours_spent_last_week' => $reports->getAverageHoursSpentLastWeek(),
+                'speed_comparison' => $reports->getSpeedSummary()
+            ]))->additional([
+                'message' => 'Task reports retrieved successfully.',
+            ]);
+        } catch (Exception $exception) {
+            throw new ApiException(message: 'Error while retrieving reports', errors: [$exception->getMessage()]);
         }
     }
 
-    /**
-     * Update task.
-     *
-     * @param UpdateRequest $request
-     * @param Task $task
-     * @param Status $status
-     * @return JsonResponse
-     */
-    public function update(UpdateRequest $request, Task $task): JsonResponse
+    public function store(CreateRequest $request): TaskResource
+    {
+        try {
+            $task = $request->user()->tasks()->create($request->validated());
+
+            return (new TaskResource($task))
+                ->additional([
+                    'message' => 'Task was successfully created.',
+                ]);
+        } catch (Exception $exception) {
+            throw new ApiException(message: 'Error while creating task', errors: [$exception->getMessage()]);
+        }
+    }
+
+    public function update(UpdateRequest $request, Task $task): TaskResource
     {
         try {
             Task::deletePreviousUploads(filter_var($request->get('replace_images', false), FILTER_VALIDATE_BOOL));
 
             $task->update($request->validated());
 
-            return $this->success('Task was successfully updated.', $task);
-        } catch (Exception) {
-            return $this->error('Something went wrong while updating the task. Please try again later.');
+            return (new TaskResource($task))
+                ->additional([
+                    'message' => 'Task was successfully updated.',
+                ]);
+        } catch (Exception $exception) {
+            throw new ApiException(message: 'Error while updating task', errors: [$exception->getMessage()]);
         }
     }
 
-    /**
-     * Update task status.
-     *
-     * @param Task $task
-     * @return JsonResponse
-     */
-    public function progress(Task $task): JsonResponse
+    public function progress(Task $task): TaskResource
     {
         try {
             Gate::authorize('update', $task);
@@ -138,44 +127,40 @@ class TaskController extends Controller
             $nextStatus = $task->status->next()->first();
 
             if (! $nextStatus) {
-                return $this->success('Task is already on its final status.', $task);
+                return (new TaskResource($task))
+                    ->additional([
+                        'message' => 'Task is already at the last status.',
+                    ]);
             }
 
             $task->update(['status_id' => $nextStatus->id]);
 
-            return $this->success('Task was successfully updated.', $task);
-        } catch (Exception) {
-            return $this->error('Something went wrong while updating the task. Please try again later.');
+            return (new TaskResource($task))
+                ->additional([
+                    'message' => 'Task was successfully progressed.',
+                ]);
+        } catch (Exception $exception) {
+            throw new ApiException(message: 'Error while progressing task', errors: [$exception->getMessage()]);
         }
     }
 
-    /**
-     * Delete task.
-     *
-     * @param Task $task
-     * @return JsonResponse
-     */
-    public function destroy(Task $task): JsonResponse
+    public function destroy(Task $task): TaskResource
     {
         try {
             Gate::authorize('delete', $task);
 
             $task->delete();
 
-            return $this->success('Task was successfully deleted.');
-        } catch (Exception) {
-            return $this->error('Something went wrong while deleting the task. Please try again later.');
+            return (new TaskResource($task))
+                ->additional([
+                    'message' => 'Task was successfully deleted.',
+                ]);
+        } catch (Exception $exception) {
+            throw new ApiException(message: 'Error while deleting task', errors: [$exception->getMessage()]);
         }
     }
 
-    /**
-     * Restore task.
-     *
-     * @param int $id
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function restore(int $id, Request $request): JsonResponse
+    public function restore(int $id, Request $request): TaskResource
     {
         try {
             $task = TaskBuilder::make()
@@ -189,9 +174,12 @@ class TaskController extends Controller
 
             $task->restore();
 
-            return $this->success('Task was successfully restored.');
-        } catch (Exception) {
-            return $this->error('Something went wrong while restoring the task. Please try again later.');
+            return (new TaskResource($task))
+                ->additional([
+                    'message' => 'Task was successfully restored.',
+                ]);
+        } catch (Exception $exception) {
+            throw new ApiException(message: 'Error while restoring task', errors: [$exception->getMessage()]);
         }
     }
 }
