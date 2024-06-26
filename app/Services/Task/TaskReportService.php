@@ -6,7 +6,7 @@ use App\Models\User;
 use App\QueryBuilders\Task\TaskBuilder;
 use Carbon\Carbon;
 
-final class TaskReportService
+final class ReportService
 {
     protected Carbon $startOfWeek;
     protected Carbon $endOfWeek;
