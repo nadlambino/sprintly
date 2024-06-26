@@ -42,4 +42,24 @@ class UpdateRequest extends FormRequest
             'images.*' => 'Image is unreadable. Please try a different image.',
         ];
     }
+
+    public function validated($key = null, $default = null)
+    {
+        $data = parent::validated($key, $default);
+
+        if (func_num_args() >= 1) {
+            return $data;
+        }
+
+        $published = filter_var($this->get('publish'), FILTER_VALIDATE_BOOL);
+        $task = $this->route('task');
+
+        $data['published_at'] = match(true) {
+            $this->has('publish') && $published && ! $task->published_at => now(),
+            $this->has('publish') && ! $published && $task->published_at => null,
+            default                                                      => $task->published_at,
+        };
+
+        return $data;
+    }
 }

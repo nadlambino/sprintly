@@ -114,18 +114,9 @@ class TaskController extends Controller
     public function update(UpdateRequest $request, Task $task): JsonResponse
     {
         try {
-            $data = array_filter($request->validated());
-            $published = filter_var($request->get('publish'), FILTER_VALIDATE_BOOL);
-
-            $data['published_at'] = match(true) {
-                $request->has('publish') && $published && ! $task->published_at => now(),
-                $request->has('publish') && ! $published && $task->published_at => null,
-                default                                                         => $task->published_at,
-            };
-
             Task::deletePreviousUploads(filter_var($request->get('replace_images', false), FILTER_VALIDATE_BOOL));
 
-            $task->update($data);
+            $task->update($request->validated());
 
             return $this->success('Task was successfully updated.', $task);
         } catch (Exception) {
