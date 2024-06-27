@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Task;
 
+use App\Exceptions\ApiException;
 use App\Rules\Status\OwnedBy;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -34,11 +35,15 @@ class TransitionRequest extends FormRequest
         $task = $this->route('task');
 
         $statusId = match (true) {
-            $this->get('status_id')                => $this->get('status_id'),
+            ! is_null($this->get('status_id'))     => $this->get('status_id'),
             $this->get('direction') === 'forward'  => $task->status->next()->first()?->id,
             $this->get('direction') === 'backward' => $task->status->previous()->first()?->id,
             default                                => null,
         };
+
+        if (! $statusId) {
+            throw new ApiException('Failed to validate the appropriate status');
+        }
 
         $this->getInputSource()->replace([
             'status_id' => $statusId

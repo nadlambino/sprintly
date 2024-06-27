@@ -115,19 +115,14 @@ class TaskController extends Controller
     {
         try {
             $statusId = $request->validated('status_id');
-
-            if (! $statusId) {
-                throw new ApiException('Failed to validate the appropriate status');
-            }
-
             $task->update(['status_id' => $statusId]);
 
             return (new TaskResource($task))
                 ->additional([
-                    'message' => 'Task was successfully progressed.',
+                    'message' => 'Task was successfully transitioned.',
                 ]);
         } catch (Exception $exception) {
-            throw new ApiException(message: 'Error while progressing task', errors: [$exception->getMessage()]);
+            throw new ApiException(message: 'Error while transitioning a task', errors: [$exception->getMessage()]);
         }
     }
 

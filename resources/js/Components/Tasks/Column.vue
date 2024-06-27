@@ -32,7 +32,7 @@ const {
     isEmpty,
     hasNextPage,
     next,
-    update,
+    transition,
     refetch
  } = await useTaskApi({
     status_id: props.statusId,
@@ -66,7 +66,7 @@ const move = async (event) => {
         return;
     };
 
-    update(id, { status_id: currentStatus })
+    transition(id, { status_id: currentStatus })
         .then(() => emits('rerender', previousStatus, currentStatus))
         .finally(() => event?.item?.remove());
 
