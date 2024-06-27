@@ -110,7 +110,6 @@ const timespent = useTimeSpent();
         </template>
         <template #actions="{ row }">
             <div class="flex gap-2">
-                <Link v-if="editable" :href="route('tasks.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white text-xs py-1 px-2 rounded">Edit</Link>
                 <ConfirmButton
                      class="bg-slate-500 hover:bg-slate-400 text-white text-xs py-1 px-2 rounded"
                      message="Are you sure you want to progress this?"
@@ -125,6 +124,7 @@ const timespent = useTimeSpent();
                      @confirm="() => transition(row.id, { direction: 'forward' }).then(refetch)" >
                      Forward
                 </ConfirmButton>
+                <Link v-if="editable" :href="route('tasks.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white text-xs py-1 px-2 rounded">Edit</Link>
                 <ConfirmButton
                     v-if="publishable"
                     class="bg-green-500 hover:bg-green-400 text-white text-xs py-1 px-2 rounded"
