@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Api\v1;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\WithApiResponse;
-use App\Http\Requests\Api\Tasks\CreateRequest;
-use App\Http\Requests\Api\Tasks\UpdateRequest;
+use App\Http\Requests\Api\Task\CreateRequest;
+use App\Http\Requests\Api\Task\TransitionRequest;
+use App\Http\Requests\Api\Task\UpdateRequest;
 use App\Http\Resources\TaskReportResource;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
@@ -110,21 +111,16 @@ class TaskController extends Controller
         }
     }
 
-    public function progress(Task $task): TaskResource
+    public function transition(TransitionRequest $request, Task $task): TaskResource
     {
         try {
-            Gate::authorize('update', $task);
+            $statusId = $request->validated('status_id');
 
-            $nextStatus = $task->status->next()->first();
-
-            if (! $nextStatus) {
-                return (new TaskResource($task))
-                    ->additional([
-                        'message' => 'Task is already at the last status.',
-                    ]);
+            if (! $statusId) {
+                throw new ApiException('Failed to validate the appropriate status');
             }
 
-            $task->update(['status_id' => $nextStatus->id]);
+            $task->update(['status_id' => $statusId]);
 
             return (new TaskResource($task))
                 ->additional([

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api\Tasks;
+namespace App\Http\Requests\Api\Task;
 
 use App\Rules\Task\ValidPriorityLevel;
 use App\Rules\Tasks\ValidParent;

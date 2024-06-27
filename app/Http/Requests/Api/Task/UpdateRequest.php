@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Api\Tasks;
+namespace App\Http\Requests\Api\Task;
 
+use App\Rules\Status\OwnedBy;
 use App\Rules\Tasks\ValidParent;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -27,7 +28,7 @@ class UpdateRequest extends FormRequest
             'parent_id' => ['sometimes', 'nullable', new ValidParent],
             'title'     => ['sometimes', 'min:3', 'max:100'],
             'content'   => ['sometimes', 'max:10000'],
-            'status_id' => ['sometimes', 'exists:statuses,id'],
+            'status_id' => ['sometimes', new OwnedBy($this->user())],
             'start_at'  => ['sometimes', 'nullable', 'date'],
             'due_at'    => ['sometimes', 'nullable', 'date', 'after:start_at'],
             'images'    => ['array'],

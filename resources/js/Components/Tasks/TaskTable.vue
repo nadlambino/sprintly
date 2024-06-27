@@ -78,7 +78,7 @@ const {
     destroy,
     restore,
     update,
-    progress
+    transition
 } = await useTaskApi({
     status: props.status || taskStore.status,
     search: props.search || taskStore.search,
@@ -112,11 +112,18 @@ const timespent = useTimeSpent();
             <div class="flex gap-2">
                 <Link v-if="editable" :href="route('tasks.edit', row.id)" class="bg-primary hover:bg-primary/80 text-white text-xs py-1 px-2 rounded">Edit</Link>
                 <ConfirmButton
-                     class="bg-yellow-500 hover:bg-yellow-400 text-white text-xs py-1 px-2 rounded"
+                     class="bg-slate-500 hover:bg-slate-400 text-white text-xs py-1 px-2 rounded"
                      message="Are you sure you want to progress this?"
-                     v-if="progressible && row.is_progressible"
-                     @confirm="() => progress(row.id, { progress: true }).then(refetch)" >
-                     Progress
+                     v-if="progressible && row.can_move_backward"
+                     @confirm="() => transition(row.id, { direction: 'backward' }).then(refetch)" >
+                     Backward
+                </ConfirmButton>
+                <ConfirmButton
+                     class="bg-slate-500 hover:bg-slate-400 text-white text-xs py-1 px-2 rounded"
+                     message="Are you sure you want to progress this?"
+                     v-if="progressible && row.can_move_forward"
+                     @confirm="() => transition(row.id, { direction: 'forward' }).then(refetch)" >
+                     Forward
                 </ConfirmButton>
                 <ConfirmButton
                     v-if="publishable"

@@ -140,15 +140,16 @@ export function useTaskApi(params = {}) {
     }
 
     /**
-     * Request to progress a task
+     * Request to transition a task
      *
      * @param {string|number} id
+     * @param {object|FormData} data
      * @param {object} headers
      * @returns {Promise}
      */
-    const progress = (id, headers) => {
+    const transition = (id, data, headers) => {
         return window.axios
-            .put(route('api.tasks.progress', { task: id }), {}, { headers });
+            .put(route('api.tasks.transition', { task: id }), { ...data, _method: 'PUT' }, { headers });
     }
 
     /**
@@ -198,7 +199,7 @@ export function useTaskApi(params = {}) {
         getMetrics,
         create,
         update,
-        progress,
+        transition,
         destroy,
         restore,
         getParents

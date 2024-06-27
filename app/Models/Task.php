@@ -33,6 +33,7 @@ class Task extends Model
 
     protected $appends = [
         'can_move_forward',
+        'can_move_backward',
     ];
 
     protected function casts(): array
@@ -57,6 +58,11 @@ class Task extends Model
     public function getCanMoveForwardAttribute(): bool
     {
         return $this->status?->next()->exists() ?: false;
+    }
+
+    public function getCanMoveBackwardAttribute(): bool
+    {
+        return $this->status?->previous()->exists() ?: false;
     }
 
     /**
