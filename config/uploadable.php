@@ -2,69 +2,115 @@
 
 return [
 
-    /**
-     * Run the package's own validation rules.
-     * You can set this to false if you want to use your own validation rules
-     * or if you've already validated your uploads from your request.
-     */
-    'validate' => false,
+    /*
+    |--------------------------------------------------------------------------
+    | Validation
+    |--------------------------------------------------------------------------
+    |
+    | Enable or disable the package's validation rules. Set to false if validation
+    | has been performed separately, such as in a form request.
+    |
+    */
+    'validate' => true,
 
-    /**
-     * Delete the uploadable model when the upload fails.
-     * This will only work for models that are just created.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Delete Model on Upload Failure
+    |--------------------------------------------------------------------------
+    |
+    | Automatically delete the newly created model if the upload process fails.
+    | Applicable only to models that are being created.
+    |
+    */
     'delete_model_on_upload_fail' => true,
 
-    /**
-     * Rollback the changes made to the uploadable model when the upload fails.
-     * This will only work for models that are to be updated.
-     * It will update the model with the original attributes.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Rollback Model on Upload Failure
+    |--------------------------------------------------------------------------
+    |
+    | Revert changes made to an existing model if the upload fails, restoring
+    | the model's original attributes. Applies only to updated models.
+    |
+    */
     'rollback_model_on_upload_fail' => true,
 
-    /**
-     * By default, uploads are soft deleted.
-     * Force delete all the uploads associated to the uploadable model when it's deleted.
-     * When this is set to true, the uploaded file will also be deleted, otherwise, it will be kept for model restoration.
-     */
-    'force_delete_uploads' => true,
+    /*
+    |--------------------------------------------------------------------------
+    | Force Delete Uploads
+    |--------------------------------------------------------------------------
+    |
+    | Determines whether uploaded files are permanently deleted. By default,
+    | files are soft deleted, allowing for recovery.
+    |
+    */
+    'force_delete_uploads' => false,
 
-    /**
-     * All previous uploads will be deleted after the new uploads are saved.
-     * This is to replace the old uploads with the new ones.
-     */
-    'delete_previous_uploads' => false,
+    /*
+    |--------------------------------------------------------------------------
+    | Replace Previous Uploads
+    |--------------------------------------------------------------------------
+    |
+    | Determines whether uploaded files should be replaced with new ones. If
+    | false, new files will be uploaded. If true, previous files will be
+    | deleted once the new ones are uploaded.
+    |
+    */
+    'replace_previous_uploads' => false,
 
-    /**
-     * The queue to use when uploading files.
-     * If null, the upload will not be queued.
-     */
-    'upload_on_queue_using' => null,
+    /*
+    |--------------------------------------------------------------------------
+    | Upload Queue
+    |--------------------------------------------------------------------------
+    |
+    | Specify the queue name for uploading files. If set to null, uploads are
+    | processed immediately. Otherwise, files are queued and processed.
+    |
+    */
+    'upload_on_queue' => null,
 
-    /**
-     * Delete the uploadable model when the upload fails and the upload process is queued.
-     * This will only work for models that are just created.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Delete Model on Queued Upload Failure
+    |--------------------------------------------------------------------------
+    |
+    | Delete the newly created model if a queued upload fails. Only affects models
+    | that are being created.
+    |
+    */
     'delete_model_on_queue_upload_fail' => false,
 
-    /**
-     * Rollback the changes made to the uploadable model when the upload fails and the upload process is queued.
-     * This will only work for models that are to be updated.
-     * It will update the model with the original attributes.
-     * Note that the original attributes are gotten from the model before the upload process is started.
-     * So, if the model was updated after the upload process was queued, those changes will be overwritten
-     * by these original attributes.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Rollback Model on Queued Upload Failure
+    |--------------------------------------------------------------------------
+    |
+    | Revert changes to a model if a queued upload fails, using the model's original
+    | attributes before the upload started. Affects only updated models.
+    |
+    */
     'rollback_model_on_queue_upload_fail' => false,
 
-    /**
-     * The disk to use to store the files temporarily when upload process is queued.
-     */
-    'temp_disk' => 'local',
+    /*
+    |--------------------------------------------------------------------------
+    | Temporary Storage Disk
+    |--------------------------------------------------------------------------
+    |
+    | Define the disk for temporary file storage during queued uploads. This
+    | is where files are stored before being processed.
+    |
+    */
+    'temporary_disk' => 'local',
 
-    /**
-     * The mime types allowed for the uploads.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Allowed Mime Types
+    |--------------------------------------------------------------------------
+    |
+    | Specify the mime types allowed for uploads. Supports categorization
+    | for images, videos, and documents with specific file extensions.
+    |
+    */
     'mimes' => [
         'image' => ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'svg', 'webp'],
         'video' => ['mp4', 'avi', 'mov', 'wmv', 'flv', '3gp', 'mkv'],

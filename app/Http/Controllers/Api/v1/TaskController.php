@@ -98,7 +98,7 @@ class TaskController extends Controller
     public function update(UpdateRequest $request, Task $task): TaskResource
     {
         try {
-            Task::deletePreviousUploads(filter_var($request->get('replace_images', false), FILTER_VALIDATE_BOOL));
+            Task::replacePreviousUploads(filter_var($request->get('replace_images', false), FILTER_VALIDATE_BOOL));
 
             $task->update($request->validated());
 

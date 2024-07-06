@@ -11,7 +11,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "nadlambino/laravel-query-builder": "7.0.1",
-        "nadlambino/uploadable": "^0.6.1",
+        "nadlambino/uploadable": "^v1.0.0",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

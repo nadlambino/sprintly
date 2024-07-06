@@ -10,15 +10,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use NadLambino\Uploadable\Models\Traits\HasUpload;
+use NadLambino\Uploadable\Concerns\Uploadable;
 
 #[ObservedBy(TaskObserver::class)]
 class Task extends Model
 {
     use HasFactory;
-    use HasUpload;
     use SoftDeletes;
     use TaskScopes;
+    use Uploadable;
 
     protected $fillable = [
         'parent_id',
