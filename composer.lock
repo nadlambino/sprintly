@@ -2139,16 +2139,16 @@
         },
         {
             "name": "nadlambino/uploadable",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nadlambino/laravel-uploadable.git",
-                "reference": "66ad2760271a24289af356ca39bb66bee939b34e"
+                "reference": "3da82a6ff813265832ea7e3d08a74f4a0939c508"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nadlambino/laravel-uploadable/zipball/66ad2760271a24289af356ca39bb66bee939b34e",
-                "reference": "66ad2760271a24289af356ca39bb66bee939b34e",
+                "url": "https://api.github.com/repos/nadlambino/laravel-uploadable/zipball/3da82a6ff813265832ea7e3d08a74f4a0939c508",
+                "reference": "3da82a6ff813265832ea7e3d08a74f4a0939c508",
                 "shasum": ""
             },
             "require": {
@@ -2205,7 +2205,7 @@
             ],
             "support": {
                 "issues": "https://github.com/nadlambino/laravel-uploadable/issues",
-                "source": "https://github.com/nadlambino/laravel-uploadable/tree/v1.0.0"
+                "source": "https://github.com/nadlambino/laravel-uploadable/tree/v1.1.0"
             },
             "funding": [
                 {
@@ -2213,7 +2213,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-05T14:34:20+00:00"
+            "time": "2024-07-10T09:38:51+00:00"
         },
         {
             "name": "nesbot/carbon",

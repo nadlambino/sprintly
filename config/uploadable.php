@@ -104,16 +104,34 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Allowed Mime Types
+    | Temporary URL
     |--------------------------------------------------------------------------
     |
-    | Specify the mime types allowed for uploads. Supports categorization
-    | for images, videos, and documents with specific file extensions.
+    | Temporary URL for files that are uploaded locally is not supported by the
+    | local disk. This setting allows you to specify the path and middleware to
+    | access the files temporarily which uses a signed URL under the hood.
+    | `expiration` can be a string or an instance of `DateTimeInterface`.
+    |
+    */
+    'temporary_url' => [
+        'path' => '/temporary',
+        'middleware' => ['signed'],
+        'expiration' => '1 hour',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Allowed Mimes by Extension
+    |--------------------------------------------------------------------------
+    |
+    | Specify the mime types by extension that is allowed for uploads. Supports
+    | categorization for images, videos, and documents with specific file
+    | extensions.
     |
     */
     'mimes' => [
-        'image' => ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'svg', 'webp'],
-        'video' => ['mp4', 'avi', 'mov', 'wmv', 'flv', '3gp', 'mkv'],
+        'image' => ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico'],
+        'video' => ['mp4', 'webm', 'avi', 'mov', 'wmv', 'flv', '3gp', 'mkv', 'mpg', 'mpeg'],
         'document' => ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'csv', 'txt'],
     ],
 ];
